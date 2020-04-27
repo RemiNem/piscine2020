@@ -5,22 +5,21 @@
 #include "Sommet.h"
 #include <iostream>
 #include <fstream>
+#include "Arrete.h"
 class Graphe
 {
-    public:
-        Graphe(std::string txt);
-        void afficher() const;
-        void initialiser_matrices();
-        void afficher_matrice_indice();
-        void charger_ponderation(std::string txt);
-        virtual ~Graphe();
+public:
+    Graphe(std::string txt);
+    void afficher() const;
+    void charger_ponderation(std::string txt);
+    virtual ~Graphe();
 
-        bool orientation;
-		size_t ordre;
-		std::vector<Sommet*>sommets;// tous les sommets de mon graphe
-		size_t m_taille;
-		int **matrice_poids;///arretes
-		int **matrice_indice;///arretes
+    bool m_orientation;
+    size_t m_ordre;
+    std::vector<Sommet*>sommets;// tous les sommets de mon graphe
+    size_t m_taille;
+    Arrete *arretes;
+
 
 };
 
