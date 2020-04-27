@@ -8,18 +8,20 @@
 #include "Arrete.h"
 class Graphe
 {
-public:
-    Graphe(std::string txt);
-    void afficher() const;
-    void charger_ponderation(std::string txt);
-    virtual ~Graphe();
+    private:
+        bool m_orientation;
+        size_t m_ordre;
+        std::vector<Sommet*>sommets;// tous les sommets de mon graphe
+        size_t m_taille;
+        Arrete *arretes;
 
-    bool m_orientation;
-    size_t m_ordre;
-    std::vector<Sommet*>sommets;// tous les sommets de mon graphe
-    size_t m_taille;
-    Arrete *arretes;
-
+    public:
+        Graphe(std::string txt);
+        virtual ~Graphe();
+        //chargement
+        void charger_ponderation(std::string txt);
+        //affichage
+        void afficher() const;
 
 };
 
