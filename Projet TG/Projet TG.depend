@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1588000385 source:c:\users\trani\onedrive\bureau\projet tg\main.cpp
+	<iostream>
+	"Graphe.h"
+
+1588000442 source:c:\users\trani\onedrive\bureau\projet tg\src\graphe.cpp
+	"Graphe.h"
+
+1588000433 c:\users\trani\onedrive\bureau\projet tg\include\graphe.h
+	<string>
+	<vector>
+	"Sommet.h"
+	<iostream>
+	<fstream>
+	"Arrete.h"
+
+1587978678 source:c:\users\trani\onedrive\bureau\projet tg\src\sommet.cpp
+	"Sommet.h"
+
+1587978662 c:\users\trani\onedrive\bureau\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1587976592 source:c:\users\trani\onedrive\bureau\projet tg\src\coord.cpp
+	"Coord.h"
+
+1587976592 c:\users\trani\onedrive\bureau\projet tg\include\coord.h
+
+1587999694 source:c:\users\trani\onedrive\bureau\projet tg\src\arrete.cpp
+	"Arrete.h"
+
+1587999979 c:\users\trani\onedrive\bureau\projet tg\include\arrete.h
+
