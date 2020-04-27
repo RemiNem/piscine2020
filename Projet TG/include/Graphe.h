@@ -9,11 +9,12 @@
 class Graphe
 {
     private:
-        bool m_orientation;
-        size_t m_ordre;
-        std::vector<Sommet*>sommets;// tous les sommets de mon graphe
-        size_t m_taille;
-        Arrete *arretes;
+        bool m_orientation; //orientation graphe
+        size_t m_ordre; //nombre de sommets
+        std::vector<Sommet*>sommets; //tous les sommets
+        Arrete *arretes; //toutes les arretes
+        size_t m_taille; //nombre d'arretes
+
 
     public:
         Graphe(std::string txt);

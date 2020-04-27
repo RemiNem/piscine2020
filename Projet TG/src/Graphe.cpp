@@ -1,4 +1,9 @@
 #include "Graphe.h"
+///DESTRUCTION
+Graphe::~Graphe()
+{
+    //dtor
+}
 
 ///CHARGEMENT GRAPHE
 Graphe::Graphe(std::string txt)
@@ -99,10 +104,8 @@ void Graphe::afficher() const
 
 }
 
-///DESTRUCTION
-Graphe::~Graphe()
-{
-    //dtor
-}
+
+///CENTRALITE DEGRE
+
 
 
