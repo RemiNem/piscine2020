@@ -1,11 +1,18 @@
 #include "Graphe.h"
+#include "svgfile.h"
+
+#define max(a,b) (a>=b?a:b)
+#define min(a,b) (a<=b?a:b)
+
 ///DESTRUCTION
 Graphe::~Graphe()
 {
     //dtor
 }
 
-///CHARGEMENT GRAPHE
+/// ------------------------CHARGEMENT GRAPHE-----------------
+
+///topologique
 Graphe::Graphe(std::string txt)
 {
     std::ifstream flux(txt);
@@ -44,7 +51,7 @@ Graphe::Graphe(std::string txt)
     flux.close();
 }
 
-///PONDERATION
+///pondération
 void Graphe::charger_ponderation(std::string txt)
 {
     std::ifstream flux(txt);
@@ -63,7 +70,9 @@ void Graphe::charger_ponderation(std::string txt)
     flux.close();
 }
 
-///AFFICHAGE
+/// -----------------AFFICHAGE---------------------
+
+///afficher le graphe
 void Graphe::afficher() const
 {
 
@@ -101,6 +110,64 @@ void Graphe::afficher() const
     }
 
 }
+
+///affichage degre de centralité
+void Graphe::afficher_degre_centralite() const
+{
+    std::cout << "La centralite de degre des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
+///affichage graphe en html
+//multiplier les coordonnées par 100 pour l'echelle
+void Graphe::afficher_graphe_internet() const
+{
+    Svgfile svgout;
+    //SOMMETS
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        svgout.addDisk(sommets[i]->get_x()*100, sommets[i]->get_y()*100, 5, "black"); //placer le sommet
+        svgout.addText(sommets[i]->get_x()*100, sommets[i]->get_y()*100 - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
+    }
+    //ARRETES + POIDS
+    for(size_t i = 0; i < m_taille; ++i)
+    {
+        //Arrete
+        svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*100, sommets[arretes[i].get_indice_s1()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, "black");
+
+        //Ajouter une fleche si le graphe est orienté (sommet 2 = pointe de la flèche)
+        if(m_orientation == true)
+        {
+            /*
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 - 10, "black");
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 + 10, "black");
+            */
+        }
+        //Ajouter le poids
+        //on récupere les coordonnées du point à mi chemin entre les deux sommets
+        int x1 = sommets[arretes[i].get_indice_s1()]->get_x();
+        int y1 = sommets[arretes[i].get_indice_s1()]->get_y();
+        int x2 = sommets[arretes[i].get_indice_s2()]->get_x();
+        int y2 = sommets[arretes[i].get_indice_s2()]->get_y();
+
+        int x = max(x1, x2) - min(x1,x2);
+        int y = max(y1,y2) - min(y1,y2);
+
+        svgout.addText(x*100 + 5, y*100 + 5, arretes[i].get_poids(), "black");
+    }
+}
+
+
+
+
+
+
 
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
@@ -141,18 +208,7 @@ void Graphe::calculer_tous_Cd()
     }
 }
 
-///affichage
-void Graphe::afficher_degre_centralite() const
-{
-    std::cout << "La centralite de degre des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
+
 
 
 

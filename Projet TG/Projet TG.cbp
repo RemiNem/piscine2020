@@ -38,6 +38,7 @@
 		<Unit filename="include/Arrete.h" />
 		<Unit filename="include/Graphe.h" />
 		<Unit filename="include/Sommet.h" />
+		<Unit filename="include/svgfile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Arrete.cpp" />
 		<Unit filename="src/Graphe.cpp" />

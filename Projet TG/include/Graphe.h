@@ -18,7 +18,7 @@ class Graphe
         float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
 
     public:
-        ///constrcution / destruction
+        ///construction / destruction
         Graphe(std::string txt);
         virtual ~Graphe();
         //chargement
@@ -27,6 +27,7 @@ class Graphe
         ///affichage
         void afficher() const;
         void afficher_degre_centralite() const;
+        void afficher_graphe_internet() const;
 
         ///calcul des indices de centralité
         //CENTRALITE DE DEGRE
