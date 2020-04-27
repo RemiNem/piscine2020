@@ -11,5 +11,7 @@ int main()
     ///afficher graphe
     G.afficher();
     //G.afficher_matrice_indice();
+    G.calculer_tous_Cd();
+    G.afficher_degre_centralite();
     return 0;
 }

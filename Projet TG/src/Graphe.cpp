@@ -102,8 +102,56 @@ void Graphe::afficher() const
 
 }
 
+/// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
-///CENTRALITE DEGRE
+///CENTRALITE DE DEGRE
+
+///calcul de la centralité de degré pour 1 sommet dont l'indice est passé en parametre
+float Graphe::calculer_Cd(int indice) const
+{
+    //1) récuperer le nombre d'arretes entrantes et sortantes du sommet = le degré
+    float degre = 0;
+    //pour toutes les arretes du graphe
+    for(size_t i = 0; i < m_taille; ++i)
+    {
+        //si l'une des extremitées de cette arrete correspond à notre sommet alors le degré augmente
+        if(indice == arretes[i].get_indice_s1() || indice == arretes[i].get_indice_s2())
+            degre++;
+    }
+    //si le graphe est non orienté on divise l'ordre par 2 car chaque arete est comptée deux fois
+    degre = degre/2;
+
+    //2) Calcul de la centralité normalisé de degré du sommet
+    float Cd = degre/(m_ordre - 1);
+    return Cd;
+}
+
+///Calcul de la  centralité de tous les sommets (placées dans un tableau)
+void Graphe::calculer_tous_Cd()
+{
+    //allocation du tab de centralite de degre
+    centralite_degre = new float[m_ordre];
+
+    std::cout << std::endl << std::endl;
+    //on calcule la centralité de chacun des sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        centralite_degre[i] = calculer_Cd(i);
+    }
+}
+
+///affichage
+void Graphe::afficher_degre_centralite() const
+{
+    std::cout << "La centralite de degre des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
 
 
 

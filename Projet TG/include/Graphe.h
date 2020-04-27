@@ -11,18 +11,28 @@ class Graphe
     private:
         bool m_orientation; //orientation graphe
         size_t m_ordre; //nombre de sommets
-        std::vector<Sommet*>sommets; //tous les sommets
+        std::vector<Sommet*> sommets; //tous les sommets
         Arrete *arretes; //toutes les arretes
         size_t m_taille; //nombre d'arretes
-
+        ///indices de centralité
+        float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
 
     public:
+        ///constrcution / destruction
         Graphe(std::string txt);
         virtual ~Graphe();
         //chargement
         void charger_ponderation(std::string txt);
-        //affichage
+
+        ///affichage
         void afficher() const;
+        void afficher_degre_centralite() const;
+
+        ///calcul des indices de centralité
+        //CENTRALITE DE DEGRE
+        float calculer_Cd(int indice) const;
+        void calculer_tous_Cd();
+
 };
 
 #endif // GRAPHE_H
