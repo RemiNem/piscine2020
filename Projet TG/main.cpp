@@ -3,8 +3,8 @@
 
 int main()
 {
-Graphe G("Graphe topo/graphe_etoile1_topo.txt");///charge le format topologique
-
+Graphe G("Load Graph/graphe_etoile1_topo.txt");///charge le format topologique
+G.charger_ponderation("Load Graph/graphe_etoile1_pond.txt");
 G.afficher();
 //G.afficher_matrice_indice();
 
