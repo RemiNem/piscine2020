@@ -36,6 +36,9 @@ class Graphe
         //CENTRALITE DE PROXIMITE
         int Dijkstra(int debut, int fin) const;
         bool EstSuccesseurDe(int s1, int s2) const;
+
+
+        /// ------------GETTERS-------------------
         Arrete get_arrete(int s1, int s2) const;
 
 
