@@ -1,5 +1,5 @@
 #include <iostream>
-#include "C:\Users\trani\OneDrive\Documents\GitHub\piscine2020\Projet TG\include\Graphe.h"
+#include "include\Graphe.h"
 
 
 
@@ -7,7 +7,7 @@ int main()
 {
     ///charger graphe
     //chargement du format topologique du graphe
-    Graphe G("Load Graph/graphe_etoile1_topo.txt");
+    Graphe G("Load Graph/graphe_cycle4_topo.txt");
     //pond�ration
     G.charger_ponderation("Load Graph/graphe_etoile1_pond.txt");
     ///afficher graphe
@@ -24,6 +24,7 @@ int main()
     G.calculer_Cvp();
     G.afficher_centralite_vp();
 
+G.Dijkstra_adapte(0,2);
 
     return 0;
 }
