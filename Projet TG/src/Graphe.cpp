@@ -231,7 +231,7 @@ int Graphe::Dijkstra(int debut, int fin) const
     distance_S0[debut] = 0;
     marquage[debut] = MARQUE;
 
-    //2) RECHERCHE DU CHEMIN
+    //2) RECHERCHE DU CHEMIN.
     //tant qu'on a pas trouvé le plus court chemin jusqu'à la fin
     do
     {
