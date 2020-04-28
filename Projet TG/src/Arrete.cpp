@@ -2,6 +2,7 @@
 
 ///CONSTRUCTEURS / DESTRUCTEUR
 //constructeur par default
+
 Arrete::Arrete()
 {
 
@@ -15,11 +16,11 @@ Arrete::Arrete(int indice,int s1,int s2)
     m_indice=indice;
 }
 //destructeur
+
 Arrete::~Arrete()
 {
     //dtor
 }
-
 /// GETTERS
 
 int Arrete::get_indice() const
