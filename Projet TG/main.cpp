@@ -12,5 +12,10 @@ int main()
     G.afficher();
     //G.afficher_matrice_indice();
 
+    G.calculer_tous_Cd();
+    G.afficher_degre_centralite();
+    G.afficher_graphe_internet();
+
+
     return 0;
 }
