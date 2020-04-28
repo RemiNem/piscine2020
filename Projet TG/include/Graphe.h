@@ -33,6 +33,12 @@ class Graphe
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
+        //CENTRALITE DE PROXIMITE
+        int Dijkstra(int debut, int fin) const;
+        bool EstSuccesseurDe(int s1, int s2) const;
+        Arrete get_arrete(int s1, int s2) const;
+
+
 
 };
 

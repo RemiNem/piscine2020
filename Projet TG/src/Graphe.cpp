@@ -4,6 +4,10 @@
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
+#define NON_MARQUE  0
+#define MARQUE      1
+#define INCONNU     -1
+
 ///DESTRUCTION
 Graphe::~Graphe()
 {
@@ -210,6 +214,126 @@ void Graphe::calculer_tous_Cd()
     }
 }
 
+/// CENTRALITE DE PROXIMITE
+
+///algorithme de Dijkstra
+
+int Graphe::Dijkstra(int debut, int fin) const
+{
+    //1) INITIALISATION
+    std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqué
+    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances à S0 (=debut)
+    std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
+    Sommet* s = sommets[debut]; //varaible tampon
+    int distance, d_min, id_d_min; //variables
+
+    //distance de S0 à S0 = 0
+    distance_S0[debut] = 0;
+    marquage[debut] = MARQUE;
+
+    //2) RECHERCHE DU CHEMIN
+    //tant qu'on a pas trouvé le plus court chemin jusqu'à la fin
+    do
+    {
+        d_min = 999;
+        //CHEMIN LE PLUS PROCHE DE S0
+        //pour tous les sommets
+        for(auto it:sommets)
+        {
+            //si le sommet est adjacent à s
+            if(EstSuccesseurDe(s->get_indice(), it->get_indice()))
+            {
+                //on récupère la distance entre ces deux sommets (arrete[s,it] -> poids)
+                distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
+                //Si c'est plus court d'aller de S0 à it en passant par s
+                if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
+                {
+                    //on met à jour la distance S0 -> it avec celle qui passe par s
+                    distance_S0[it->get_indice()] = distance_S0[s->get_indice()] + distance;
+                    //predecesseur de it devient s
+                    preds[it->get_indice()] = s->get_indice();
+                }
+            }
+        }
+
+        //le plus proche sommet de S0 qui n'est pas marqué
+        for(size_t i=0; i < sommets.size(); ++i)
+        {
+            //si ce sommet n'est pas marqué
+            if(marquage[i] != MARQUE)
+            {
+                //et si c'est le plus proche de S0
+                if(distance_S0[i]<d_min)
+                {
+                    //on change la distance minimale à S0
+                    d_min = distance_S0[i];
+                    //on garde en mémoire son identifiant
+                    id_d_min=i;
+                }
+            }
+        }
+        //le sommet le plus proche qui n'a pas encore été étudié est le prochain que nous allons parcourir
+        s = sommets[id_d_min];
+        //on marque le sommet s
+        marquage[s->get_indice()] = MARQUE;
+    }while(marquage[fin] != MARQUE);
+
+    //on retourn la distance de debut à fin
+    return distance_S0[fin];
+}
+
+///Cherche à savoir si s1 est adjacent à s2 (s1 -> s2 si graphe orienté)
+bool Graphe::EstSuccesseurDe(int s1, int s2) const
+{
+    //GRAPHE ORIENTE
+    if(m_orientation == true)
+    {
+        //pour toutes les arretes du graphe
+        for (size_t i = 0; i < m_taille; ++i)
+        {
+            //si on a une arrete s1 -> s2
+            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
+                return true; // alors s2 est successeur de s1
+        }
+    }
+    //GRAPHE NON ORIENTE
+    else
+    {
+        for (size_t i = 0; i < m_taille; ++i)
+        {
+            //si s1 est lié à s2
+            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
+                return true;
+        }
+    }
+    //les sommets ne sont pas adjacents
+    return false;
+}
+
+/// ----------GETTERS----------
+
+///retourne l'arrete correspondante à ces deux sommets
+Arrete Graphe::get_arrete(int s1, int s2) const
+{
+    //GRAPHE ORIENTE
+    if(m_orientation == true)
+    {
+        for(size_t i = 0; i < m_taille; ++i)
+        {
+            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
+                return arretes[i];
+        }
+    }
+    //GRAPHE NON ORIENTE
+    else
+    {
+        for (size_t i = 0; i < m_taille; ++i)
+        {
+            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
+                return arretes[i];
+        }
+    }
+}
 
 
 
