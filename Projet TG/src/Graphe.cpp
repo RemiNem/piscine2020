@@ -118,12 +118,25 @@ void Graphe::afficher() const
 ///affichage degre de centralité
 void Graphe::afficher_degre_centralite() const
 {
-    std::cout << "La centralite de degre des sommets : " << std::endl;
+    std::cout << std::endl << "La centralite de degre des sommets : " << std::endl;
     //pour tous les sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
         //on affiche le nom
         std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
+///affichage centralité de proximité
+void Graphe::afficher_centralite_proximite() const
+{
+    std::cout << std::endl <<"La centralie de proximite des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_proximite[i] << std::endl;;
     }
     std::cout << std::endl << std::endl;
 }
@@ -172,7 +185,6 @@ void Graphe::afficher_graphe_internet() const
 
 
 
-
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
 ///CENTRALITE DE DEGRE
@@ -205,8 +217,6 @@ void Graphe::calculer_tous_Cd()
 {
     //allocation du tab de centralite de degre
     centralite_degre = new float[m_ordre];
-
-    std::cout << std::endl << std::endl;
     //on calcule la centralité de chacun des sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
@@ -216,8 +226,32 @@ void Graphe::calculer_tous_Cd()
 
 /// CENTRALITE DE PROXIMITE
 
-///algorithme de Dijkstra
+///calcul de la centralité de proximité pour 1 sommet dont l'indice est passé en parametre
+float Graphe::calculer_Cp(int indice) const
+{
+    int Cp, somme_distances = 0;
+    //récuperer la somme des longueurs des plus courts chemins de s aux autres sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //si ce n'est pas s
+        if(sommets[i] != sommets[indice])
+            somme_distances += Dijkstra(sommets[indice]->get_indice(), sommets[i]->get_indice()); // on ajoute leur distance à la somme
+    }
 
+    //Cp = ;
+    return (m_ordre -1)/somme_distances;
+}
+
+///calcul de la centralité de proximite pour tous les sommets
+void Graphe::calculer_tous_Cp()
+{
+    centralite_proximite = new float[m_ordre]; //Allocation
+    for (size_t i = 0 ; i < m_ordre; ++i)
+    {
+        centralite_proximite[i] = calculer_Cp(i);
+    }
+}
+///algorithme de Dijkstra
 int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
@@ -309,6 +343,9 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
     //les sommets ne sont pas adjacents
     return false;
 }
+
+
+
 
 /// ----------GETTERS----------
 

@@ -16,6 +16,7 @@ class Graphe
         size_t m_taille; //nombre d'arretes
         /// INDICES DE CENTRALITE
         float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
+        float *centralite_proximite; //le degre de proximité de chaque sommet dans un vecteur
 
     public:
         ///DESTRUCTION
@@ -27,6 +28,7 @@ class Graphe
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
         void afficher_degre_centralite() const; //affichage du degré de centralité de chaque sommet
+        void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
         void afficher_graphe_internet() const; //html
 
         /// --------CALCULS INDICES DE CENTRALITE---------
@@ -34,6 +36,8 @@ class Graphe
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
         //CENTRALITE DE PROXIMITE
+        float calculer_Cp(int indice) const;
+        void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
         bool EstSuccesseurDe(int s1, int s2) const;
 
