@@ -16,19 +16,21 @@ class Graphe
         Arrete *arretes; //toutes les arretes
         size_t m_taille; //nombre d'arretes
         /// INDICES DE CENTRALITE
-        float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
-        float *centralite_vecteurp; // degré de centralité Vp de chaque sommet
+        float *centralite_degre; //le degrï¿½ de centralitï¿½ de chaque sommet dans un vecteur
+        float *centralite_vecteurp; // degrï¿½ de centralitï¿½ Vp de chaque sommet
+        float *centralite_proximite; //le degre de proximitï¿½ de chaque sommet dans un vecteur
     public:
         ///DESTRUCTION
         virtual ~Graphe();
 
         /// --------CHARGEMENT GRAPHE------
         Graphe(std::string txt); //topologique
-        void charger_ponderation(std::string txt); //pondération
+        void charger_ponderation(std::string txt); //pondï¿½ration
 
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
-        void afficher_degre_centralite() const; //affichage du degré de centralité de chaque sommet
+        void afficher_degre_centralite() const; //affichage du degrï¿½ de centralitï¿½ de chaque sommet
+        void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
         void afficher_graphe_internet() const; //html
         void afficher_centralite_vp() const;
 
@@ -38,6 +40,8 @@ class Graphe
         void calculer_tous_Cd();
 
         //CENTRALITE DE PROXIMITE
+        float calculer_Cp(int indice) const;
+        void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
         bool EstSuccesseurDe(int s1, int s2) const;
 

@@ -8,6 +8,7 @@
 #define NON_MARQUE  0
 #define MARQUE      1
 #define INCONNU     -1
+#define NORMALISE   (m_ordre - 1)
 
 #define VAR_LAMBDA 4
 
@@ -33,7 +34,7 @@ Graphe::Graphe(std::string txt)
         int indice,x,y;
         std::string nom;
         flux>>indice>>nom>>x>>y;
-        Sommet *nouv=new Sommet(indice,nom,x,y);//nouveau sommet actualisé
+        Sommet *nouv=new Sommet(indice,nom,x,y);//nouveau sommet actualisï¿½
         sommets.push_back(nouv);
     }
     //Arretes
@@ -43,12 +44,12 @@ Graphe::Graphe(std::string txt)
     for(size_t i=0; i < m_taille; i++)
     {
         int s1,s2,indice;//sommet 1 sommet 2 et l'indice de l'arrete
-        //recupération
+        //recupï¿½ration
         flux >> indice >> s1 >> s2;
         sommets[s1]->ajouter_adjacent(sommets[s2]);
         arretes[i].set_indice_s1(s1);
         arretes[i].set_indice_s2(s2);
-        //si le graphe n'est pas orienté l'arrete va dans les deux sens
+        //si le graphe n'est pas orientï¿½ l'arrete va dans les deux sens
         if(m_orientation==false)
         {
             sommets[s2]->ajouter_adjacent(sommets[s1]);
@@ -59,7 +60,7 @@ Graphe::Graphe(std::string txt)
 }
 
 
-///pondération
+///pondï¿½ration
 
 void Graphe::charger_ponderation(std::string txt)
 {
@@ -121,10 +122,10 @@ void Graphe::afficher() const
 
 }
 
-///affichage degre de centralité
+///affichage degre de centralitï¿½
 void Graphe::afficher_degre_centralite() const
 {
-    std::cout << "La centralite de degre des sommets : " << std::endl;
+    std::cout << std::endl << "La centralite de degre des sommets : " << std::endl;
     //pour tous les sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
@@ -134,8 +135,21 @@ void Graphe::afficher_degre_centralite() const
     std::cout << std::endl << std::endl;
 }
 
+///affichage centralitï¿½ de proximitï¿½
+void Graphe::afficher_centralite_proximite() const
+{
+    std::cout << std::endl <<"La centralie de proximite des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_proximite[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
 ///affichage graphe en html
-//multiplier les coordonnées par 100 pour l'echelle
+//multiplier les coordonnï¿½es par 100 pour l'echelle
 void Graphe::afficher_graphe_internet() const
 {
     Svgfile svgout;
@@ -151,7 +165,7 @@ void Graphe::afficher_graphe_internet() const
         //Arrete
         svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*100, sommets[arretes[i].get_indice_s1()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, "black");
 
-        //Ajouter une fleche si le graphe est orienté (sommet 2 = pointe de la flèche)
+        //Ajouter une fleche si le graphe est orientï¿½ (sommet 2 = pointe de la flï¿½che)
         if(m_orientation == true)
         {
 
@@ -160,7 +174,7 @@ void Graphe::afficher_graphe_internet() const
 
         }
         //Ajouter le poids
-        //on récupere les coordonnées du point à mi chemin entre les deux sommets
+        //on rï¿½cupere les coordonnï¿½es du point ï¿½ mi chemin entre les deux sommets
         int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*100;
         int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*100;
         int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*100;
@@ -174,37 +188,34 @@ void Graphe::afficher_graphe_internet() const
 }
 
 
-
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
 ///CENTRALITE DE DEGRE
 
-///calcul de la centralité de degré pour 1 sommet dont l'indice est passé en parametre
+///calcul de la centralitï¿½ de degrï¿½ pour 1 sommet dont l'indice est passï¿½ en parametre
 float Graphe::calculer_Cd(int indice) const
 {
-    //1) récuperer le nombre d'arretes entrantes et sortantes du sommet = le degré
+    //1) rï¿½cuperer le nombre d'arretes entrantes et sortantes du sommet = le degrï¿½
     float degre = 0;
     //pour toutes les arretes du graphe
     for(size_t i = 0; i < m_taille; ++i)
     {
-        //si l'une des extremitées de cette arrete correspond à notre sommet alors le degré augmente
+        //si l'une des extremitï¿½es de cette arrete correspond ï¿½ notre sommet alors le degrï¿½ augmente
         if(indice == arretes[i].get_indice_s1() || indice == arretes[i].get_indice_s2())
             degre++;
     }
 
-    //2) Calcul de la centralité normalisé de degré du sommet
-    float Cd = degre/(m_ordre - 1);
+    //2) Calcul de la centralitï¿½ normalisï¿½ de degrï¿½ du sommet
+    float Cd = degre/NORMALISE;
     return Cd;
 }
 
-///Calcul de la  centralité de tous les sommets (placées dans un tableau)
+///Calcul de la  centralitï¿½ de tous les sommets (placï¿½es dans un tableau)
 void Graphe::calculer_tous_Cd()
 {
     //allocation du tab de centralite de degre
     centralite_degre = new float[m_ordre];
-
-    std::cout << std::endl << std::endl;
-    //on calcule la centralité de chacun des sommets du graphe
+    //on calcule la centralitï¿½ de chacun des sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
         centralite_degre[i] = calculer_Cd(i);
@@ -214,23 +225,47 @@ void Graphe::calculer_tous_Cd()
 
 /// CENTRALITE DE PROXIMITE
 
-///algorithme de Dijkstra
+///calcul de la centralitï¿½ de proximitï¿½ pour 1 sommet dont l'indice est passï¿½ en parametre
+float Graphe::calculer_Cp(int indice) const
+{
+    float Cp;
+    int somme_distances = 0;
+    //rï¿½cuperer la somme des longueurs des plus courts chemins de s aux autres sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //si ce n'est pas s
+        if(sommets[i] != sommets[indice])
+            somme_distances += Dijkstra(sommets[indice]->get_indice(), sommets[i]->get_indice()); // on ajoute leur distance ï¿½ la somme
+    }
+    Cp = float(NORMALISE)/somme_distances;
+    return Cp;
+}
 
+///calcul de la centralitï¿½ de proximite pour tous les sommets
+void Graphe::calculer_tous_Cp()
+{
+    centralite_proximite = new float[m_ordre]; //Allocation
+    for (size_t i = 0 ; i < m_ordre; ++i)
+    {
+        centralite_proximite[i] = calculer_Cp(i);
+    }
+}
+///algorithme de Dijkstra
 int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
-    std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqué
-    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances à S0 (=debut)
+    std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marquï¿½
+    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances ï¿½ S0 (=debut)
     std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
     Sommet* s = sommets[debut]; //varaible tampon
     int distance, d_min, id_d_min; //variables
 
-    //distance de S0 à S0 = 0
+    //distance de S0 ï¿½ S0 = 0
     distance_S0[debut] = 0;
     marquage[debut] = MARQUE;
 
     //2) RECHERCHE DU CHEMIN.
-    //tant qu'on a pas trouvé le plus court chemin jusqu'à la fin
+    //tant qu'on a pas trouvï¿½ le plus court chemin jusqu'ï¿½ la fin
     do
     {
         d_min = 999;
@@ -238,15 +273,15 @@ int Graphe::Dijkstra(int debut, int fin) const
         //pour tous les sommets
         for(auto it:sommets)
         {
-            //si le sommet est adjacent à s
+            //si le sommet est adjacent ï¿½ s
             if(EstSuccesseurDe(s->get_indice(), it->get_indice()))
             {
-                //on récupère la distance entre ces deux sommets (arrete[s,it] -> poids)
+                //on rï¿½cupï¿½re la distance entre ces deux sommets (arrete[s,it] -> poids)
                 distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
-                //Si c'est plus court d'aller de S0 à it en passant par s
+                //Si c'est plus court d'aller de S0 ï¿½ it en passant par s
                 if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
                 {
-                    //on met à jour la distance S0 -> it avec celle qui passe par s
+                    //on met ï¿½ jour la distance S0 -> it avec celle qui passe par s
                     distance_S0[it->get_indice()] = distance_S0[s->get_indice()] + distance;
                     //predecesseur de it devient s
                     preds[it->get_indice()] = s->get_indice();
@@ -254,33 +289,33 @@ int Graphe::Dijkstra(int debut, int fin) const
             }
         }
 
-        //le plus proche sommet de S0 qui n'est pas marqué
+        //le plus proche sommet de S0 qui n'est pas marquï¿½
         for(size_t i=0; i < sommets.size(); ++i)
         {
-            //si ce sommet n'est pas marqué
+            //si ce sommet n'est pas marquï¿½
             if(marquage[i] != MARQUE)
             {
                 //et si c'est le plus proche de S0
                 if(distance_S0[i]<d_min)
                 {
-                    //on change la distance minimale à S0
+                    //on change la distance minimale ï¿½ S0
                     d_min = distance_S0[i];
-                    //on garde en mémoire son identifiant
+                    //on garde en mï¿½moire son identifiant
                     id_d_min=i;
                 }
             }
         }
-        //le sommet le plus proche qui n'a pas encore été étudié est le prochain que nous allons parcourir
+        //le sommet le plus proche qui n'a pas encore ï¿½tï¿½ ï¿½tudiï¿½ est le prochain que nous allons parcourir
         s = sommets[id_d_min];
         //on marque le sommet s
         marquage[s->get_indice()] = MARQUE;
     }while(marquage[fin] != MARQUE);
 
-    //on retourn la distance de debut à fin
+    //on retourn la distance de debut ï¿½ fin
     return distance_S0[fin];
 }
 
-///Cherche à savoir si s1 est adjacent à s2 (s1 -> s2 si graphe orienté)
+///Cherche ï¿½ savoir si s1 est adjacent ï¿½ s2 (s1 -> s2 si graphe orientï¿½)
 bool Graphe::EstSuccesseurDe(int s1, int s2) const
 {
     //GRAPHE ORIENTE
@@ -299,7 +334,7 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
     {
         for (size_t i = 0; i < m_taille; ++i)
         {
-            //si s1 est lié à s2
+            //si s1 est liï¿½ ï¿½ s2
             if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
                 return true;
         }
@@ -308,9 +343,12 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
     return false;
 }
 
+
+
+
 /// ----------GETTERS----------
 
-///retourne l'arrete correspondante à ces deux sommets
+///retourne l'arrete correspondante ï¿½ ces deux sommets
 Arrete Graphe::get_arrete(int s1, int s2) const
 {
     //GRAPHE ORIENTE
@@ -336,14 +374,14 @@ Arrete Graphe::get_arrete(int s1, int s2) const
 /// Calcul de Cvp
 void Graphe::calculer_Cvp()
 {
-    // initialisation : on passe l'indice des sommets à 1
+    // initialisation : on passe l'indice des sommets ï¿½ 1
     centralite_vecteurp = new float[m_ordre];
      for(size_t i=0; i<m_ordre; i++)
      {
          centralite_vecteurp[i]=1;
      }
 
-    // tableau centralité "intermediaire" pour calcul
+    // tableau centralitï¿½ "intermediaire" pour calcul
     float centralite[m_ordre] = {0};
 
     float lambda_p = 0;
@@ -355,7 +393,7 @@ void Graphe::calculer_Cvp()
 
     do
     {
-        for(size_t i=0; i<m_ordre; i++) // va permettre d'affecter un indice de centralite vp à tous les sommets
+        for(size_t i=0; i<m_ordre; i++) // va permettre d'affecter un indice de centralite vp ï¿½ tous les sommets
         {
 
             for(size_t j =0; j < sommets[i]->sommet_adjacent.size(); j++)  // va faire la somme de l'indice de centralite vp des sommets adjacents au sommet i
