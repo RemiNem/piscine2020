@@ -7,6 +7,7 @@
 #define NON_MARQUE  0
 #define MARQUE      1
 #define INCONNU     -1
+#define NORMALISE   (m_ordre - 1)
 
 ///DESTRUCTION
 Graphe::~Graphe()
@@ -201,14 +202,9 @@ float Graphe::calculer_Cd(int indice) const
         if(indice == arretes[i].get_indice_s1() || indice == arretes[i].get_indice_s2())
             degre++;
     }
-    /*
-    //si le graphe est non orienté on divise l'ordre par 2 car chaque arete est comptée deux fois
-    if(m_orientation == false)
-        degre = degre/2;
-    */
 
     //2) Calcul de la centralité normalisé de degré du sommet
-    float Cd = degre/(m_ordre - 1);
+    float Cd = degre/NORMALISE;
     return Cd;
 }
 
@@ -229,7 +225,8 @@ void Graphe::calculer_tous_Cd()
 ///calcul de la centralité de proximité pour 1 sommet dont l'indice est passé en parametre
 float Graphe::calculer_Cp(int indice) const
 {
-    int Cp, somme_distances = 0;
+    float Cp;
+    int somme_distances = 0;
     //récuperer la somme des longueurs des plus courts chemins de s aux autres sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
@@ -237,9 +234,8 @@ float Graphe::calculer_Cp(int indice) const
         if(sommets[i] != sommets[indice])
             somme_distances += Dijkstra(sommets[indice]->get_indice(), sommets[i]->get_indice()); // on ajoute leur distance à la somme
     }
-
-    //Cp = ;
-    return (m_ordre -1)/somme_distances;
+    Cp = float(NORMALISE)/somme_distances;
+    return Cp;
 }
 
 ///calcul de la centralité de proximite pour tous les sommets
