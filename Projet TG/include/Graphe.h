@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "Arrete.h"
+#include <math.h>
 class Graphe
 {
     private:
@@ -16,7 +17,7 @@ class Graphe
         size_t m_taille; //nombre d'arretes
         /// INDICES DE CENTRALITE
         float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
-
+        float *centralite_vecteurp; // degré de centralité Vp de chaque sommet
     public:
         ///DESTRUCTION
         virtual ~Graphe();
@@ -29,11 +30,13 @@ class Graphe
         void afficher() const; //affichage du graphe sur console
         void afficher_degre_centralite() const; //affichage du degré de centralité de chaque sommet
         void afficher_graphe_internet() const; //html
+        void afficher_centralite_vp() const;
 
         /// --------CALCULS INDICES DE CENTRALITE---------
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
+        void calculer_Cvp();
 
 
 };

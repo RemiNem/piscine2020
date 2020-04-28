@@ -4,6 +4,8 @@
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
+#define VAR_LAMBDA 4
+
 ///DESTRUCTION
 Graphe::~Graphe()
 {
@@ -147,10 +149,10 @@ void Graphe::afficher_graphe_internet() const
         //Ajouter une fleche si le graphe est orienté (sommet 2 = pointe de la flèche)
         if(m_orientation == true)
         {
-            /*
+
             svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 - 10, "black");
             svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 + 10, "black");
-            */
+
         }
         //Ajouter le poids
         //on récupere les coordonnées du point à mi chemin entre les deux sommets
@@ -165,10 +167,6 @@ void Graphe::afficher_graphe_internet() const
         svgout.addText(x*100 + 5, y*100 + 5, arretes[i].get_poids(), "black");
     }
 }
-
-
-
-
 
 
 
@@ -189,8 +187,8 @@ float Graphe::calculer_Cd(int indice) const
             degre++;
     }
     //si le graphe est non orienté on divise l'ordre par 2 car chaque arete est comptée deux fois
-    if(m_orientation == false)
-        degre = degre/2;
+    /*if(m_orientation == false)
+        degre = degre/2;*/
 
     //2) Calcul de la centralité normalisé de degré du sommet
     float Cd = degre/(m_ordre - 1);
@@ -211,7 +209,69 @@ void Graphe::calculer_tous_Cd()
     }
 }
 
+/// Calcul de Cvp
+void Graphe::calculer_Cvp()
+{
+    // initialisation : on passe l'indice des sommets à 1
+    centralite_vecteurp = new float[m_ordre];
+     for(size_t i=0; i<m_ordre; i++)
+     {
+         centralite_vecteurp[i]=1;
+     }
+
+    // tableau centralité "intermediaire" pour calcul
+    float centralite[m_ordre] = {0};
+
+    float lambda_p = 0;
+    float lambda =100;
+    float lambda_diff = 100;
 
 
+    float somme_ci =0;
+
+    do
+    {
+        for(size_t i=0; i<m_ordre; i++) // va permettre d'affecter un indice de centralite vp à tous les sommets
+        {
+
+            for(size_t j =0; j < sommets[i]->sommet_adjacent.size(); j++)  // va faire la somme de l'indice de centralite vp des sommets adjacents au sommet i
+            {
+
+                centralite[i] = centralite[i] + centralite_vecteurp[sommets[i]->sommet_adjacent[j]->get_indice()];
+            }
+        }
 
 
+        lambda_p = lambda;
+
+        for(size_t i =0; i < m_ordre; i++)    // permet d'avoir la somme des Ci^2
+        {
+            somme_ci= somme_ci + centralite[i]*centralite[i];
+        }
+
+        lambda = sqrt(somme_ci);
+
+        for(size_t i=0; i<m_ordre; i++) // enfin, on recalcule les Cvp
+        {
+            centralite_vecteurp[i]= centralite[i]/lambda;
+        }
+       /* std::cout << "lambda vaut : " << lambda << std::endl;
+        std::cout << "lambda prec : " << lambda_p << std::endl;*/
+
+        lambda_diff = abs(lambda_p-lambda);
+
+
+    }while(lambda_diff > VAR_LAMBDA);
+}
+
+void Graphe::afficher_centralite_vp() const
+{
+    std::cout << "La centralite de VP des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_vecteurp[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}

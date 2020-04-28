@@ -35,17 +35,15 @@
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
 		</Compiler>
-<<<<<<< HEAD
-=======
 		<Unit filename="include/Arrete.h" />
 		<Unit filename="include/Graphe.h" />
->>>>>>> develop
 		<Unit filename="include/Sommet.h" />
 		<Unit filename="include/svgfile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Arrete.cpp" />
 		<Unit filename="src/Graphe.cpp" />
 		<Unit filename="src/Sommet.cpp" />
+		<Unit filename="src/svgfile.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

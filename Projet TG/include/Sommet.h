@@ -27,6 +27,8 @@ class Sommet
 
         ///setters
         void ajouter_adjacent(Sommet* s);
+
+
 };
 
 #endif // SOMMET_H
