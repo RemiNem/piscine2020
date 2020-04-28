@@ -448,7 +448,7 @@ void Graphe::calculer_Cvp()
 //= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
 
 ///algorithme de Dijkstra adapté
-int Graphe::Dijkstra_adapté(int debut, int fin) const
+int Graphe::Dijkstra_adapte(int debut, int fin) const
 {
     //1) INITIALISATION
     std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�

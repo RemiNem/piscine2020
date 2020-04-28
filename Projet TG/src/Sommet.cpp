@@ -1,4 +1,4 @@
-#include "Sommet.h"
+#include "C:\Users\trani\OneDrive\Documents\GitHub\piscine2020\Projet TG\include\Sommet.h"
 
 Sommet::Sommet(int indice,std::string nom,int x0,int y0)
 {
