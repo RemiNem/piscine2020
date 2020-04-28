@@ -1,5 +1,5 @@
-#include "Graphe.h"
-#include "svgfile.h"
+#include "../include/Graphe.h"
+#include "../include/svgfile.h"
 
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
@@ -386,8 +386,6 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
 }
 
 
-
-
 /// CENTRALITE DE VECTEUR PROPRE
 
 /// Calcul de Cvp
@@ -443,5 +441,74 @@ void Graphe::calculer_Cvp()
 
 
     }while(lambda_diff > VAR_LAMBDA);
+}
+
+
+/// CENTRALITE D'INTERMEDIARITE
+//= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
+
+///algorithme de Dijkstra adapté
+int Graphe::Dijkstra_adapté(int debut, int fin) const
+{
+    //1) INITIALISATION
+    std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�
+    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances � S0 (=debut)
+    std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
+    Sommet* s = sommets[debut]; //varaible tampon
+    int distance, d_min, id_d_min; //variables
+
+    //distance de S0 a S0 = 0
+    distance_S0[debut] = 0;
+    marquage[debut] = MARQUE;
+
+    //2) RECHERCHE DU CHEMIN.
+    //tant qu'on a pas trouv� le plus court chemin jusqu'� la fin
+    do
+    {
+        d_min = 999;
+        //CHEMIN LE PLUS PROCHE DE S0
+        //pour tous les sommets
+        for(auto it:sommets)
+        {
+            //si le sommet est adjacent � s
+            if(EstSuccesseurDe(s->get_indice(), it->get_indice()))
+            {
+                //on r�cup�re la distance entre ces deux sommets (arrete[s,it] -> poids)
+                distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
+                //Si c'est plus court d'aller de S0 � it en passant par s
+                if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
+                {
+                    //on met � jour la distance S0 -> it avec celle qui passe par s
+                    distance_S0[it->get_indice()] = distance_S0[s->get_indice()] + distance;
+                    //predecesseur de it devient s
+                    preds[it->get_indice()] = s->get_indice();
+                }
+            }
+        }
+
+        //le plus proche sommet de S0 qui n'est pas marqu�
+        for(size_t i=0; i < sommets.size(); ++i)
+        {
+            //si ce sommet n'est pas marqu�
+            if(marquage[i] != MARQUE)
+            {
+                //et si c'est le plus proche de S0
+                if(distance_S0[i]<d_min)
+                {
+                    //on change la distance minimale � S0
+                    d_min = distance_S0[i];
+                    //on garde en m�moire son identifiant
+                    id_d_min=i;
+                }
+            }
+        }
+        //le sommet le plus proche qui n'a pas encore �t� �tudi� est le prochain que nous allons parcourir
+        s = sommets[id_d_min];
+        //on marque le sommet s
+        marquage[s->get_indice()] = MARQUE;
+    }while(marquage[fin] != MARQUE);
+
+    //on retourn la distance de debut � fin
+    return distance_S0[fin];
 }
 

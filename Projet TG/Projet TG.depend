@@ -35,3 +35,38 @@
 	<iostream>
 	"Graphe.h"
 
+1588009356 source:c:\users\rose\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"Sommet.h"
+
+1588017964 source:c:\users\rose\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"svgfile.h"
+	<iostream>
+	<sstream>
+
+1588082066 source:c:\users\rose\documents\github\piscine2020\projet tg\src\arrete.cpp
+	"../include/Arrete.h"
+
+1588080561 c:\users\rose\documents\github\piscine2020\projet tg\include\arrete.h
+
+1588081929 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
+	"../include/Graphe.h"
+	"../include/svgfile.h"
+
+1588080561 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+	<string>
+	<vector>
+	"Sommet.h"
+	<iostream>
+	<fstream>
+	"Arrete.h"
+	<math.h>
+
+1588080561 c:\users\rose\documents\github\piscine2020\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1588017964 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
