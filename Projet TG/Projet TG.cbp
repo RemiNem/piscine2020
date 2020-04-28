@@ -43,6 +43,7 @@
 		<Unit filename="src/Arrete.cpp" />
 		<Unit filename="src/Graphe.cpp" />
 		<Unit filename="src/Sommet.cpp" />
+		<Unit filename="src/svgfile.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

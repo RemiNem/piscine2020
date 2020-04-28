@@ -7,12 +7,12 @@ class Sommet
     private:
         int m_indice;
         std::string m_nom;
-        //coords
+        ///coords :
         int xs;
         int ys;
 
     public:
-        //attribut
+        ///attribut
         std::vector<Sommet*> sommet_adjacent;
 
         ///construction/destruction

@@ -151,15 +151,15 @@ void Graphe::afficher_graphe_internet() const
         }
         //Ajouter le poids
         //on récupere les coordonnées du point à mi chemin entre les deux sommets
-        int x1 = sommets[arretes[i].get_indice_s1()]->get_x();
-        int y1 = sommets[arretes[i].get_indice_s1()]->get_y();
-        int x2 = sommets[arretes[i].get_indice_s2()]->get_x();
-        int y2 = sommets[arretes[i].get_indice_s2()]->get_y();
+        int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*100;
+        int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*100;
+        int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*100;
+        int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*100;
 
-        int x = max(x1, x2) - min(x1,x2);
-        int y = max(y1,y2) - min(y1,y2);
+        int x = (max(x1, x2) - min(x1,x2))/2 + min(x1,x2);
+        int y = (max(y1,y2) - min(y1,y2))/2 + min(y1,y2);
 
-        svgout.addText(x*100 + 5, y*100 + 5, arretes[i].get_poids(), "black");
+        svgout.addText(x + 5, y - 5, arretes[i].get_poids(), "black");
     }
 }
 
