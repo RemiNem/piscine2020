@@ -122,32 +122,6 @@ void Graphe::afficher() const
 
 }
 
-///affichage degre de centralit�
-void Graphe::afficher_degre_centralite() const
-{
-    std::cout << std::endl << "La centralite de degre des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-///affichage centralit� de proximit�
-void Graphe::afficher_centralite_proximite() const
-{
-    std::cout << std::endl <<"La centralie de proximite des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_proximite[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
-
 ///affichage graphe en html
 //multiplier les coordonn�es par 100 pour l'echelle
 void Graphe::afficher_graphe_internet() const
@@ -184,6 +158,74 @@ void Graphe::afficher_graphe_internet() const
         int y = (max(y1,y2) - min(y1,y2))/2 + min(y1,y2);
 
         svgout.addText(x + 5, y - 5, arretes[i].get_poids(), "black");
+    }
+}
+
+///affichage degre de centralit�
+void Graphe::afficher_degre_centralite() const
+{
+    std::cout << std::endl << "La centralite de degre des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
+///affichage centralit� de proximit�
+void Graphe::afficher_centralite_proximite() const
+{
+    std::cout << std::endl <<"La centralie de proximite des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_proximite[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
+
+///affichage de centralite de vecteur propre
+void Graphe::afficher_centralite_vp() const
+{
+    std::cout << "La centralite de VP des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_vecteurp[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
+
+
+
+/// ----------GETTERS----------
+
+///retourne l'arrete correspondante � ces deux sommets
+Arrete Graphe::get_arrete(int s1, int s2) const
+{
+    //GRAPHE ORIENTE
+    if(m_orientation == true)
+    {
+        for(size_t i = 0; i < m_taille; ++i)
+        {
+            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
+                return arretes[i];
+        }
+    }
+    //GRAPHE NON ORIENTE
+    else
+    {
+        for (size_t i = 0; i < m_taille; ++i)
+        {
+            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
+                return arretes[i];
+        }
     }
 }
 
@@ -346,30 +388,7 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
 
 
 
-/// ----------GETTERS----------
-
-///retourne l'arrete correspondante � ces deux sommets
-Arrete Graphe::get_arrete(int s1, int s2) const
-{
-    //GRAPHE ORIENTE
-    if(m_orientation == true)
-    {
-        for(size_t i = 0; i < m_taille; ++i)
-        {
-            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
-                return arretes[i];
-        }
-    }
-    //GRAPHE NON ORIENTE
-    else
-    {
-        for (size_t i = 0; i < m_taille; ++i)
-        {
-            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
-                return arretes[i];
-        }
-    }
-}
+/// CENTRALITE DE VECTEUR PROPRE
 
 /// Calcul de Cvp
 void Graphe::calculer_Cvp()
@@ -426,14 +445,3 @@ void Graphe::calculer_Cvp()
     }while(lambda_diff > VAR_LAMBDA);
 }
 
-void Graphe::afficher_centralite_vp() const
-{
-    std::cout << "La centralite de VP des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_vecteurp[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}

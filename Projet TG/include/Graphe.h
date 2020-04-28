@@ -29,10 +29,13 @@ class Graphe
 
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
+        void afficher_graphe_internet() const; //html
         void afficher_degre_centralite() const; //affichage du degr� de centralit� de chaque sommet
         void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
-        void afficher_graphe_internet() const; //html
-        void afficher_centralite_vp() const;
+        void afficher_centralite_vp() const; //affichage de la centralite de vecteur pour chaque sommet
+
+        /// ------------GETTERS-------------------
+        Arrete get_arrete(int s1, int s2) const;
 
         /// --------CALCULS INDICES DE CENTRALITE---------
         //CENTRALITE DE DEGRE
@@ -45,11 +48,7 @@ class Graphe
         int Dijkstra(int debut, int fin) const;
         bool EstSuccesseurDe(int s1, int s2) const;
 
-
-        /// ------------GETTERS-------------------
-        Arrete get_arrete(int s1, int s2) const;
-
-
+        //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
 
 
