@@ -11,8 +11,19 @@ int main()
     ///afficher graphe
     G.afficher();
     //G.afficher_matrice_indice();
+
     G.calculer_tous_Cd();
     G.afficher_degre_centralite();
     G.afficher_graphe_internet();
+    G.calculer_Cvp();
+    G.afficher_centralite_vp();
+
+
     return 0;
 }
+
+
+
+
+
+

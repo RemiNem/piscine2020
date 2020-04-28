@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "Arrete.h"
+#include <math.h>
 class Graphe
 {
     private:
@@ -16,10 +17,11 @@ class Graphe
         size_t m_taille; //nombre d'arretes
         /// INDICES DE CENTRALITE
         float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
-
+        float *centralite_vecteurp; // degré de centralité Vp de chaque sommet
     public:
         ///DESTRUCTION
         virtual ~Graphe();
+
         /// --------CHARGEMENT GRAPHE------
         Graphe(std::string txt); //topologique
         void charger_ponderation(std::string txt); //pondération
@@ -28,11 +30,13 @@ class Graphe
         void afficher() const; //affichage du graphe sur console
         void afficher_degre_centralite() const; //affichage du degré de centralité de chaque sommet
         void afficher_graphe_internet() const; //html
+        void afficher_centralite_vp() const;
 
         /// --------CALCULS INDICES DE CENTRALITE---------
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
+
         //CENTRALITE DE PROXIMITE
         int Dijkstra(int debut, int fin) const;
         bool EstSuccesseurDe(int s1, int s2) const;
@@ -41,6 +45,8 @@ class Graphe
         /// ------------GETTERS-------------------
         Arrete get_arrete(int s1, int s2) const;
 
+
+        void calculer_Cvp();
 
 
 };

@@ -12,6 +12,7 @@ class Arrete
 
     public:
         ///constructeurs/destructeurs
+
         Arrete();
         Arrete(int indice,int s1,int s2);
         virtual ~Arrete();
@@ -27,6 +28,7 @@ class Arrete
         void set_indice_s2(int indice);
         void set_indice(int i);
         void set_poids(int p);
+
 };
 
 #endif // ARRETE_H
