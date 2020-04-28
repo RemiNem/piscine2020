@@ -14,22 +14,22 @@ class Graphe
         std::vector<Sommet*> sommets; //tous les sommets
         Arrete *arretes; //toutes les arretes
         size_t m_taille; //nombre d'arretes
-        ///indices de centralité
+        /// INDICES DE CENTRALITE
         float *centralite_degre; //le degré de centralité de chaque sommet dans un vecteur
 
     public:
-        ///construction / destruction
-        Graphe(std::string txt);
+        ///DESTRUCTION
         virtual ~Graphe();
-        //chargement
-        void charger_ponderation(std::string txt);
+        /// --------CHARGEMENT GRAPHE------
+        Graphe(std::string txt); //topologique
+        void charger_ponderation(std::string txt); //pondération
 
-        ///affichage
-        void afficher() const;
-        void afficher_degre_centralite() const;
-        void afficher_graphe_internet() const;
+        /// ---------AFFICHAGE--------
+        void afficher() const; //affichage du graphe sur console
+        void afficher_degre_centralite() const; //affichage du degré de centralité de chaque sommet
+        void afficher_graphe_internet() const; //html
 
-        ///calcul des indices de centralité
+        /// --------CALCULS INDICES DE CENTRALITE---------
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
