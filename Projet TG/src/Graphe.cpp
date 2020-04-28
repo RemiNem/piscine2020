@@ -185,9 +185,11 @@ float Graphe::calculer_Cd(int indice) const
         if(indice == arretes[i].get_indice_s1() || indice == arretes[i].get_indice_s2())
             degre++;
     }
+    /*
     //si le graphe est non orienté on divise l'ordre par 2 car chaque arete est comptée deux fois
     if(m_orientation == false)
         degre = degre/2;
+    */
 
     //2) Calcul de la centralité normalisé de degré du sommet
     float Cd = degre/(m_ordre - 1);
