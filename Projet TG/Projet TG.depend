@@ -43,6 +43,7 @@
 	<iostream>
 	<sstream>
 
+<<<<<<< Updated upstream
 1588082066 source:c:\users\rose\documents\github\piscine2020\projet tg\src\arrete.cpp
 	"../include/Arrete.h"
 
@@ -53,6 +54,13 @@
 	"../include/svgfile.h"
 
 1588080561 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+=======
+1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\main.cpp
+	<iostream>
+	"C:\Users\rose\Documents\GitHub\piscine2020\Projet TG\include\Graphe.h"
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+>>>>>>> Stashed changes
 	<string>
 	<vector>
 	"Sommet.h"
@@ -61,12 +69,40 @@
 	"Arrete.h"
 	<math.h>
 
+<<<<<<< Updated upstream
 1588080561 c:\users\rose\documents\github\piscine2020\projet tg\include\sommet.h
 	<vector>
 	<string>
 
 1588017964 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
+=======
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\arrete.h
+
+1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\src\arrete.cpp
+	"../include/Arrete.h"
+
+1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
+	"../include/Graphe.h"
+	"../include/svgfile.h"
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
+>>>>>>> Stashed changes
 	<string>
 	<fstream>
 	<set>
 
+<<<<<<< Updated upstream
+=======
+1588009356 source:c:\users\rose\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"Sommet.h"
+
+1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"svgfile.h"
+	<iostream>
+	<sstream>
+
+>>>>>>> Stashed changes
