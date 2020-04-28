@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1588072541 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"Sommet.h"
+
+1588065247 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"svgfile.h"
+	<iostream>
+	<sstream>
+
