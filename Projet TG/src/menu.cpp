@@ -22,16 +22,12 @@ void menu()
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
                 G.charger_graphe(graphe_charge);
-                //calculer les indices de centralit�
+                //calculer les indices de centralite du graphe
                 G.calculer_tous_indices();
-                //a la fin
-                graphe_charge = true;
                 break;
             case 2: // CHANGER LE SYSTEME DE PONDERATION DU GRAPHE
                 if(graphe_charge)
-                {
-
-                }
+                    G.changer_ponderation();
                 else
                     erreur("le graphe n'est pas encore charge");
                 break;
@@ -56,10 +52,10 @@ void menu()
                 // 2) tester la connexite
                 // 3) recalculer les nouveaux indices de centralit� et les comparer avec les anciens (dans la sauvegarde)
                 // 4) sauvegarder les nouveaux indices de centralite ?
-                G.vulnerabilite();
+
                 if(graphe_charge)
                 {
-
+                    G.vulnerabilite();
                 }
                 else
                     erreur("le graphe n'est pas encore charge");

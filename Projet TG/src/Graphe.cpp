@@ -10,10 +10,11 @@
 #define min(a,b) (a<=b?a:b)
 
 
-#define NON_MARQUE  0
-#define MARQUE      1
-#define INCONNU     -1
-#define NORMALISE   (m_ordre - 1)
+#define NON_MARQUE          0
+#define MARQUE              1
+#define INCONNU             -1
+#define NORMALISE           (m_ordre - 1)
+#define AUCUNE_PONDERATION (int(fichiers.size()) + 1)
 
 #define VAR_LAMBDA 4
 
@@ -43,28 +44,34 @@ void Graphe::charger_graphe(bool &graphe_charge)
     int choix;
     //on recupere le choix du fichier a charger mais l'entree est blindee
     entree_blindee(1, int(fichiers.size()), choix);
-
     charger_topologique(fichiers[choix - 1].insert(0, "Load topologique/")); // chargement du graphe topologique
 
    ///CHARGER GRAPHE PODOLOGIQUE
-    std::string dossier = fichiers[choix - 1].erase(0, 17); //dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
-    fichiers = recuperer_fichiers("Load podologique/" +  dossier); // recupération des pondérations  qu'on a le droit de charger depuis ce graphe topo
-    std::cout << "Quel ponderation souhaitez vous charger ? " << std::endl; //recuperation de la ponderation a charger
-    for(size_t i = 0; i < fichiers.size(); ++i)
-        std::cout << i + 1 << ") " << fichiers[i] << std::endl;
-        std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune ponderation disponible)
-    //on recupere le choix du fichier mais en blindant l'entree
-    entree_blindee(1, int(fichiers.size()) + 1, choix);
-    //si on a choisi aucune pondération
-    if(choix == int(fichiers.size()) + 1)
-        std::cout << ""; // il se passe rien
-    else //sinon on charge la ponderation dans le bon dossier
-    {
-        charger_ponderation(fichiers[choix - 1].insert(0, "Load podologique/" + dossier + "/"));
-    }
+    nomfichiergraphe = fichiers[choix - 1].erase(0, 17); //Recuperation du nom du fichier pour charger la ponderation
+    changer_ponderation(); //chargement ponderation
     graphe_charge = true; //le graphe devient charge
 }
 
+void Graphe::changer_ponderation()
+{
+    int choix;
+    std::vector<std::string> fichiers = recuperer_fichiers("Load podologique/" + nomfichiergraphe); //recuperation des ponderations qu'on a le droit de charger depuis le graphe topo actuel
+    std::cout << "Quelle ponderaiton souhaitez vous charger ? " << std::endl; //recuperation du fichier ponderation a charger
+    for(size_t i = 0; i < fichiers.size(); ++i)
+        std::cout << i + 1 << ") " << fichiers[i] << std::endl;
+        std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune disponible)
+    //on recupere le choix de l'utilisateur en blindant l'entree
+    entree_blindee(1, int(fichiers.size()) + 1, choix);
+    //si on a choisi aucune ponderation, le poids de toutes les arretes doit etre initialisé a 0
+    if (choix == AUCUNE_PONDERATION)
+        for(size_t i = 0; i < m_taille; ++i)
+            arretes[i].set_poids(0);
+    else //sinon on charge la ponderation depuis le bon dossier
+    {
+        charger_ponderation(fichiers[choix - 1].insert(0, "Load podologique/" + nomfichiergraphe + "/"));
+    }
+
+}
 
 ///topologique
 void Graphe::charger_topologique(std::string txt)
@@ -85,9 +92,12 @@ void Graphe::charger_topologique(std::string txt)
     }
     //Arretes
     flux >> m_taille;
-    Arrete a;
     for(size_t i = 0; i < m_taille; ++i)
+    {
+        Arrete a;
+        a.set_indice(i);
         arretes.push_back(a);
+    }
 
     for(size_t i=0; i < m_taille; i++)
     {
@@ -97,7 +107,6 @@ void Graphe::charger_topologique(std::string txt)
         sommets[s1]->ajouter_adjacent(sommets[s2]);
         arretes[i].set_indice_s1(s1);
         arretes[i].set_indice_s2(s2);
-        arretes[i].set_poids(0);
         //si le graphe n'est pas orient� l'arrete va dans les deux sens
         if(m_orientation==false)
         {
@@ -608,26 +617,6 @@ void Graphe::calculer_tous_indices()
 
 void Graphe::vulnerabilite()
 {
-    /*
-    int indice_arrete_sup;
-    Arrete tampon;
-    arretes=new Arrete[m_taille];
-    //affiche les arretes
-    for(size_t i =0; i< m_taille; i++)
-    {
-        std::cout << i << " : " << arretes[i].get_indice_s1() << "--" << arretes[i].get_indice_s2();
-    }
-
-    std::cout << "indiquer l'arrete a supprimer" << std::endl;
-    std::cin >> indice_arrete_sup;
-
-    //on intervertit l'arrete a sup avec la derniere arrete du tableau pour utiliser popback
-    tampon = arretes[m_taille];
-    arretes[m_taille] = arretes[indice_arrete_sup];
-    arretes[indice_arrete_sup]= tampon;
-
-   /arretes.erase(arretes.begin() + m_taille);*/
-
     //1) SUPPRIMER UNE ARRETE
     supprimer_arrete();
     //2) REGARDER LA CONNEXITE
@@ -640,20 +629,19 @@ void Graphe::vulnerabilite()
 void Graphe::supprimer_arrete()
 {
     int indice;
+    Arrete tampon;
     afficher_arretes();
     std::cout << std::endl <<"Quelle arrete souhaitez vous supprimer ? " << std::endl;
     entree_blindee(0, m_taille, indice);
-
-    //on decalle toutes les arretes vers la gauche
-    for(size_t i = indice; i < m_taille - 1; ++i)
-    {
-        arretes[i] = arretes[i+1];
-        arretes[i].set_indice(i);
-    }
+    //on interverti la case a suppr avec la derniere case du vecteur
+    arretes[m_taille - 1].set_indice(indice);
+    tampon = arretes[indice];
+    arretes[indice] = arretes[m_taille - 1];
+    arretes[m_taille - 1] = tampon;
     //on supprime la derniere case du vecteur
     arretes.pop_back();
     m_taille--;
 
+    std::cout << std::endl << "Les nouvelles arretes : " << std::endl;
     afficher_arretes();
-
 }
