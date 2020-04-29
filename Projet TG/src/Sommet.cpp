@@ -1,4 +1,4 @@
-#include "Sommet.h"
+#include "..\include\Sommet.h"
 
 Sommet::Sommet(int indice,std::string nom,int x0,int y0)
 {

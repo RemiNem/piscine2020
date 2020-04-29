@@ -46,6 +46,7 @@ class Graphe
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
+        int Dijkstra_adapte(int debut, int fin) ;
         bool EstSuccesseurDe(int s1, int s2) const;
 
         //CENTRALITE DE VECTEUR PROPRE

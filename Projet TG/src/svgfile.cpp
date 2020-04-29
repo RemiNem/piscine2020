@@ -1,4 +1,4 @@
-#include "svgfile.h"
+#include "..\include\svgfile.h"
 #include <iostream>
 #include <sstream>
 

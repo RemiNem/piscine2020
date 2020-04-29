@@ -448,67 +448,65 @@ void Graphe::calculer_Cvp()
 //= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
 
 ///algorithme de Dijkstra adapté
-int Graphe::Dijkstra_adapté(int debut, int fin) const
+int Graphe::Dijkstra_adapte(int s0, int sf)
 {
-    //1) INITIALISATION
-    std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�
-    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances � S0 (=debut)
-    std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
-    Sommet* s = sommets[debut]; //varaible tampon
-    int distance, d_min, id_d_min; //variables
+    std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
+    std::vector<bool>decouvert(m_ordre,false);
+    int dtot=0;///distance parcourue
+    int sa;
+    int ss=s0;
+    int sommet_marque=0;
+    std::vector<int>distance(m_ordre,-1);///distance absolue du sommet en cours par rapport a un sommet numero i
 
-    //distance de S0 a S0 = 0
-    distance_S0[debut] = 0;
-    marquage[debut] = MARQUE;
-
-    //2) RECHERCHE DU CHEMIN.
-    //tant qu'on a pas trouv� le plus court chemin jusqu'� la fin
-    do
+    while(sommet_marque!=m_ordre-1) ///tant que il reste des sommetes marqués
     {
-        d_min = 999;
-        //CHEMIN LE PLUS PROCHE DE S0
-        //pour tous les sommets
-        for(auto it:sommets)
+
+        decouvert[ss]=true;
+        sommet_marque++;
+
+        for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
         {
-            //si le sommet est adjacent � s
-            if(EstSuccesseurDe(s->get_indice(), it->get_indice()))
+            sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
+
+            if(decouvert[sa]==false) ///si le sommet n'est pas découvert
             {
-                //on r�cup�re la distance entre ces deux sommets (arrete[s,it] -> poids)
-                distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
-                //Si c'est plus court d'aller de S0 � it en passant par s
-                if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
+                if((get_arrete(ss,sa).get_poids()+dtot)<distance[sa]||distance[sa]==-1)
+                    ///si la case du tableau de distance est vide ou que la nouvelle distance entre s0 et sa en cours
+                    ///est inférieure a la distance d'avant alors on la remplace dans la liste
                 {
-                    //on met � jour la distance S0 -> it avec celle qui passe par s
-                    distance_S0[it->get_indice()] = distance_S0[s->get_indice()] + distance;
-                    //predecesseur de it devient s
-                    preds[it->get_indice()] = s->get_indice();
+                    distance[sa]=get_arrete(ss,sa).get_poids()+dtot;
+                    pred[sa]=ss;
+
                 }
+
             }
         }
+         int min=32767;///valeur maximale d'un int non signé
 
-        //le plus proche sommet de S0 qui n'est pas marqu�
-        for(size_t i=0; i < sommets.size(); ++i)
+    for(size_t i=0; i<distance.size(); i++)
+    {
+        if(distance[i]<min&&distance[i]!=-1&&decouvert[i]==false)
         {
-            //si ce sommet n'est pas marqu�
-            if(marquage[i] != MARQUE)
-            {
-                //et si c'est le plus proche de S0
-                if(distance_S0[i]<d_min)
-                {
-                    //on change la distance minimale � S0
-                    d_min = distance_S0[i];
-                    //on garde en m�moire son identifiant
-                    id_d_min=i;
-                }
-            }
+            min=distance[i];
+            ss=i;
         }
-        //le sommet le plus proche qui n'a pas encore �t� �tudi� est le prochain que nous allons parcourir
-        s = sommets[id_d_min];
-        //on marque le sommet s
-        marquage[s->get_indice()] = MARQUE;
-    }while(marquage[fin] != MARQUE);
+    }
+        dtot=distance[ss];///on actualise la distance totale
+    }
+    int n;
+int somme=0;
+ n=pred[sf];
+    if(n!=-1)
+    {
+        std::cout<<sommets[sf]->get_nom();
 
-    //on retourn la distance de debut � fin
-    return distance_S0[fin];
+        while(n!=-1)///on remonte tous les predessesseurs jusqu'a trouver le sommet initial
+        {
+            std::cout<<"<--"<<sommets[n]->get_nom();
+            n=pred[n];
+        }
+
+    }
+return dtot;
 }
 
