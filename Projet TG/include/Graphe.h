@@ -25,7 +25,8 @@ class Graphe
         virtual ~Graphe();
 
         /// --------CHARGEMENT GRAPHE------
-        Graphe(std::string txt); //topologique
+        void charger_graphe(bool &graphe_charge); //chargement du graphe global
+        void charger_topologique(std::string txt); //topologique
         void charger_ponderation(std::string txt); //pond�ration
 
         /// ---------AFFICHAGE--------

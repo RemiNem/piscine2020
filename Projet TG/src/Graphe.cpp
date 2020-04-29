@@ -1,5 +1,6 @@
 #include "../include/Graphe.h"
 #include "../include/svgfile.h"
+#include "../include/erreur.h"
 
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
@@ -27,8 +28,27 @@ Graphe::Graphe()
 
 /// ------------------------CHARGEMENT GRAPHE-----------------
 
+void Graphe::charger_graphe(bool &graphe_charge)
+{
+    std::string nomfichier;
+    std::cout << "Veuillez donner le nom du fichier sous la forme nomfichier.txt : ";
+    std::cin >> nomfichier;
+    nomfichier.insert(0, "Load Graph/");
+    std::ifstream graphe(nomfichier);
+    if(!graphe)
+        erreur("Nom du graphe invalide");
+    else
+    {
+        graphe.close();
+        charger_topologique(nomfichier);
+        charger_ponderation(nomfichier);
+        graphe_charge = true;
+    }
+}
+
+
 ///topologique
-Graphe::Graphe(std::string txt)
+void Graphe::charger_topologique(std::string txt)
 {
     std::ifstream flux(txt);
     //orientation

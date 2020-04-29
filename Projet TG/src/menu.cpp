@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../include/Graphe.h"
-void erreur(std::string error);
+#include "../include/erreur.h"
 
 void menu()
 {
@@ -21,7 +21,7 @@ void menu()
         {
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
-
+                G.charger_graphe(graphe_charge);
                 //calculer les indices de centralité
                 G.calculer_tous_indices();
                 //a la fin
@@ -74,7 +74,4 @@ void menu()
     }while(!quitter);
 }
 
-void erreur(std::string error)
-{
-    std::cout << error << std::endl;
-}
+
