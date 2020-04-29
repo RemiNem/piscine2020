@@ -75,14 +75,17 @@ class Graphe
         void vulnerabilite();
         void supprimer_arrete();
 
+        //CONEXITE
+        std::vector<int> BFS(int num_s0)const;
+        void recherche_afficher_CC();
+        
         //SAUVEGARDE
         void sauvegarde_centralites();
         void ecrire_centralite(float* vecteur, std::ofstream &fichier);
 
-        //CONEXITE
-        std::vector<int> BFS(int num_s0)const;
-        void recherche_afficher_CC();
-
+        //CHARGEMENT
+        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp);
+        void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
 
 };
 
