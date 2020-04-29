@@ -75,6 +75,10 @@ class Graphe
         void vulnerabilite();
         void supprimer_arrete();
 
+        //CONEXITE
+        std::vector<int> BFS(int num_s0)const;
+        void recherche_afficher_CC();
+
 };
 
 #endif // GRAPHE_H

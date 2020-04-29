@@ -620,7 +620,7 @@ void Graphe::vulnerabilite()
     //1) SUPPRIMER UNE ARRETE
     supprimer_arrete();
     //2) REGARDER LA CONNEXITE
-
+    recherche_afficher_CC();
     //3) REGARDER LES NOUVEAUX INDICES DE CENTRALITE
 
 }
@@ -645,3 +645,88 @@ void Graphe::supprimer_arrete()
     std::cout << std::endl << "Les nouvelles arretes : " << std::endl;
     afficher_arretes();
 }
+
+
+std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
+    {
+         /// déclaration de la file(queue)
+         std::queue<const Sommet*>file;
+         /// pour le marquage
+         /// couleurs [i] indique si le sommet numéro i est non marqué (valeur 0)
+         /// ou marqué (valeur 1)
+         std::vector<int> couleurs((int)sommets.size(),0);
+         ///pour noter les prédécesseurs : on note les numéros des prédécesseurs
+         ///(on pourrait stocker des pointeurs sur ...)
+         ///preds[i] donnera le numéro du prédécesseur du sommet i
+         ///dans les chemins obtenus
+         ///Au départ les sommets n’ont pas de prédécesseur (valeur -1)
+         ///Le sommet initial n’aura pas de prédécesseur. Les sommets non découverts
+         ///(non accessibles à partir du sommet initial) non plus.
+         std::vector<int> preds((int)sommets.size(),-1);
+         ///étape initiale : on enfile et on marque le sommet initial
+         file.push(sommets[num_s0]);
+         couleurs[num_s0]=1;
+         const Sommet*s;
+
+         ///tant que la file n'est pas vide
+         while(!file.empty())
+            {
+         ///on défile le prochain élément de la file
+                s=file.front();//on récupère le premier élement de la file
+                file.pop(); // on l’enlève de la file
+         /// on va parcourir les successeurs du sommet défilé :
+         ///pour chaque successeur du sommet défilé
+                for(auto succ:s->sommet_adjacent)
+                    {
+                        if(couleurs[succ->get_indice()]==0) ///s'il n'est pas marqué
+                        {
+                            couleurs[succ->get_indice()]=1; ///on le marque
+        ///on note son prédecesseur (= le sommet défilé)
+                            preds[succ->get_indice()]= s->get_indice();
+                            file.push(succ);///on le met dans la file
+                        }
+                    }
+            }
+         return preds;
+    }
+
+void Graphe::recherche_afficher_CC() // source Mme PALASI
+{
+
+    size_t num=0;
+            bool test;
+            int ncc=0;
+            ///pour noter les numéros de CC
+            std::vector<int> cc(sommets.size(),-1);
+            do
+            {
+
+            cc[num]=num;
+                std::cout<<std::endl<<"composante connexe "<<ncc<<" : "<<sommets[num]->get_nom()<<" ";
+                ncc++;
+                ///lancement d'un BFS sur le sommet num
+                std::vector<int> arbre_BFS=BFS(num);
+                ///affichage des sommets decouverts lors du parcours (ceux qui ont un predecesseur
+                for(size_t i=0;i<arbre_BFS.size();++i){
+                    if ((i!=num)&&(arbre_BFS[i]!=-1)){
+                            cc[i]=num;
+                            std::cout<<sommets[i]->get_nom()<<" ";
+                    }
+                }
+                ///recherche d'un sommet non explorÈ
+                ///pour relancer un BFS au prochain tour
+                test=false;
+                for(size_t i=0;i<sommets.size();++i){
+                    if (cc[i]==-1){
+                        num=i;
+                        test=true;
+                        break;
+                    }
+                }
+            }while(test==true);
+            std::cout<<std::endl;
+        }
+
+
+
+
