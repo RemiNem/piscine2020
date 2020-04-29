@@ -1,11 +1,8 @@
 #include "../include/Graphe.h"
 #include "../include/svgfile.h"
-
-#include "../include/erreur.h"
+#include "../include/fonctions.h"
 #include <dirent.h>
 #include <string.h>
-
-
 #include <bits/stdc++.h>
 
 
@@ -35,32 +32,6 @@ Graphe::Graphe()
 
 /// ------------------------CHARGEMENT GRAPHE-----------------
 
-///recupere dans un vecteur de string les fichiers qu'il est possible de charger
-std::vector<std::string> recuperer_fichiers(std::string nomdossier)
-{
-    double i = -2; //pour eviter de recuperer les donnees . et .. au debut
-    //conversion string vers char
-    std::vector<std::string> nomfichiers;
-    char* dossier = new char[nomdossier.length() + 1];
-    strcpy(dossier, nomdossier.c_str());
-    //recupere tous e=les fichiers dans la string
-    DIR * rep = opendir(dossier);
-    if (rep != NULL)
-    {
-        struct dirent * ent;
-
-        while ((ent = readdir(rep)) != NULL)
-        {
-            ++i;
-            if (i >= 1)
-                nomfichiers.push_back(ent->d_name);
-        }
-
-        closedir(rep);
-    }
-    std::cout << std::endl;
-    return nomfichiers;
-}
 
 void Graphe::charger_graphe(bool &graphe_charge)
 {
@@ -70,15 +41,10 @@ void Graphe::charger_graphe(bool &graphe_charge)
     for(size_t i = 0; i < fichiers.size(); ++i)
         std::cout << i + 1 << ") " << fichiers[i] << std::endl; // i + 1 car on affiche à partir de 1 et non 0
     int choix;
-    do//blindage
-    {
-        std::cout << "votre choix : ";
-        std::cin >> choix; //choix du fichier a charger
-        if(choix < 1 || choix > int(fichiers.size()))
-            erreur("Le numero que vous avez entre n'est pas valide");
-    }while(choix < 1 || choix > int(fichiers.size()));//blindage
+    //on recupere le choix du fichier a charger mais l'entree est blindee
+    entree_blindee(1, int(fichiers.size()), choix);
 
-   charger_topologique(fichiers[choix - 1].insert(0, "Load topologique/")); // chargement du graphe topologique
+    charger_topologique(fichiers[choix - 1].insert(0, "Load topologique/")); // chargement du graphe topologique
 
    ///CHARGER GRAPHE PODOLOGIQUE
     std::string dossier = fichiers[choix - 1].erase(0, 17); //dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
@@ -87,13 +53,8 @@ void Graphe::charger_graphe(bool &graphe_charge)
     for(size_t i = 0; i < fichiers.size(); ++i)
         std::cout << i + 1 << ") " << fichiers[i] << std::endl;
         std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune ponderation disponible)
-    do//blindage
-    {
-        std::cout << "votre choix : ";
-        std::cin >> choix; //on recupere le choix
-        if(choix < 1 || choix > int(fichiers.size()) + 1)
-            erreur("Le numero que vous avez entre n'est pas valide");
-    }while(choix < 1 || choix > int(fichiers.size()) + 1);//blindage
+    //on recupere le choix du fichier mais en blindant l'entree
+    entree_blindee(1, int(fichiers.size()) + 1, choix);
     //si on a choisi aucune pondération
     if(choix == int(fichiers.size()) + 1)
         std::cout << ""; // il se passe rien
@@ -124,7 +85,9 @@ void Graphe::charger_topologique(std::string txt)
     }
     //Arretes
     flux >> m_taille;
-    arretes=new Arrete[m_taille];
+    Arrete a;
+    for(size_t i = 0; i < m_taille; ++i)
+        arretes.push_back(a);
 
     for(size_t i=0; i < m_taille; i++)
     {
@@ -181,13 +144,13 @@ void Graphe::afficher() const
         std::cout << "Graphe non oriente" << std::endl;
     }
 
-    std::cout << " Ordre: " << m_ordre << std::endl;
-    std::cout << " Taille: " << m_taille << std::endl << std::endl;
+    std::cout << "Ordre: " << m_ordre << std::endl;
+    std::cout << "Taille: " << m_taille << std::endl << std::endl;
 
     std::cout<<"Liste d'adjacences : "<<std::endl;
     for(size_t i=0; i < sommets.size(); i++)
     {
-        std::cout<<"  Sommet "<< sommets[i]->get_nom() <<"("<< sommets[i]->get_x() <<","<< sommets[i]->get_y() <<")"<<" : ";///affiche numero sommet
+        std::cout<<"Sommet "<< sommets[i]->get_nom() <<"("<< sommets[i]->get_x() <<","<< sommets[i]->get_y() <<")"<<" : ";///affiche numero sommet
 
         for(size_t j = 0; j < sommets[i]->sommet_adjacent.size(); j++)
         {
@@ -199,13 +162,19 @@ void Graphe::afficher() const
     }
     std::cout<<std::endl;
 
-    for(size_t i=0; i < m_taille; i++)
+    afficher_arretes();
+}
+
+///affichage de toutes les arretes du graphe
+void Graphe::afficher_arretes() const
+{
+     for(size_t i=0; i < m_taille; i++)
     {
-        std::cout<< arretes[i].get_indice() <<" : "<< arretes[i].get_indice_s1() <<" "<< arretes[i].get_indice_s2() << " Poids: "
+        std::cout<< "Arrete "<< arretes[i].get_indice() <<" : "<< sommets[arretes[i].get_indice_s1()]->get_nom() << "-"
+                 << sommets[arretes[i].get_indice_s2()]->get_nom() << "   Poids: "
                  << arretes[i].get_poids()
                  <<std::endl;
     }
-
 }
 
 ///affichage graphe en html
@@ -332,10 +301,10 @@ void Graphe::set_m_taille(size_t taille)
     m_taille = taille;
 }
 
-void Graphe::set_arretes(Arrete *nouv_arretes)
+/*void Graphe::set_arretes(Arrete nouv_arretes)
 {
     arretes = nouv_arretes;
-}
+}*/
 
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
@@ -639,6 +608,7 @@ void Graphe::calculer_tous_indices()
 
 void Graphe::vulnerabilite()
 {
+    /*
     int indice_arrete_sup;
     Arrete tampon;
     arretes=new Arrete[m_taille];
@@ -656,8 +626,34 @@ void Graphe::vulnerabilite()
     arretes[m_taille] = arretes[indice_arrete_sup];
     arretes[indice_arrete_sup]= tampon;
 
-   // arretes.erase(arretes.begin() + m_taille);
+   /arretes.erase(arretes.begin() + m_taille);*/
+
+    //1) SUPPRIMER UNE ARRETE
+    supprimer_arrete();
+    //2) REGARDER LA CONNEXITE
+
+    //3) REGARDER LES NOUVEAUX INDICES DE CENTRALITE
+
+}
 
 
+void Graphe::supprimer_arrete()
+{
+    int indice;
+    afficher_arretes();
+    std::cout << std::endl <<"Quelle arrete souhaitez vous supprimer ? " << std::endl;
+    entree_blindee(0, m_taille, indice);
+
+    //on decalle toutes les arretes vers la gauche
+    for(size_t i = indice; i < m_taille - 1; ++i)
+    {
+        arretes[i] = arretes[i+1];
+        arretes[i].set_indice(i);
+    }
+    //on supprime la derniere case du vecteur
+    arretes.pop_back();
+    m_taille--;
+
+    afficher_arretes();
 
 }

@@ -15,7 +15,7 @@ class Graphe
         bool m_orientation; //orientation graphe
         size_t m_ordre; //nombre de sommets
         std::vector<Sommet*> sommets; //tous les sommets
-        Arrete *arretes; //toutes les arretes
+        std::vector<Arrete> arretes; //toutes les arretes
         size_t m_taille; //nombre d'arretes
         /// INDICES DE CENTRALITE
         float *centralite_degre; //le degr� de centralit� de chaque sommet dans un vecteur
@@ -33,6 +33,7 @@ class Graphe
 
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
+        void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
         void afficher_graphe_internet() const; //html
         void afficher_degre_centralite() const; //affichage du degr� de centralit� de chaque sommet
         void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
@@ -45,7 +46,7 @@ class Graphe
 
         ///--------------SETTERS------------------
         void set_m_taille(size_t taille);
-        void set_arretes(Arrete *nouv_arretes);
+        //void set_arretes(Arrete *nouv_arretes);
 
         /// --------CALCULS INDICES DE CENTRALITE---------
 
@@ -70,6 +71,8 @@ class Graphe
 
         //VULNERABILITE
         void vulnerabilite();
+        void supprimer_arrete();
+
 };
 
 #endif // GRAPHE_H

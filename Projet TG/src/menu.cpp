@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../include/Graphe.h"
-#include "../include/erreur.h"
+#include "../include/fonctions.h"
 
 void menu()
 {
@@ -56,6 +56,7 @@ void menu()
                 // 2) tester la connexite
                 // 3) recalculer les nouveaux indices de centralit� et les comparer avec les anciens (dans la sauvegarde)
                 // 4) sauvegarder les nouveaux indices de centralite ?
+                G.vulnerabilite();
                 if(graphe_charge)
                 {
 
