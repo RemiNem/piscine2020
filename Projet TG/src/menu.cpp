@@ -33,7 +33,7 @@ void menu()
                 if(graphe_charge)
                 {
                     G.changer_ponderation();
-                    G.calculer_tous_Cd(); // recalculer les indices de centralite qui ont change
+                    G.calculer_tous_indices(); // recalculer les indices de centralite qui ont change
                     G.sauvegarde_centralites(); //on les sauvegarde
                     G.afficher_graphe_internet(); //actualiser l'affichage du graphe sur html
                 }

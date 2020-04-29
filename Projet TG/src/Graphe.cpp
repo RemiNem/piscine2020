@@ -31,7 +31,7 @@ Graphe::Graphe()
 
 }
 
-/// ------------------------CHARGEMENT GRAPHE-----------------
+/// ------------------------CHARGEMENT GRAPHE--------------------------
 
 
 void Graphe::charger_graphe(bool &graphe_charge)
@@ -621,8 +621,9 @@ void Graphe::vulnerabilite()
     supprimer_arrete();
     //2) REGARDER LA CONNEXITE
 
-    //3) REGARDER LES NOUVEAUX INDICES DE CENTRALITE
-
+    //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
+    calculer_tous_indices();
+    //4) COMPARER CES CALCULS AVEC LES ANCIENS (dans la sauvegarde)
 }
 
 
