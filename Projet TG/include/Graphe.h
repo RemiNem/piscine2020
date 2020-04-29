@@ -75,6 +75,12 @@ class Graphe
         void vulnerabilite();
         void supprimer_arrete();
 
+        //SAUVEGARDE
+        void sauvegarde_centralites();
+        void ecrire_centralite(float* vecteur, std::ofstream &fichier);
+
+
+
 };
 
 #endif // GRAPHE_H

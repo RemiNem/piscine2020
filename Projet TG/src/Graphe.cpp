@@ -65,7 +65,7 @@ void Graphe::changer_ponderation()
     //si on a choisi aucune ponderation, le poids de toutes les arretes doit etre initialisé a 0
     if (choix == AUCUNE_PONDERATION)
         for(size_t i = 0; i < m_taille; ++i)
-            arretes[i].set_poids(0);
+            arretes[i].set_poids(1);
     else //sinon on charge la ponderation depuis le bon dossier
     {
         charger_ponderation(fichiers[choix - 1].insert(0, "Load podologique/" + nomfichiergraphe + "/"));
@@ -613,7 +613,7 @@ void Graphe::calculer_tous_indices()
 
 
 
-///VULNERABILITE
+//VULNERABILITE
 
 void Graphe::vulnerabilite()
 {
@@ -644,4 +644,35 @@ void Graphe::supprimer_arrete()
 
     std::cout << std::endl << "Les nouvelles arretes : " << std::endl;
     afficher_arretes();
+}
+
+
+///SAUVEGARDE CENTRALITE
+
+void Graphe::sauvegarde_centralites()
+{
+    std::ofstream sauv{"centralites.txt"}; //creation d'un fichier texte en ecriture
+    if(!sauv)
+        erreur("Impossible d'ouvrir le fichier centralites.txt");
+    else
+    {
+        //CENTRALITE DE DEGRE
+        sauv << "centralite_degre" << std::endl;
+        ecrire_centralite(centralite_degre, sauv);
+        //CENTRALITE DE VECTEUR PROPRE
+        sauv << "centralite_vecteurp" << std::endl;
+        ecrire_centralite(centralite_vecteurp, sauv);
+        //CENTRALITE DE PROXIMITE
+        sauv << "centralite_proximite" << std::endl;
+        ecrire_centralite(centralite_proximite, sauv);
+        //CENTRALITE D'INTERMEDIARITE
+        //A faire
+        sauv.close();
+    }
+}
+
+void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
+{
+    for(size_t i = 0; i < m_ordre; ++i)
+        fichier << vecteur[i] << std::endl;
 }
