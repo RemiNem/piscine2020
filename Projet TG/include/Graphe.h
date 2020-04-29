@@ -21,6 +21,7 @@ class Graphe
         float *centralite_proximite; //le degre de proximit� de chaque sommet dans un vecteur
     public:
         ///DESTRUCTION
+        Graphe();
         virtual ~Graphe();
 
         /// --------CHARGEMENT GRAPHE------
@@ -33,11 +34,14 @@ class Graphe
         void afficher_degre_centralite() const; //affichage du degr� de centralit� de chaque sommet
         void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
         void afficher_centralite_vp() const; //affichage de la centralite de vecteur pour chaque sommet
+        void afficher_tous_indices() const; //affiche tous les indices de centralite
+
 
         /// ------------GETTERS-------------------
         Arrete get_arrete(int s1, int s2) const;
 
         /// --------CALCULS INDICES DE CENTRALITE---------
+
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
@@ -46,11 +50,16 @@ class Graphe
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
-        int Dijkstra_adapte(int debut, int fin) ;
         bool EstSuccesseurDe(int s1, int s2) const;
 
         //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
+
+        //CENTRALITE D'INTERMEDIARITE
+        int Dijkstra_adapte(int debut, int fin) ;
+
+        //CALCULER TOUS
+        void calculer_tous_indices();
 
 
 };

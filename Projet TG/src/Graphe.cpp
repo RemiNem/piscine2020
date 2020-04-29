@@ -18,6 +18,13 @@ Graphe::~Graphe()
     //dtor
 }
 
+/// CONSTRUCTION
+//default
+Graphe::Graphe()
+{
+
+}
+
 /// ------------------------CHARGEMENT GRAPHE-----------------
 
 ///topologique
@@ -202,6 +209,17 @@ void Graphe::afficher_centralite_vp() const
 }
 
 
+///afficher tous les indices de centralite
+
+void Graphe::afficher_tous_indices() const
+{
+    afficher_centralite_proximite();
+    afficher_degre_centralite();
+    afficher_centralite_vp();
+    //ajouter centralite d'intermediarite
+}
+
+
 
 
 /// ----------GETTERS----------
@@ -351,7 +369,8 @@ int Graphe::Dijkstra(int debut, int fin) const
         s = sommets[id_d_min];
         //on marque le sommet s
         marquage[s->get_indice()] = MARQUE;
-    }while(marquage[fin] != MARQUE);
+    }
+    while(marquage[fin] != MARQUE);
 
     //on retourn la distance de debut � fin
     return distance_S0[fin];
@@ -393,10 +412,10 @@ void Graphe::calculer_Cvp()
 {
     // initialisation : on passe l'indice des sommets � 1
     centralite_vecteurp = new float[m_ordre];
-     for(size_t i=0; i<m_ordre; i++)
-     {
-         centralite_vecteurp[i]=1;
-     }
+    for(size_t i=0; i<m_ordre; i++)
+    {
+        centralite_vecteurp[i]=1;
+    }
 
     // tableau centralit� "intermediaire" pour calcul
     float centralite[m_ordre] = {0};
@@ -434,13 +453,14 @@ void Graphe::calculer_Cvp()
         {
             centralite_vecteurp[i]= centralite[i]/lambda;
         }
-       /* std::cout << "lambda vaut : " << lambda << std::endl;
-        std::cout << "lambda prec : " << lambda_p << std::endl;*/
+        /* std::cout << "lambda vaut : " << lambda << std::endl;
+         std::cout << "lambda prec : " << lambda_p << std::endl;*/
 
         lambda_diff = abs(lambda_p-lambda);
 
 
-    }while(lambda_diff > VAR_LAMBDA);
+    }
+    while(lambda_diff > VAR_LAMBDA);
 }
 
 
@@ -458,7 +478,7 @@ int Graphe::Dijkstra_adapte(int s0, int sf)
     int sommet_marque=0;
     std::vector<int>distance(m_ordre,-1);///distance absolue du sommet en cours par rapport a un sommet numero i
 
-    while(sommet_marque!=m_ordre-1) ///tant que il reste des sommetes marqués
+    while(sommet_marque != int(m_ordre-1)) ///tant que il reste des sommetes marqués
     {
 
         decouvert[ss]=true;
@@ -481,21 +501,21 @@ int Graphe::Dijkstra_adapte(int s0, int sf)
 
             }
         }
-         int min=32767;///valeur maximale d'un int non signé
+        int min=32767;///valeur maximale d'un int non signé
 
-    for(size_t i=0; i<distance.size(); i++)
-    {
-        if(distance[i]<min&&distance[i]!=-1&&decouvert[i]==false)
+        for(size_t i=0; i<distance.size(); i++)
         {
-            min=distance[i];
-            ss=i;
+            if(distance[i]<min&&distance[i]!=-1&&decouvert[i]==false)
+            {
+                min=distance[i];
+                ss=i;
+            }
         }
-    }
         dtot=distance[ss];///on actualise la distance totale
     }
     int n;
-int somme=0;
- n=pred[sf];
+    int somme=0;
+    n=pred[sf];
     if(n!=-1)
     {
         std::cout<<sommets[sf]->get_nom();
@@ -507,6 +527,17 @@ int somme=0;
         }
 
     }
-return dtot;
+    return dtot;
 }
 
+
+/// CALCULER TOUS INDICES
+
+
+void Graphe::calculer_tous_indices()
+{
+    calculer_tous_Cd();
+    calculer_tous_Cp();
+    calculer_Cvp();
+    //rajouter intermediarite
+}
