@@ -1,7 +1,8 @@
 #include "../include/Graphe.h"
 #include "../include/svgfile.h"
 #include "../include/erreur.h"
-
+#include <dirent.h>
+#include <string.h>
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
@@ -28,22 +29,73 @@ Graphe::Graphe()
 
 /// ------------------------CHARGEMENT GRAPHE-----------------
 
+///recupere dans un vecteur de string les fichiers qu'il est possible de charger
+std::vector<std::string> recuperer_fichiers(std::string nomdossier)
+{
+    double i = -2; //pour eviter de recuperer les donnees . et .. au debut
+    //conversion string vers char
+    std::vector<std::string> nomfichiers;
+    char* dossier = new char[nomdossier.length() + 1];
+    strcpy(dossier, nomdossier.c_str());
+    //recupere tous e=les fichiers dans la string
+    DIR * rep = opendir(dossier);
+    if (rep != NULL)
+    {
+        struct dirent * ent;
+
+        while ((ent = readdir(rep)) != NULL)
+        {
+            ++i;
+            if (i >= 1)
+                nomfichiers.push_back(ent->d_name);
+        }
+
+        closedir(rep);
+    }
+    std::cout << std::endl;
+    return nomfichiers;
+}
+
 void Graphe::charger_graphe(bool &graphe_charge)
 {
-    std::string nomfichier;
-    std::cout << "Veuillez donner le nom du fichier sous la forme nomfichier.txt : ";
-    std::cin >> nomfichier;
-    nomfichier.insert(0, "Load Graph/");
-    std::ifstream graphe(nomfichier);
-    if(!graphe)
-        erreur("Nom du graphe invalide");
-    else
+    ///CHARGER GRAPHE TOPOLOGIQUE
+    std::vector<std::string> fichiers = recuperer_fichiers("Load topologique"); // on récupère les fichiers du dossier des graphes topo
+    std::cout << "Quel graphe souhaitez vous charger ? " << std::endl; //affichage de chacun des fichiers à selectionner
+    for(size_t i = 0; i < fichiers.size(); ++i)
+        std::cout << i + 1 << ") " << fichiers[i] << std::endl; // i + 1 car on affiche à partir de 1 et non 0
+    int choix;
+    do//blindage
     {
-        graphe.close();
-        charger_topologique(nomfichier);
-        charger_ponderation(nomfichier);
-        graphe_charge = true;
+        std::cout << "votre choix : ";
+        std::cin >> choix; //choix du fichier a charger
+        if(choix < 1 || choix > int(fichiers.size()))
+            erreur("Le numero que vous avez entre n'est pas valide");
+    }while(choix < 1 || choix > int(fichiers.size()));//blindage
+
+   charger_topologique(fichiers[choix - 1].insert(0, "Load topologique/")); // chargement du graphe topologique
+
+   ///CHARGER GRAPHE PODOLOGIQUE
+    std::string dossier = fichiers[choix - 1].erase(0, 17); //dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
+    fichiers = recuperer_fichiers("Load podologique/" +  dossier); // recupération des pondérations  qu'on a le droit de charger depuis ce graphe topo
+    std::cout << "Quel ponderation souhaitez vous charger ? " << std::endl; //recuperation de la ponderation a charger
+    for(size_t i = 0; i < fichiers.size(); ++i)
+        std::cout << i + 1 << ") " << fichiers[i] << std::endl;
+        std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune ponderation disponible)
+    do//blindage
+    {
+        std::cout << "votre choix : ";
+        std::cin >> choix; //on recupere le choix
+        if(choix < 1 || choix > int(fichiers.size()) + 1)
+            erreur("Le numero que vous avez entre n'est pas valide");
+    }while(choix < 1 || choix > int(fichiers.size()) + 1);//blindage
+    //si on a choisi aucune pondération
+    if(choix == int(fichiers.size()) + 1)
+        std::cout << ""; // il se passe rien
+    else //sinon on charge la ponderation dans le bon dossier
+    {
+        charger_ponderation(fichiers[choix - 1].insert(0, "Load podologique/" + dossier + "/"));
     }
+    graphe_charge = true; //le graphe devient charge
 }
 
 
@@ -76,6 +128,7 @@ void Graphe::charger_topologique(std::string txt)
         sommets[s1]->ajouter_adjacent(sommets[s2]);
         arretes[i].set_indice_s1(s1);
         arretes[i].set_indice_s2(s2);
+        arretes[i].set_poids(0);
         //si le graphe n'est pas orient� l'arrete va dans les deux sens
         if(m_orientation==false)
         {

@@ -2,5 +2,5 @@
 #include <string>
 void erreur(std::string error)
 {
-    std::cout << error << std::endl;
+    std::cout << std::endl << error << std::endl;
 }

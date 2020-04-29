@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588160969 source:c:\users\rose\documents\github\piscine2020\projet tg\main.cpp
+1588163135 source:c:\users\rose\documents\github\piscine2020\projet tg\main.cpp
 	<iostream>
 	"include\Graphe.h"
 	"include/menu.h"
@@ -22,9 +22,12 @@
 1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\src\arrete.cpp
 	"../include/Arrete.h"
 
-1588160828 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
+1588169195 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
 	"../include/Graphe.h"
 	"../include/svgfile.h"
+	"../include/erreur.h"
+	<dirent.h>
+	<string.h>
 
 1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
 	<string>
@@ -41,7 +44,7 @@
 
 1588156667 c:\users\rose\documents\github\piscine2020\projet tg\include\menu.h
 
-1588160610 source:c:\users\rose\documents\github\piscine2020\projet tg\src\erreur.cpp
+1588166697 source:c:\users\rose\documents\github\piscine2020\projet tg\src\erreur.cpp
 	<iostream>
 	<string>
 
