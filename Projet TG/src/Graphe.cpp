@@ -638,6 +638,10 @@ void Graphe::supprimer_arrete()
     tampon = arretes[indice];
     arretes[indice] = arretes[m_taille - 1];
     arretes[m_taille - 1] = tampon;
+
+    //supprime les sommets considere voisins
+    sommets[arretes[m_taille-1].get_indice_s1()]->supprimer_succ(arretes[m_taille-1].get_indice_s2());
+    sommets[arretes[m_taille-1].get_indice_s2()]->supprimer_succ(arretes[m_taille-1].get_indice_s1());
     //on supprime la derniere case du vecteur
     arretes.pop_back();
     m_taille--;
@@ -674,6 +678,7 @@ std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
          ///on défile le prochain élément de la file
                 s=file.front();//on récupère le premier élement de la file
                 file.pop(); // on l’enlève de la file
+
          /// on va parcourir les successeurs du sommet défilé :
          ///pour chaque successeur du sommet défilé
                 for(auto succ:s->sommet_adjacent)
@@ -687,7 +692,7 @@ std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
                         }
                     }
             }
-         return preds;
+            return preds;
     }
 
 void Graphe::recherche_afficher_CC() // source Mme PALASI
