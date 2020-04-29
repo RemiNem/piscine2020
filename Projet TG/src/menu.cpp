@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../include/Graphe.h"
+void erreur(std::string error);
 
 void menu()
 {
@@ -32,13 +33,9 @@ void menu()
 
                 }
                 else
-                {
-                    //mettre un catch erreurs
-                }
+                    erreur("le graphe n'est pas encore charge");
                 break;
             case 3: // AFFICHER LES INDICES DE CENTRALITE DU GRAPHE
-                // = Afficher et sauvegarder les indices de centralite
-                // Afficher le graphe
                 if(graphe_charge)
                 {
                     //affichage du graphe
@@ -46,12 +43,12 @@ void menu()
                     G.afficher_graphe_internet();
                     //Affichage des degres de centralite
                     G.afficher_tous_indices();
+                    //SAUVEGARDE:
+                    //A faire
 
                 }
                 else
-                {
-                    //mettre catch erreur
-                }
+                    erreur("le graphe n'est pas encore charge");
                 break;
             case 4: // SUPPRIMER UNE ARRETE DU GRAPHE
                 // = creer un sspg "vulnerabilite" qui appellera d'autres programme pour :
@@ -64,9 +61,7 @@ void menu()
 
                 }
                 else
-                {
-                    //Erreur
-                }
+                    erreur("le graphe n'est pas encore charge");
                 break;
             case 5: // QUITTER
                 quitter = true;
@@ -74,7 +69,12 @@ void menu()
 
             default: // mettre un catch pour les erreurs
                 break;
-
         }
+
     }while(!quitter);
+}
+
+void erreur(std::string error)
+{
+    std::cout << error << std::endl;
 }
