@@ -1,6 +1,8 @@
 #include "../include/Graphe.h"
 #include "../include/svgfile.h"
 
+#include <bits/stdc++.h>
+
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
@@ -577,9 +579,7 @@ void Graphe::vulnerabilite()
     arretes[m_taille] = arretes[indice_arrete_sup];
     arretes[indice_arrete_sup]= tampon;
 
-    arretes->pop_back();
-
-
+    arretes->erase(arretes.begin() + m_taille);
 
 
 
