@@ -146,11 +146,11 @@ void Graphe::afficher() const
 
     if(m_orientation==true)
     {
-        std::cout<<"Graphe oriente"<<std::endl;
+        std::cout<< std::endl<< "Graphe oriente"<<std::endl;
     }
     else
     {
-        std::cout << "Graphe non oriente" << std::endl;
+        std::cout << std::endl << "Graphe non oriente" << std::endl;
     }
 
     std::cout << "Ordre: " << m_ordre << std::endl;
@@ -364,6 +364,7 @@ float Graphe::calculer_Cp(int indice) const
         if(sommets[i] != sommets[indice])
             somme_distances += Dijkstra(sommets[indice]->get_indice(), sommets[i]->get_indice()); // on ajoute leur distance � la somme
     }
+
     Cp = float(NORMALISE)/somme_distances;
     return Cp;
 }
@@ -401,7 +402,7 @@ int Graphe::Dijkstra(int debut, int fin) const
         for(auto it:sommets)
         {
             //si le sommet est adjacent � s
-            if(EstSuccesseurDe(s->get_indice(), it->get_indice()))
+            if(s->EstSuccesseurDe(it->get_indice()))
             {
                 //on r�cup�re la distance entre ces deux sommets (arrete[s,it] -> poids)
                 distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
@@ -442,7 +443,7 @@ int Graphe::Dijkstra(int debut, int fin) const
     //on retourn la distance de debut � fin
     return distance_S0[fin];
 }
-
+/*
 ///Cherche � savoir si s1 est adjacent � s2 (s1 -> s2 si graphe orient�)
 bool Graphe::EstSuccesseurDe(int s1, int s2) const
 {
@@ -469,7 +470,8 @@ bool Graphe::EstSuccesseurDe(int s1, int s2) const
     }
     //les sommets ne sont pas adjacents
     return false;
-}
+}*/
+
 
 
 /// CENTRALITE DE VECTEUR PROPRE
@@ -611,8 +613,6 @@ void Graphe::calculer_tous_indices()
 
 
 
-
-
 //VULNERABILITE
 
 void Graphe::vulnerabilite()
@@ -622,6 +622,8 @@ void Graphe::vulnerabilite()
     //2) REGARDER LA CONNEXITE
     recherche_afficher_CC();
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
+    afficher();
+    afficher_graphe_internet();
     calculer_tous_indices();
     //4) COMPARER CES CALCULS AVEC LES ANCIENS (dans la sauvegarde)
     //on recupere dans la sauvegarde les anciens indices de centralite
@@ -646,7 +648,6 @@ void Graphe::supprimer_arrete()
     tampon = arretes[indice];
     arretes[indice] = arretes[m_taille - 1];
     arretes[m_taille - 1] = tampon;
-
     //supprime les sommets considere voisins
     sommets[arretes[m_taille-1].get_indice_s1()]->supprimer_succ(arretes[m_taille-1].get_indice_s2());
     sommets[arretes[m_taille-1].get_indice_s2()]->supprimer_succ(arretes[m_taille-1].get_indice_s1());

@@ -60,7 +60,7 @@ class Graphe
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
-        bool EstSuccesseurDe(int s1, int s2) const;
+        //bool EstSuccesseurDe(int s1, int s2) const;
 
         //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
@@ -78,7 +78,7 @@ class Graphe
         //CONEXITE
         std::vector<int> BFS(int num_s0)const;
         void recherche_afficher_CC();
-        
+
         //SAUVEGARDE
         void sauvegarde_centralites();
         void ecrire_centralite(float* vecteur, std::ofstream &fichier);

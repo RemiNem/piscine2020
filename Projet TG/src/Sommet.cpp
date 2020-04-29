@@ -57,4 +57,11 @@ void Sommet::supprimer_succ(int indice)
 
 }
 
-///affichage successeurs
+///test successeur
+bool Sommet::EstSuccesseurDe(int sommet)
+{
+    for(auto s : sommet_adjacent)
+        if(s->get_indice() == sommet)
+            return true;
+    return false;
+}

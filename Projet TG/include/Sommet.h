@@ -31,6 +31,8 @@ class Sommet
         ///supprimer successeur
         void supprimer_succ(int indice);
 
+        ///test adjacent
+        bool EstSuccesseurDe(int sommet);
 
 };
 
