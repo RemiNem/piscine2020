@@ -43,7 +43,7 @@ class Graphe
         /// ------------GETTERS-------------------
         Arrete get_arrete(int s1, int s2) const;
 
-        ///---------SETTERS------------------------
+        ///--------------SETTERS------------------
         void set_m_taille(size_t taille);
         void set_arretes(Arrete *nouv_arretes);
 

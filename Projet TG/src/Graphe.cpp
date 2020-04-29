@@ -656,7 +656,7 @@ void Graphe::vulnerabilite()
     arretes[m_taille] = arretes[indice_arrete_sup];
     arretes[indice_arrete_sup]= tampon;
 
-    arretes->erase(arretes.begin() + m_taille);
+   // arretes.erase(arretes.begin() + m_taille);
 
 
 

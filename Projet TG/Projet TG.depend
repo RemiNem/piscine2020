@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1588090543 source:c:\users\rose\documents\github\piscine2020\projet tg\src\arrete.cpp
+	"../include/Arrete.h"
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\arrete.h
+
+1588169932 source:c:\users\rose\documents\github\piscine2020\projet tg\src\erreur.cpp
+	<iostream>
+	<string>
+
+1588153259 source:c:\users\rose\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"..\include\Sommet.h"
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1588153259 source:c:\users\rose\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"..\include\svgfile.h"
+	<iostream>
+	<sstream>
+
+1588090543 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1588170179 source:c:\users\rose\documents\github\piscine2020\projet tg\main.cpp
+	<iostream>
+	"include\Graphe.h"
+	"include/menu.h"
+
+1588170179 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+	<string>
+	<vector>
+	"Sommet.h"
+	<iostream>
+	<fstream>
+	"Arrete.h"
+	<math.h>
+	<bits/stdc++.h>
+
+1588156667 c:\users\rose\documents\github\piscine2020\projet tg\include\menu.h
+
+1588170100 source:c:\users\rose\documents\github\piscine2020\projet tg\src\menu.cpp
+	<iostream>
+	"../include/Graphe.h"
+	"../include/erreur.h"
+
+1588169932 c:\users\rose\documents\github\piscine2020\projet tg\include\erreur.h
+
