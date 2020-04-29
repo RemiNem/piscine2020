@@ -79,7 +79,9 @@ class Graphe
         void sauvegarde_centralites();
         void ecrire_centralite(float* vecteur, std::ofstream &fichier);
 
-
+        //CHARGEMENT
+        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp);
+        void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
 
 };
 

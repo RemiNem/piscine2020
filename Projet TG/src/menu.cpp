@@ -48,9 +48,6 @@ void menu()
                     G.afficher_graphe_internet();
                     //Affichage des degres de centralite
                     G.afficher_tous_indices();
-                    //SAUVEGARDE:
-                    //A faire
-
                 }
                 else
                     erreur("le graphe n'est pas encore charge");

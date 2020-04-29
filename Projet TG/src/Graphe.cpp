@@ -624,6 +624,13 @@ void Graphe::vulnerabilite()
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     calculer_tous_indices();
     //4) COMPARER CES CALCULS AVEC LES ANCIENS (dans la sauvegarde)
+    //on recupere dans la sauvegarde les anciens indices de centralite
+    float* prec_Cd = new float [m_ordre];
+    float* prec_Cvp = new float [m_ordre];
+    float* prec_Cp = new float [m_ordre];
+    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp);
+    //interpreter les resultats
+    //a faire
 }
 
 
@@ -632,7 +639,7 @@ void Graphe::supprimer_arrete()
     int indice;
     Arrete tampon;
     afficher_arretes();
-    std::cout << std::endl <<"Quelle arrete souhaitez vous supprimer ? " << std::endl;
+    std::cout << std::endl <<"Indiquez le numero de l'arrete que vous souhaitez vous supprimer  " << std::endl;
     entree_blindee(0, m_taille, indice);
     //on interverti la case a suppr avec la derniere case du vecteur
     arretes[m_taille - 1].set_indice(indice);
@@ -676,4 +683,31 @@ void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
 {
     for(size_t i = 0; i < m_ordre; ++i)
         fichier << vecteur[i] << std::endl;
+}
+
+
+///CHARGEMENT CENTRALITE
+void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp)
+{
+    std::string centralite;
+    std::ifstream charg{"centralites.txt"};
+    if(!charg)
+        erreur("Impossible d'ouvrir le fichier de sauvegarde des centralites");
+    else
+    {
+        charg >> centralite;
+        if(centralite == "centralite_degre") //DEGRE
+            recuperer_centralite(prec_Cd, charg);
+        else if(centralite == "centralite_vecteurp") //VECTEUR PROPRE
+            recuperer_centralite(prec_Cvp, charg);
+        else if(centralite == "centralite_proximite") //PROXIMITE
+            recuperer_centralite(prec_Cp, charg);
+        //AJOUTER INTERMEDIARITE
+    }
+}
+
+void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier)
+{
+    for(size_t i = 0; i < m_ordre; ++i)
+        fichier >> vecteur[i];
 }
