@@ -79,6 +79,9 @@ class Graphe
         void sauvegarde_centralites();
         void ecrire_centralite(float* vecteur, std::ofstream &fichier);
 
+        //CONEXITE
+        std::vector<int> BFS(int num_s0)const;
+        void recherche_afficher_CC();
 
 
 };

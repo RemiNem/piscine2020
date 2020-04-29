@@ -28,6 +28,9 @@ class Sommet
         ///setters
         void ajouter_adjacent(Sommet* s);
 
+        ///supprimer successeur
+        void supprimer_succ(int indice);
+
 
 };
 
