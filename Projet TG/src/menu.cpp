@@ -22,7 +22,7 @@ void menu()
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
                 G.charger_graphe(graphe_charge);
-                //calculer les indices de centralité
+                //calculer les indices de centralitï¿½
                 G.calculer_tous_indices();
                 //a la fin
                 graphe_charge = true;
@@ -54,7 +54,7 @@ void menu()
                 // = creer un sspg "vulnerabilite" qui appellera d'autres programme pour :
                 // 1) supprimer une arrete
                 // 2) tester la connexite
-                // 3) recalculer les nouveaux indices de centralité et les comparer avec les anciens (dans la sauvegarde)
+                // 3) recalculer les nouveaux indices de centralitï¿½ et les comparer avec les anciens (dans la sauvegarde)
                 // 4) sauvegarder les nouveaux indices de centralite ?
                 if(graphe_charge)
                 {
@@ -73,5 +73,3 @@ void menu()
 
     }while(!quitter);
 }
-
-

@@ -1,8 +1,14 @@
 #include "../include/Graphe.h"
 #include "../include/svgfile.h"
+
 #include "../include/erreur.h"
 #include <dirent.h>
 #include <string.h>
+
+
+#include <bits/stdc++.h>
+
+
 #define max(a,b) (a>=b?a:b)
 #define min(a,b) (a<=b?a:b)
 
@@ -320,6 +326,16 @@ Arrete Graphe::get_arrete(int s1, int s2) const
     }
 }
 
+///---------------SETTERS--------------------
+void Graphe::set_m_taille(size_t taille)
+{
+    m_taille = taille;
+}
+
+void Graphe::set_arretes(Arrete *nouv_arretes)
+{
+    arretes = nouv_arretes;
+}
 
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
@@ -613,4 +629,35 @@ void Graphe::calculer_tous_indices()
     calculer_tous_Cp();
     calculer_Cvp();
     //rajouter intermediarite
+}
+
+
+
+
+
+///VULNERABILITE
+
+void Graphe::vulnerabilite()
+{
+    int indice_arrete_sup;
+    Arrete tampon;
+    arretes=new Arrete[m_taille];
+    //affiche les arretes
+    for(size_t i =0; i< m_taille; i++)
+    {
+        std::cout << i << " : " << arretes[i].get_indice_s1() << "--" << arretes[i].get_indice_s2();
+    }
+
+    std::cout << "indiquer l'arrete a supprimer" << std::endl;
+    std::cin >> indice_arrete_sup;
+
+    //on intervertit l'arrete a sup avec la derniere arrete du tableau pour utiliser popback
+    tampon = arretes[m_taille];
+    arretes[m_taille] = arretes[indice_arrete_sup];
+    arretes[indice_arrete_sup]= tampon;
+
+    arretes->erase(arretes.begin() + m_taille);
+
+
+
 }
