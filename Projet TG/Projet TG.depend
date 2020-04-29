@@ -1,0 +1,48 @@
+# depslib dependency file v1.0
+1588158092 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\main.cpp
+	<iostream>
+	"include\Graphe.h"
+	"include/menu.h"
+
+1588162329 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
+	<string>
+	<vector>
+	"Sommet.h"
+	<iostream>
+	<fstream>
+	"Arrete.h"
+	<math.h>
+	<bits/stdc++.h>
+
+1588153773 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1588077571 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
+
+1588158000 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\menu.h
+
+1588153773 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
+	"../include/Arrete.h"
+
+1588158000 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
+	"../include/Graphe.h"
+	"../include/svgfile.h"
+
+1588065247 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1588161213 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
+	<iostream>
+	"../include/Graphe.h"
+
+1588153773 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"..\include\Sommet.h"
+
+1588153776 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"..\include\svgfile.h"
+	<iostream>
+	<sstream>
+

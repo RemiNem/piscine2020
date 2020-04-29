@@ -7,6 +7,8 @@
 #include <fstream>
 #include "Arrete.h"
 #include <math.h>
+#include <bits/stdc++.h>
+
 class Graphe
 {
     private:
@@ -40,6 +42,10 @@ class Graphe
         /// ------------GETTERS-------------------
         Arrete get_arrete(int s1, int s2) const;
 
+        ///---------SETTERS------------------------
+        void set_m_taille(size_t taille);
+        void set_arretes(Arrete *nouv_arretes);
+
         /// --------CALCULS INDICES DE CENTRALITE---------
 
         //CENTRALITE DE DEGRE
@@ -61,7 +67,8 @@ class Graphe
         //CALCULER TOUS
         void calculer_tous_indices();
 
-
+        //VULNERABILITE
+        void vulnerabilite();
 };
 
 #endif // GRAPHE_H
