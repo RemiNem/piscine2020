@@ -262,7 +262,7 @@ void Graphe::afficher_tous_indices() const
 /// ----------GETTERS----------
 
 ///retourne l'arrete correspondante � ces deux sommets
-Arrete Graphe::get_arrete(int s1, int s2) const
+void Graphe::get_arrete(int s1, int s2, Arrete &arrete) const //on passe arrete par adresse pour eviter control reaches end of non-void function
 {
     //GRAPHE ORIENTE
     if(m_orientation == true)
@@ -270,7 +270,7 @@ Arrete Graphe::get_arrete(int s1, int s2) const
         for(size_t i = 0; i < m_taille; ++i)
         {
             if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
-                return arretes[i];
+                arrete = arretes[i];
         }
     }
     //GRAPHE NON ORIENTE
@@ -279,7 +279,7 @@ Arrete Graphe::get_arrete(int s1, int s2) const
         for (size_t i = 0; i < m_taille; ++i)
         {
             if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
-                return arretes[i];
+                arrete = arretes[i];
         }
     }
 }
@@ -385,10 +385,10 @@ int Graphe::Dijkstra(int debut, int fin) const
             //si le sommet est adjacent � s
             if((s->EstSuccesseurDe(it->get_indice()))&&(marquage[it->get_indice()] != MARQUE))
             {
-                //std::cout << "on est bloque sur l'arrete : " << s->get_nom() << "-" << it->get_nom() << std::endl;
+                Arrete a;
+                get_arrete(s->get_indice(), it->get_indice(), a);
                 //on r�cup�re la distance entre ces deux sommets (arrete[s,it] -> poids)
-                distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
-                //std::cout << "la distance de " << s->get_nom() << " a " << it->get_nom() << " est " << distance << std::endl;
+                distance = a.get_poids();
                 //Si c'est plus court d'aller de S0 � it en passant par s
                 if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
                 {
@@ -398,7 +398,6 @@ int Graphe::Dijkstra(int debut, int fin) const
                     preds[it->get_indice()] = s->get_indice();
                 }
             }
-            //std::cout << "bloques sur le sommet : " << it->get_nom() << std::endl;
         }
 
         //le plus proche sommet de S0 qui n'est pas marqu�
@@ -550,9 +549,12 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
 
                 if(decouvert[sa]==false) ///si le sommet n'est pas découvert
                 {
-                    if((get_arrete(ss,sa).get_poids()+dtot)<distance[sa])
+                    Arrete a;
+                    get_arrete(ss, sa, a);
+                    if((a.get_poids()+dtot)<distance[sa])
                     {
-                        distance[sa]=get_arrete(ss,sa).get_poids()+dtot;
+                        get_arrete(ss,sa,a);
+                        distance[sa]=a.get_poids()+dtot;
                         pred[sa]=ss;
                     }
                 }
@@ -600,10 +602,8 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
         {
             if(stop==false)
                 if(sommets[branche[i]]->get_indice()==straverse&&stop==false) ///si le sommet est dans un chemin
-                {
-
-                    Ci++;
-                }
+                    if((sommets[branche[i]]->get_indice() != s0)&&(sommets[branche[i]]->get_indice() != sf))///si le sommet n'est ni le debut ni la fin
+                        Ci++;
             marque[branche[i]]=true;
         }
 
