@@ -8,6 +8,7 @@
 #include "Arrete.h"
 #include <math.h>
 #include <bits/stdc++.h>
+#include <map>
 
 class Graphe
 {
@@ -18,6 +19,7 @@ class Graphe
         std::vector<Arrete> arretes; //toutes les arretes
         size_t m_taille; //nombre d'arretes
         std::string nomfichiergraphe; // nom du dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
+        std::vector<std::vector<int>> CC;//le tableau des composantes connexes (chaque case contient un lot de sommets)
         /// INDICES DE CENTRALITE
         float *centralite_degre; //le degr� de centralit� de chaque sommet dans un vecteur
         float *centralite_vecteurp; // degr� de centralit� Vp de chaque sommet
@@ -32,6 +34,7 @@ class Graphe
         void changer_ponderation(); //pour modifier ou charger la ponderation via un choix de fichier
         void charger_topologique(std::string txt); //topologique
         void charger_ponderation(std::string txt); //pond�ration
+        void reinitialiser_graphe(); //
 
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
@@ -60,7 +63,8 @@ class Graphe
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
-        //bool EstSuccesseurDe(int s1, int s2) const;
+        //int Dijkstra_2(int debut, int fin, int num_CC) const;
+
 
         //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
@@ -77,7 +81,10 @@ class Graphe
 
         //CONEXITE
         std::vector<int> BFS(int num_s0)const;
-        void recherche_afficher_CC();
+        void afficher_CC() const;
+        void rechercher_CC();
+        void quelle_CC(int s, int &num_CC) const;
+
 
         //SAUVEGARDE
         void sauvegarde_centralites();
@@ -86,6 +93,7 @@ class Graphe
         //CHARGEMENT
         void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp);
         void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
+
 
 };
 

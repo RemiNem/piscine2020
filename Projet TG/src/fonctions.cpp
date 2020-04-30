@@ -38,14 +38,17 @@ std::vector<std::string> recuperer_fichiers(std::string nomdossier)
 
 
 ///gère le blindage des entrée consoles
-void entree_blindee(int mini, int maxi, int &valeur)
+void entree_blindee(int mini, int maxi,int &valeur)
 {
     do
     {
         std::cout << "Votre choix :";
+        std::cin.clear();
+        fflush(stdin);
         std::cin >> valeur;
         if(valeur < mini || valeur > maxi)
             erreur("Le numero que vous avez entre n'est pas valide");
+
     }while(valeur < mini || valeur > maxi);
 }
 

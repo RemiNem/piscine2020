@@ -16,7 +16,7 @@ void menu()
                   << "3) Afficher les indices de centralite du graphe " << std::endl
                   << "4) Supprimer une arrete du graphe " << std::endl
                   << "5) Quitter " << std::endl;
-        std::cin >> choix;
+        entree_blindee(1, 5, choix);
         switch(choix)
         {
             case 1: //CHARGER UN GRAPHE
@@ -25,6 +25,9 @@ void menu()
                 //afficher le graphe charge
                 G.afficher();
                 G.afficher_graphe_internet(); //en html
+                //calculer ses CC
+                G.rechercher_CC();
+                G.afficher_CC();
                 //calculer les indices de centralite du graphe
                 G.calculer_tous_indices();
                 G.sauvegarde_centralites(); // + sauvegarde des donnees
