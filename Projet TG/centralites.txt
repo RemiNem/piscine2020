@@ -17,8 +17,8 @@ centralite_proximite
 0.117647
 0.0930233
 centralite_intermediarite
-8
-8
-20
-8
-8
+4
+4
+10
+4
+4

@@ -41,11 +41,8 @@ class Graphe
         void afficher() const; //affichage du graphe sur console
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
         void afficher_graphe_internet() const; //html
-        void afficher_degre_centralite() const; //affichage du degr� de centralit� de chaque sommet
-        void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
-        void afficher_centralite_vp() const; //affichage de la centralite de vecteur pour chaque sommet
-        void afficher_centralite_i() const;
         void afficher_tous_indices() const; //affiche tous les indices de centralite
+        void afficher_centralite(float* vecteur) const; //affiche une centralite passee en paramtre
 
 
         /// ------------GETTERS-------------------

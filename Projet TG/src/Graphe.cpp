@@ -234,68 +234,28 @@ void Graphe::afficher_graphe_internet() const
         svgout.addText(x + 5, y - 5, arretes[i].get_poids(), "black");
     }
 }
-
-///affichage degre de centralit�
-void Graphe::afficher_degre_centralite() const
+//affiche une centralite
+void Graphe::afficher_centralite(float* vecteur) const
 {
-    std::cout << std::endl << "La centralite de degre des sommets : " << std::endl;
     //pour tous les sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
         //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_degre[i] << std::endl;;
+        std::cout << sommets[i]->get_nom() << " : " << vecteur[i] << std::endl;;
     }
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
 }
-
-///affichage centralit� de proximit�
-void Graphe::afficher_centralite_proximite() const
-{
-    std::cout << std::endl <<"La centralie de proximite des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_proximite[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-
-///affichage de centralite de vecteur propre
-void Graphe::afficher_centralite_vp() const
-{
-    std::cout << "La centralite de VP des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_vecteurp[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-void Graphe::afficher_centralite_i() const
-{
-    std::cout << std::endl << "La centralite d'intermediarite des sommets : " << std::endl;
-    //pour tous les sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
-    {
-        //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << centralite_intermediarite[i] << std::endl;;
-    }
-    std::cout << std::endl << std::endl;
-}
-
-
-///afficher tous les indices de centralite
-
+//afficher tous les indices de centralite
 void Graphe::afficher_tous_indices() const
 {
-    afficher_centralite_proximite();
-    afficher_degre_centralite();
-    afficher_centralite_vp();
-    afficher_centralite_i();
+    std::cout << std::endl << "La centralite de proximite des sommets : " << std::endl;
+    afficher_centralite(centralite_proximite);
+    std::cout << std::endl << "Le degre de centralite des sommets : " << std::endl;
+    afficher_centralite(centralite_degre);
+    std::cout << std::endl << "La centralite de vecteur propre des sommets : " << std::endl;
+    afficher_centralite(centralite_vecteurp);
+    std::cout << std::endl << "La centralite d'intermediarite des sommets : " << std::endl;
+    afficher_centralite(centralite_intermediarite);
 }
 
 
@@ -540,7 +500,7 @@ float Graphe::calcul_Ci(int s) const
     for(size_t i = 0; i < CC[num_CC].size(); ++i)
     {
         for(size_t j = 0; j < CC[num_CC].size(); ++j)
-            if(CC[num_CC][i] != CC[num_CC][j])
+            if(CC[num_CC][j] < CC[num_CC][i])
                 somme_Ci += Dijkstra_ameliore(CC[num_CC][j], CC[num_CC][i], s);
     }
     return somme_Ci;
@@ -550,7 +510,7 @@ float Graphe::calcul_Ci(int s) const
 void Graphe::calcul_tous_Ci()
 {
     centralite_intermediarite = new float[m_ordre];
-    for(int i = 0; i < m_ordre; ++i)
+    for(size_t i = 0; i < m_ordre; ++i)
     {
         centralite_intermediarite[i] = calcul_Ci(i);
     }
@@ -625,7 +585,7 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
             dtot=distance[ss];///on actualise la distance totale
 
         }
-        while(sommet_decouverts!=m_ordre);  ///tant que il reste des sommetes decouverts
+        while(sommet_decouverts != int(m_ordre));  ///tant que il reste des sommetes decouverts
 
         branche=retourner_chemin(s0,sf,pred);///stocke le chemin dans la branche
         if(nb_chemin==0)
