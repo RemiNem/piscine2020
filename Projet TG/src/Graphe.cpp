@@ -358,7 +358,7 @@ void Graphe::calculer_tous_Cd()
 /// CENTRALITE DE PROXIMITE
 
 ///calcul de la centralit� de proximit� pour 1 sommet dont l'indice est pass� en parametre
-float Graphe::calculer_Cp(int indice) const
+float Graphe::calculer_Cp(int indice)
 {
     float Cp;
     int somme_distances = 0;
@@ -367,7 +367,7 @@ float Graphe::calculer_Cp(int indice) const
     {
         //si ce n'est pas s
         if(sommets[i] != sommets[indice])
-            if(Appartenance_meme_CC(indice,i))
+            if(Appartenance_meme_CC(indice,i)==true)
                 somme_distances += Dijkstra(indice,i); // on ajoute leur distance � la somme
     }
 
@@ -750,14 +750,32 @@ void Graphe::afficher_CC(std::vector<std::vector<int>> toutes_CC) const
 
 ///A FAIRE
 //verifie si les deux sommets reçus en parametre appartiennent a la meme composante connexe
-bool Graphe::Appartenance_meme_CC(int s1, int s2) const
+bool Graphe::Appartenance_meme_CC(int s1, int s2)
 {
-    std::vector<std::vector<int> toutes_CC = rechercher_CC();
+    bool appartient = false;
+    std::vector<std::vector<int>> toutes_CC = rechercher_CC();
     for(size_t i = 0; i < toutes_CC.size(); ++i)
     {
+        auto it = std::find(toutes_CC[i].begin(), toutes_CC[i].end(), s1);
+        if(it !=toutes_CC[i].end()) // on regarde si s1 appartient a i, sinon, on passe a un autre
+        {
+            auto it2 = std::find(toutes_CC[i].begin(), toutes_CC[i].end(), s2);
+            if(it2 != toutes_CC[i].end()) // on regarde si s2 appartient aussi  a i
+        {
+            appartient = true;
+            return appartient;
+        }
+        else
+        {
+            appartient = false;
+            return appartient;
+        }
 
     }
+
 }
+}
+
 
 ///SAUVEGARDE CENTRALITE
 

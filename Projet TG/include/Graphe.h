@@ -59,7 +59,7 @@ class Graphe
         void calculer_tous_Cd();
 
         //CENTRALITE DE PROXIMITE
-        float calculer_Cp(int indice) const;
+        float calculer_Cp(int indice) ;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
         //bool EstSuccesseurDe(int s1, int s2) const;
@@ -92,6 +92,7 @@ class Graphe
         //TEST
         void afficher_CC(std::vector<std::vector<int>> toutes_CC) const;
         std::vector<std::vector<int>> rechercher_CC();
+        bool Appartenance_meme_CC(int s1, int s2);
 
 
 
