@@ -3,6 +3,8 @@
 #include "../include/fonctions.h"
 #include <dirent.h>
 #include <string.h>
+#include <vector>
+#include <map>
 #include <bits/stdc++.h>
 
 
@@ -36,6 +38,8 @@ Graphe::Graphe()
 
 void Graphe::charger_graphe(bool &graphe_charge)
 {
+    if(graphe_charge == true) //si le graphe a deja été chargé auparavent il faut reinitialiser le graphe
+        reinitialiser_graphe();
     ///CHARGER GRAPHE TOPOLOGIQUE
     std::vector<std::string> fichiers = recuperer_fichiers("Load topologique"); // on récupère les fichiers du dossier des graphes topo
     std::cout << "Quel graphe souhaitez vous charger ? " << std::endl; //affichage de chacun des fichiers à selectionner
@@ -46,7 +50,7 @@ void Graphe::charger_graphe(bool &graphe_charge)
     entree_blindee(1, int(fichiers.size()), choix);
     charger_topologique(fichiers[choix - 1].insert(0, "Load topologique/")); // chargement du graphe topologique
 
-   ///CHARGER GRAPHE PODOLOGIQUE
+    ///CHARGER GRAPHE PODOLOGIQUE
     nomfichiergraphe = fichiers[choix - 1].erase(0, 17); //Recuperation du nom du fichier pour charger la ponderation
     changer_ponderation(); //chargement ponderation
     graphe_charge = true; //le graphe devient charge
@@ -59,7 +63,7 @@ void Graphe::changer_ponderation()
     std::cout << "Quelle ponderaiton souhaitez vous charger ? " << std::endl; //recuperation du fichier ponderation a charger
     for(size_t i = 0; i < fichiers.size(); ++i)
         std::cout << i + 1 << ") " << fichiers[i] << std::endl;
-        std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune disponible)
+    std::cout << fichiers.size() + 1 << ") Aucune" << std::endl; //si aucune ponderation souhaitee (ou si aucune disponible)
     //on recupere le choix de l'utilisateur en blindant l'entree
     entree_blindee(1, int(fichiers.size()) + 1, choix);
     //si on a choisi aucune ponderation, le poids de toutes les arretes doit etre initialisé a 0
@@ -138,6 +142,12 @@ void Graphe::charger_ponderation(std::string txt)
     flux.close();
 }
 
+void Graphe::reinitialiser_graphe()
+{
+    sommets.clear();
+    arretes.clear();
+}
+
 /// -----------------AFFICHAGE---------------------
 
 ///afficher le graphe
@@ -177,7 +187,7 @@ void Graphe::afficher() const
 ///affichage de toutes les arretes du graphe
 void Graphe::afficher_arretes() const
 {
-     for(size_t i=0; i < m_taille; i++)
+    for(size_t i=0; i < m_taille; i++)
     {
         std::cout<< "Arrete "<< arretes[i].get_indice() <<" : "<< sommets[arretes[i].get_indice_s1()]->get_nom() << "-"
                  << sommets[arretes[i].get_indice_s2()]->get_nom() << "   Poids: "
@@ -310,11 +320,6 @@ void Graphe::set_m_taille(size_t taille)
     m_taille = taille;
 }
 
-/*void Graphe::set_arretes(Arrete nouv_arretes)
-{
-    arretes = nouv_arretes;
-}*/
-
 /// -------------CALCUL DES INDICES DE CENTRALITE -------------
 
 ///CENTRALITE DE DEGRE
@@ -362,7 +367,8 @@ float Graphe::calculer_Cp(int indice) const
     {
         //si ce n'est pas s
         if(sommets[i] != sommets[indice])
-            somme_distances += Dijkstra(sommets[indice]->get_indice(), sommets[i]->get_indice()); // on ajoute leur distance � la somme
+            if(Appartenance_meme_CC(indice,i))
+                somme_distances += Dijkstra(indice,i); // on ajoute leur distance � la somme
     }
 
     Cp = float(NORMALISE)/somme_distances;
@@ -402,10 +408,12 @@ int Graphe::Dijkstra(int debut, int fin) const
         for(auto it:sommets)
         {
             //si le sommet est adjacent � s
-            if(s->EstSuccesseurDe(it->get_indice()))
+            if((s->EstSuccesseurDe(it->get_indice()))&&(marquage[it->get_indice()] != MARQUE))
             {
+                //std::cout << "on est bloque sur l'arrete : " << s->get_nom() << "-" << it->get_nom() << std::endl;
                 //on r�cup�re la distance entre ces deux sommets (arrete[s,it] -> poids)
                 distance = get_arrete(s->get_indice(), it->get_indice()).get_poids();
+                //std::cout << "la distance de " << s->get_nom() << " a " << it->get_nom() << " est " << distance << std::endl;
                 //Si c'est plus court d'aller de S0 � it en passant par s
                 if(distance_S0[it->get_indice()] > distance_S0[s->get_indice()] + distance)
                 {
@@ -415,6 +423,7 @@ int Graphe::Dijkstra(int debut, int fin) const
                     preds[it->get_indice()] = s->get_indice();
                 }
             }
+            //std::cout << "bloques sur le sommet : " << it->get_nom() << std::endl;
         }
 
         //le plus proche sommet de S0 qui n'est pas marqu�
@@ -443,34 +452,6 @@ int Graphe::Dijkstra(int debut, int fin) const
     //on retourn la distance de debut � fin
     return distance_S0[fin];
 }
-/*
-///Cherche � savoir si s1 est adjacent � s2 (s1 -> s2 si graphe orient�)
-bool Graphe::EstSuccesseurDe(int s1, int s2) const
-{
-    //GRAPHE ORIENTE
-    if(m_orientation == true)
-    {
-        //pour toutes les arretes du graphe
-        for (size_t i = 0; i < m_taille; ++i)
-        {
-            //si on a une arrete s1 -> s2
-            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
-                return true; // alors s2 est successeur de s1
-        }
-    }
-    //GRAPHE NON ORIENTE
-    else
-    {
-        for (size_t i = 0; i < m_taille; ++i)
-        {
-            //si s1 est li� � s2
-            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
-                return true;
-        }
-    }
-    //les sommets ne sont pas adjacents
-    return false;
-}*/
 
 
 
@@ -620,7 +601,9 @@ void Graphe::vulnerabilite()
     //1) SUPPRIMER UNE ARRETE
     supprimer_arrete();
     //2) REGARDER LA CONNEXITE
-    recherche_afficher_CC();
+    //scinder recherche et affichage
+    //recherche_afficher_CC();
+    afficher_CC(rechercher_CC());
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     afficher();
     afficher_graphe_internet();
@@ -648,7 +631,7 @@ void Graphe::supprimer_arrete()
     tampon = arretes[indice];
     arretes[indice] = arretes[m_taille - 1];
     arretes[m_taille - 1] = tampon;
-    //supprime les sommets considere voisins
+    //supprimer le voisin au bout de cette arrete
     sommets[arretes[m_taille-1].get_indice_s1()]->supprimer_succ(arretes[m_taille-1].get_indice_s2());
     sommets[arretes[m_taille-1].get_indice_s2()]->supprimer_succ(arretes[m_taille-1].get_indice_s1());
     //on supprime la derniere case du vecteur
@@ -659,88 +642,122 @@ void Graphe::supprimer_arrete()
     afficher_arretes();
 }
 
-// CONNEXITE
+/// CONNEXITE
 
 std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
-    {
-         /// déclaration de la file(queue)
-         std::queue<const Sommet*>file;
-         /// pour le marquage
-         /// couleurs [i] indique si le sommet numéro i est non marqué (valeur 0)
-         /// ou marqué (valeur 1)
-         std::vector<int> couleurs((int)sommets.size(),0);
-         ///pour noter les prédécesseurs : on note les numéros des prédécesseurs
-         ///(on pourrait stocker des pointeurs sur ...)
-         ///preds[i] donnera le numéro du prédécesseur du sommet i
-         ///dans les chemins obtenus
-         ///Au départ les sommets n’ont pas de prédécesseur (valeur -1)
-         ///Le sommet initial n’aura pas de prédécesseur. Les sommets non découverts
-         ///(non accessibles à partir du sommet initial) non plus.
-         std::vector<int> preds((int)sommets.size(),-1);
-         ///étape initiale : on enfile et on marque le sommet initial
-         file.push(sommets[num_s0]);
-         couleurs[num_s0]=1;
-         const Sommet*s;
-
-         ///tant que la file n'est pas vide
-         while(!file.empty())
-            {
-         ///on défile le prochain élément de la file
-                s=file.front();//on récupère le premier élement de la file
-                file.pop(); // on l’enlève de la file
-
-         /// on va parcourir les successeurs du sommet défilé :
-         ///pour chaque successeur du sommet défilé
-                for(auto succ:s->sommet_adjacent)
-                    {
-                        if(couleurs[succ->get_indice()]==0) ///s'il n'est pas marqué
-                        {
-                            couleurs[succ->get_indice()]=1; ///on le marque
-        ///on note son prédecesseur (= le sommet défilé)
-                            preds[succ->get_indice()]= s->get_indice();
-                            file.push(succ);///on le met dans la file
-                        }
-                    }
-            }
-            return preds;
-    }
-
-void Graphe::recherche_afficher_CC() // source Mme PALASI
 {
+    /// déclaration de la file(queue)
+    std::queue<const Sommet*>file;
+    /// pour le marquage
+    /// couleurs [i] indique si le sommet numéro i est non marqué (valeur 0)
+    /// ou marqué (valeur 1)
+    std::vector<int> couleurs((int)sommets.size(),0);
+    ///pour noter les prédécesseurs : on note les numéros des prédécesseurs
+    ///(on pourrait stocker des pointeurs sur ...)
+    ///preds[i] donnera le numéro du prédécesseur du sommet i
+    ///dans les chemins obtenus
+    ///Au départ les sommets n’ont pas de prédécesseur (valeur -1)
+    ///Le sommet initial n’aura pas de prédécesseur. Les sommets non découverts
+    ///(non accessibles à partir du sommet initial) non plus.
+    std::vector<int> preds((int)sommets.size(),-1);
+    ///étape initiale : on enfile et on marque le sommet initial
+    file.push(sommets[num_s0]);
+    couleurs[num_s0]=1;
+    const Sommet*s;
 
-    size_t num=0;
-            bool test;
-            int ncc=0;
-            ///pour noter les numéros de CC
-            std::vector<int> cc(sommets.size(),-1);
-            do
+    ///tant que la file n'est pas vide
+    while(!file.empty())
+    {
+        ///on défile le prochain élément de la file
+        s=file.front();//on récupère le premier élement de la file
+        file.pop(); // on l’enlève de la file
+
+        /// on va parcourir les successeurs du sommet défilé :
+        ///pour chaque successeur du sommet défilé
+        for(auto succ:s->sommet_adjacent)
+        {
+            if(couleurs[succ->get_indice()]==0) ///s'il n'est pas marqué
             {
-
-            cc[num]=num;
-                std::cout<<std::endl<<"composante connexe "<<ncc<<" : "<<sommets[num]->get_nom()<<" ";
-                ncc++;
-                ///lancement d'un BFS sur le sommet num
-                std::vector<int> arbre_BFS=BFS(num);
-                ///affichage des sommets decouverts lors du parcours (ceux qui ont un predecesseur
-                for(size_t i=0;i<arbre_BFS.size();++i){
-                    if ((i!=num)&&(arbre_BFS[i]!=-1)){
-                            cc[i]=num;
-                            std::cout<<sommets[i]->get_nom()<<" ";
-                    }
-                }
-                ///recherche d'un sommet non explorÈ
-                ///pour relancer un BFS au prochain tour
-                test=false;
-                for(size_t i=0;i<sommets.size();++i){
-                    if (cc[i]==-1){
-                        num=i;
-                        test=true;
-                        break;
-                    }
-                }
-            }while(test==true);
-            std::cout<<std::endl;
+                couleurs[succ->get_indice()]=1; ///on le marque
+                ///on note son prédecesseur (= le sommet défilé)
+                preds[succ->get_indice()]= s->get_indice();
+                file.push(succ);///on le met dans la file
+            }
         }
+    }
+    return preds;
+}
+
+/// COMPOSANTES CONNEXES
+//renvoie un vecteur avec les differentes composantes connexes du graphe
+std::vector<std::vector<int>> Graphe::rechercher_CC()
+{
+    size_t num=0;
+    bool test;
+    int ncc=0;
+    std::vector<std::vector<int>> toutes_CC; //le tableau des composantes connexes (chaque case contient un lot de sommets)
+    std::vector<int> CC; //une seule composante connexe
+    ///pour noter les numéros de CC
+    std::vector<int> cc(sommets.size(),-1);
+    std::map<std::vector<int>, int> CC_ncc;
+    do
+    {
+        cc[num]=num;
+        CC.clear();
+        CC.push_back(num);
+        ncc++;
+
+        ///lancement d'un BFS sur le sommet num
+        std::vector<int> arbre_BFS=BFS(num);
+        ///affichage des sommets decouverts lors du parcours (ceux qui ont un predecesseur
+        for(size_t i=0; i<arbre_BFS.size(); ++i)
+        {
+            if ((i!=num)&&(arbre_BFS[i]!=-1))
+            {
+                cc[i]=num;
+                CC.push_back(i);
+            }
+        }
+        ///recherche d'un sommet non explorÈ
+        ///pour relancer un BFS au prochain tour
+        test=false;
+        for(size_t i=0; i<sommets.size(); ++i)
+        {
+            if (cc[i]==-1)
+            {
+                num=i;
+                test=true;
+                break;
+            }
+        }
+        toutes_CC.push_back(CC);
+    }
+    while(test==true);
+    return toutes_CC;
+}
+
+//affiche les differentes composantes connexes reçues en parametre
+void Graphe::afficher_CC(std::vector<std::vector<int>> toutes_CC) const
+{
+    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    {
+        std::cout << "Composante connexe " << i << ": ";
+        for(size_t j = 0; j < toutes_CC[i].size(); ++j)
+            std::cout << sommets[toutes_CC[i][j]]->get_nom() << " ";
+        std::cout << std::endl;
+    }
+}
+
+///A FAIRE
+//verifie si les deux sommets reçus en parametre appartiennent a la meme composante connexe
+bool Graphe::Appartenance_meme_CC(int s1, int s2) const
+{
+    std::vector<std::vector<int> toutes_CC = rechercher_CC();
+    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    {
+
+    }
+}
 
 ///SAUVEGARDE CENTRALITE
 
@@ -801,3 +818,13 @@ void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier)
     for(size_t i = 0; i < m_ordre; ++i)
         fichier >> vecteur[i];
 }
+
+
+
+///SCINDER RECHERCHER ET AFFICHER CC
+
+
+
+
+
+

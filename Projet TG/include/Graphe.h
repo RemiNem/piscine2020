@@ -8,6 +8,7 @@
 #include "Arrete.h"
 #include <math.h>
 #include <bits/stdc++.h>
+#include <map>
 
 class Graphe
 {
@@ -32,6 +33,7 @@ class Graphe
         void changer_ponderation(); //pour modifier ou charger la ponderation via un choix de fichier
         void charger_topologique(std::string txt); //topologique
         void charger_ponderation(std::string txt); //pond�ration
+        void reinitialiser_graphe(); //
 
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
@@ -86,6 +88,12 @@ class Graphe
         //CHARGEMENT
         void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp);
         void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
+
+        //TEST
+        void afficher_CC(std::vector<std::vector<int>> toutes_CC) const;
+        std::vector<std::vector<int>> rechercher_CC();
+
+
 
 };
 
