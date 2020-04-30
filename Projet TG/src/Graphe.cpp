@@ -443,35 +443,6 @@ int Graphe::Dijkstra(int debut, int fin) const
     //on retourn la distance de debut � fin
     return distance_S0[fin];
 }
-/*
-///Cherche � savoir si s1 est adjacent � s2 (s1 -> s2 si graphe orient�)
-bool Graphe::EstSuccesseurDe(int s1, int s2) const
-{
-    //GRAPHE ORIENTE
-    if(m_orientation == true)
-    {
-        //pour toutes les arretes du graphe
-        for (size_t i = 0; i < m_taille; ++i)
-        {
-            //si on a une arrete s1 -> s2
-            if(s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())
-                return true; // alors s2 est successeur de s1
-        }
-    }
-    //GRAPHE NON ORIENTE
-    else
-    {
-        for (size_t i = 0; i < m_taille; ++i)
-        {
-            //si s1 est li� � s2
-            if((s1 == arretes[i].get_indice_s1() && s2 == arretes[i].get_indice_s2())||(s2 == arretes[i].get_indice_s1() && s1 == arretes[i].get_indice_s2()))
-                return true;
-        }
-    }
-    //les sommets ne sont pas adjacents
-    return false;
-}*/
-
 
 
 /// CENTRALITE DE VECTEUR PROPRE
