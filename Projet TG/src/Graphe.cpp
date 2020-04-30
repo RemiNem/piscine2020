@@ -673,6 +673,18 @@ void Graphe::vulnerabilite()
     float* prec_Cp = new float [m_ordre];
     float* prec_Ci = new float[m_ordre];
     chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci);
+    std::cout << "la centralite de degre precedente puis actuelle" << std::endl;
+    afficher_centralite(prec_Cd);
+    afficher_centralite(centralite_degre);
+    std::cout << "la centralite de vecteur propre precedente puis actuelle" << std::endl;
+    afficher_centralite(prec_Cvp);
+    afficher_centralite(centralite_vecteurp);
+    std::cout << "la centralite de proximite precedente puis actuelle" << std::endl;
+    afficher_centralite(prec_Cp);
+    afficher_centralite(centralite_proximite);
+    std::cout << "la centralite d intermediarite precedente puis actuelle" << std::endl;
+    afficher_centralite(prec_Ci);
+    afficher_centralite(centralite_intermediarite);
     //5) INTERPRETER LES RESULTATS
 }
 
