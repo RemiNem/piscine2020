@@ -362,16 +362,19 @@ float Graphe::calculer_Cp(int indice) const
 {
     float Cp;
     int somme_distances = 0;
+    int num_CC;
+    quelle_CC(indice, num_CC); //recuperation de la composante connexe a laquelle appartient ce sommet
     //r�cuperer la somme des longueurs des plus courts chemins de s aux autres sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
+    for(size_t i = 0; i < CC[num_CC].size(); ++i) //seulement pour cette composante connexe
     {
         //si ce n'est pas s
-        if(sommets[i] != sommets[indice])
-            if(Appartenance_meme_CC(indice,i))
-                somme_distances += Dijkstra(indice,i); // on ajoute leur distance � la somme
+        if(sommets[CC[num_CC][i]] != sommets[indice])
+                somme_distances += Dijkstra(indice,CC[num_CC][i]); // on ajoute leur distance � la somme en faisant dijkstra sur la CC
     }
-
-    Cp = float(NORMALISE)/somme_distances;
+    if(somme_distances != 0)
+        Cp = float(NORMALISE)/somme_distances;
+    else
+        Cp = 0;
     return Cp;
 }
 
@@ -384,7 +387,9 @@ void Graphe::calculer_tous_Cp()
         centralite_proximite[i] = calculer_Cp(i);
     }
 }
+
 ///algorithme de Dijkstra
+///DIJKSTRA SANS MODIF
 int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
@@ -452,7 +457,6 @@ int Graphe::Dijkstra(int debut, int fin) const
     //on retourn la distance de debut � fin
     return distance_S0[fin];
 }
-
 
 
 /// CENTRALITE DE VECTEUR PROPRE
@@ -582,8 +586,6 @@ int Graphe::Dijkstra_adapte(int s0, int sf)
 
 
 /// CALCULER TOUS INDICES
-
-
 void Graphe::calculer_tous_indices()
 {
     calculer_tous_Cd();
@@ -603,7 +605,8 @@ void Graphe::vulnerabilite()
     //2) REGARDER LA CONNEXITE
     //scinder recherche et affichage
     //recherche_afficher_CC();
-    afficher_CC(rechercher_CC());
+    rechercher_CC();
+    afficher_CC();
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     afficher();
     afficher_graphe_internet();
@@ -690,21 +693,20 @@ std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
 
 /// COMPOSANTES CONNEXES
 //renvoie un vecteur avec les differentes composantes connexes du graphe
-std::vector<std::vector<int>> Graphe::rechercher_CC()
+void Graphe::rechercher_CC()
 {
     size_t num=0;
     bool test;
     int ncc=0;
-    std::vector<std::vector<int>> toutes_CC; //le tableau des composantes connexes (chaque case contient un lot de sommets)
-    std::vector<int> CC; //une seule composante connexe
+    std::vector<int> une_cc; //une seule composante connexe
     ///pour noter les numéros de CC
     std::vector<int> cc(sommets.size(),-1);
-    std::map<std::vector<int>, int> CC_ncc;
+    CC.clear(); //on clear le vecteur de CC avant tout calcul
     do
     {
         cc[num]=num;
-        CC.clear();
-        CC.push_back(num);
+        une_cc.clear();
+        une_cc.push_back(num);
         ncc++;
 
         ///lancement d'un BFS sur le sommet num
@@ -715,7 +717,7 @@ std::vector<std::vector<int>> Graphe::rechercher_CC()
             if ((i!=num)&&(arbre_BFS[i]!=-1))
             {
                 cc[i]=num;
-                CC.push_back(i);
+                une_cc.push_back(i);
             }
         }
         ///recherche d'un sommet non explorÈ
@@ -730,32 +732,31 @@ std::vector<std::vector<int>> Graphe::rechercher_CC()
                 break;
             }
         }
-        toutes_CC.push_back(CC);
+        CC.push_back(une_cc);
     }
     while(test==true);
-    return toutes_CC;
 }
 
 //affiche les differentes composantes connexes reçues en parametre
-void Graphe::afficher_CC(std::vector<std::vector<int>> toutes_CC) const
+void Graphe::afficher_CC() const
 {
-    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    for(size_t i = 0; i < CC.size(); ++i)
     {
         std::cout << "Composante connexe " << i << ": ";
-        for(size_t j = 0; j < toutes_CC[i].size(); ++j)
-            std::cout << sommets[toutes_CC[i][j]]->get_nom() << " ";
+        for(size_t j = 0; j < CC[i].size(); ++j)
+            std::cout << sommets[CC[i][j]]->get_nom() << " ";
         std::cout << std::endl;
     }
 }
 
-///A FAIRE
-//verifie si les deux sommets reçus en parametre appartiennent a la meme composante connexe
-bool Graphe::Appartenance_meme_CC(int s1, int s2) const
+//renvoie le numero de la composante connexe a laquelle appartient le sommet passé en parametre
+void Graphe::quelle_CC(int s, int &num_CC) const
 {
-    std::vector<std::vector<int> toutes_CC = rechercher_CC();
-    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    for(size_t i = 0; i < CC.size(); ++i) //pour chacune des composantes connexes du graphe
     {
-
+        for(size_t j = 0; j < CC[i].size(); ++j) //pour chacun des indices de sommets de cette CC
+            if(s == CC[i][j])//si note sommet appartient a cette CC
+                num_CC = i; //alors num_CC prend la valeur de la CC correspondante
     }
 }
 
