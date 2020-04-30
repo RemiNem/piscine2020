@@ -1,12 +1,19 @@
 #include <iostream>
-#include "Graphe.h"
+#include "include\Graphe.h"
+#include "include/menu.h"
 
 int main()
 {
-Graphe G("Graphe topo/graphe_etoile1_topo.txt");///charge le format topologique
 
-    G.afficher();
-    //G.afficher_matrice_indice();
+    menu();
+
 
     return 0;
 }
+
+
+
+
+
+
+

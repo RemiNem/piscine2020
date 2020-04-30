@@ -4,15 +4,36 @@
 #include <string>
 class Sommet
 {
+    private:
+        int m_indice;
+        std::string m_nom;
+        ///coords :
+        int xs;
+        int ys;
+
     public:
+        ///attribut
+        std::vector<Sommet*> sommet_adjacent;
+
+        ///construction/destruction
         Sommet(int indice,std::string nom,int x0,int y0);
         virtual ~Sommet();
 
-std::vector<Sommet*>sommet_adjacent;
-int m_indice;
-std::string m_nom;
-int xs;
-int ys;
+        ///getters
+        int get_indice() const;
+        std::string get_nom() const;
+        int get_x() const;
+        int get_y() const;
+
+        ///setters
+        void ajouter_adjacent(Sommet* s);
+
+        ///supprimer successeur
+        void supprimer_succ(int indice);
+
+        ///test adjacent
+        bool EstSuccesseurDe(int sommet);
+
 };
 
 #endif // SOMMET_H
