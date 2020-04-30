@@ -822,10 +822,6 @@ void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier)
 
 
 
-///SCINDER RECHERCHER ET AFFICHER CC
-
-
-
 
 
 
