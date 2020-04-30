@@ -70,7 +70,7 @@ class Graphe
 
         //CENTRALITE D'INTERMEDIARITE
         float Dijkstra_ameliore(int s0, int sf,int straverse) const;
-        std::vector<int> retourner_chemin(int s0,int sf,std::vector<int> pred) const;
+        std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;
 

@@ -587,7 +587,7 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
         }
         while(sommet_decouverts != int(m_ordre));  ///tant que il reste des sommetes decouverts
 
-        branche=retourner_chemin(s0,sf,pred);///stocke le chemin dans la branche
+        branche=retourner_chemin(sf,pred);///stocke le chemin dans la branche
         if(nb_chemin==0)
         {
             branche0=branche;
@@ -599,7 +599,6 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
         for(size_t i=0; i<branche.size(); i++)
         {
             if(stop==false)
-//std::cout<<sommets[branche[i]]->get_nom();
                 if(sommets[branche[i]]->get_indice()==straverse&&stop==false) ///si le sommet est dans un chemin
                 {
 
@@ -621,7 +620,7 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
     return Ci/nb_chemin;
 }
 
-std::vector<int> Graphe::retourner_chemin(int s0,int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
+std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
 {
     int n;
     std::vector<int>branche(0);
