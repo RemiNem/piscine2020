@@ -129,7 +129,7 @@ void Graphe::charger_ponderation(std::string txt)
     std::ifstream flux(txt);
     int taille;
     int indice_arrete;
-    int poids;
+    float poids;
     flux>>taille;
 
     for(int i=0; i < taille; i++)
@@ -394,7 +394,7 @@ int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
     std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�
-    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances � S0 (=debut)
+    std::vector<float> distance_S0((float)sommets.size(), 999); //le tableau des distances � S0 (=debut)
     std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
     Sommet* s = sommets[debut]; //varaible tampon
     int distance, d_min, id_d_min; //variables

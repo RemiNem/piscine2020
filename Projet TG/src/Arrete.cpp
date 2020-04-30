@@ -35,7 +35,7 @@ int Arrete::get_indice_s2() const
 {
     return indice_s2;
 }
-int Arrete::get_poids() const
+float Arrete::get_poids() const
 {
     return m_poids;
 }
@@ -57,7 +57,7 @@ void Arrete::set_indice(int i)
     m_indice = i;
 }
 
-void Arrete::set_poids(int p)
+void Arrete::set_poids(float p)
 {
     m_poids = p;
 }

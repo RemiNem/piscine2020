@@ -8,7 +8,7 @@ class Arrete
         int m_indice;
         int indice_s1;
         int indice_s2;
-        int m_poids;
+        float m_poids;
 
     public:
         ///constructeurs/destructeurs
@@ -21,13 +21,13 @@ class Arrete
         int get_indice() const;
         int get_indice_s1() const;
         int get_indice_s2() const;
-        int get_poids() const;
+        float get_poids() const;
 
         ///setters
         void set_indice_s1(int indice);
         void set_indice_s2(int indice);
         void set_indice(int i);
-        void set_poids(int p);
+        void set_poids(float p);
 
 };
 
