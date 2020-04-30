@@ -299,8 +299,6 @@ void Graphe::afficher_tous_indices() const
 }
 
 
-
-
 /// ----------GETTERS----------
 
 ///retourne l'arrete correspondante � ces deux sommets
@@ -532,7 +530,7 @@ void Graphe::calculer_Cvp()
 
 /// CENTRALITE D'INTERMEDIARITE
 //= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
-///calcule la centralite d'intermediarite pour un sommet
+//calcule la centralite d'intermediarite pour un sommet
 float Graphe::calcul_Ci(int s) const
 {
     float somme_Ci = 0;
@@ -558,7 +556,7 @@ void Graphe::calcul_tous_Ci()
     }
 }
 
-///algorithme de Dijkstra adapté
+//algorithme de Dijkstra adapté
 float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
 {
     std::vector<int>branche(0);
@@ -629,7 +627,6 @@ float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
         }
         while(sommet_decouverts!=m_ordre);  ///tant que il reste des sommetes decouverts
 
-        std::cout<<std::endl;
         branche=retourner_chemin(s0,sf,pred);///stocke le chemin dans la branche
         if(nb_chemin==0)
         {
@@ -690,7 +687,7 @@ void Graphe::calculer_tous_indices()
     calculer_tous_Cd();
     calculer_tous_Cp();
     calculer_Cvp();
-    //rajouter intermediarite
+    calcul_tous_Ci();
 }
 
 
@@ -715,9 +712,9 @@ void Graphe::vulnerabilite()
     float* prec_Cd = new float [m_ordre];
     float* prec_Cvp = new float [m_ordre];
     float* prec_Cp = new float [m_ordre];
-    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp);
-    //interpreter les resultats
-    //a faire
+    float* prec_Ci = new float[m_ordre];
+    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci);
+    //5) INTERPRETER LES RESULTATS
 }
 
 
@@ -878,7 +875,8 @@ void Graphe::sauvegarde_centralites()
         sauv << "centralite_proximite" << std::endl;
         ecrire_centralite(centralite_proximite, sauv);
         //CENTRALITE D'INTERMEDIARITE
-        //A faire
+        sauv << "centralite_intermediarite" << std::endl;
+        ecrire_centralite(centralite_intermediarite, sauv);
         sauv.close();
     }
 }
@@ -894,7 +892,7 @@ void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
 
 
 ///CHARGEMENT CENTRALITE
-void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp)
+void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci)
 {
     std::string centralite;
     std::ifstream charg{"centralites.txt"};
@@ -909,7 +907,8 @@ void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &p
             recuperer_centralite(prec_Cvp, charg);
         else if(centralite == "centralite_proximite") //PROXIMITE
             recuperer_centralite(prec_Cp, charg);
-        //AJOUTER INTERMEDIARITE
+        else if(centralite == "centralite_intermediarite") //INTERMEDIARITE
+            recuperer_centralite(prec_Ci, charg);
     }
 }
 
