@@ -24,6 +24,7 @@ class Graphe
         float *centralite_degre; //le degr� de centralit� de chaque sommet dans un vecteur
         float *centralite_vecteurp; // degr� de centralit� Vp de chaque sommet
         float *centralite_proximite; //le degre de proximit� de chaque sommet dans un vecteur
+        float *centralite_intermediarite; //bon vous avez compris le concept
     public:
         ///DESTRUCTION
         Graphe();
@@ -43,6 +44,7 @@ class Graphe
         void afficher_degre_centralite() const; //affichage du degr� de centralit� de chaque sommet
         void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
         void afficher_centralite_vp() const; //affichage de la centralite de vecteur pour chaque sommet
+        void afficher_centralite_i() const;
         void afficher_tous_indices() const; //affiche tous les indices de centralite
 
 
@@ -70,7 +72,10 @@ class Graphe
         void calculer_Cvp();
 
         //CENTRALITE D'INTERMEDIARITE
-        int Dijkstra_adapte(int debut, int fin) ;
+        float Dijkstra_ameliore(int s0, int sf,int straverse) const;
+        std::vector<int> retourner_chemin(int s0,int sf,std::vector<int> pred) const;
+        void calcul_tous_Ci();
+        float calcul_Ci(int s) const;
 
         //CALCULER TOUS
         void calculer_tous_indices();

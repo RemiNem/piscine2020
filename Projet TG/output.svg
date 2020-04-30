@@ -19,10 +19,10 @@
 <text x="100" y="495" fill="black" >H</text>
 <circle cx="500" cy="500" r="5" fill="black" />
 <text x="500" y="495" fill="black" >I</text>
-<line x1="200" y1="400" x2="100" y2="500" stroke="black" />
-<text x="155" y="445" fill="black" >1</text>
-<line x1="400" y1="400" x2="500" y2="500" stroke="black" />
-<text x="455" y="445" fill="black" >1</text>
+<line x1="300" y1="100" x2="200" y2="200" stroke="black" />
+<text x="255" y="145" fill="black" >1</text>
+<line x1="300" y1="100" x2="400" y2="200" stroke="black" />
+<text x="355" y="145" fill="black" >1</text>
 <line x1="200" y1="200" x2="300" y2="300" stroke="black" />
 <text x="255" y="245" fill="black" >1</text>
 <line x1="400" y1="200" x2="300" y2="300" stroke="black" />
@@ -39,6 +39,10 @@
 <text x="255" y="395" fill="black" >1</text>
 <line x1="300" y1="400" x2="400" y2="400" stroke="black" />
 <text x="355" y="395" fill="black" >1</text>
+<line x1="400" y1="400" x2="500" y2="500" stroke="black" />
+<text x="455" y="445" fill="black" >1</text>
+<line x1="200" y1="400" x2="100" y2="500" stroke="black" />
+<text x="155" y="445" fill="black" >1</text>
 
 
 </svg>
