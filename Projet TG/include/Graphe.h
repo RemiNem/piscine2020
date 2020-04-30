@@ -43,6 +43,7 @@ class Graphe
         void afficher_centralite_proximite() const; //affichage de la centrlite de proximite de chaque sommet
         void afficher_centralite_vp() const; //affichage de la centralite de vecteur pour chaque sommet
         void afficher_tous_indices() const; //affiche tous les indices de centralite
+        void afficher_anciens_indices(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp) const;
 
 
         /// ------------GETTERS-------------------

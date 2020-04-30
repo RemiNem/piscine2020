@@ -129,7 +129,7 @@ void Graphe::charger_ponderation(std::string txt)
     std::ifstream flux(txt);
     int taille;
     int indice_arrete;
-    int poids;
+    float poids;
     flux>>taille;
 
     for(int i=0; i < taille; i++)
@@ -275,6 +275,18 @@ void Graphe::afficher_centralite_vp() const
     std::cout << std::endl << std::endl;
 }
 
+void Graphe::afficher_centralite_i() const
+{
+    std::cout << std::endl << "La centralite d'intermediarite des sommets : " << std::endl;
+    //pour tous les sommets du graphe
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        //on affiche le nom
+        std::cout << sommets[i]->get_nom() << " : " << centralite_intermediarite[i] << std::endl;;
+    }
+    std::cout << std::endl << std::endl;
+}
+
 
 ///afficher tous les indices de centralite
 
@@ -283,7 +295,7 @@ void Graphe::afficher_tous_indices() const
     afficher_centralite_proximite();
     afficher_degre_centralite();
     afficher_centralite_vp();
-    //ajouter centralite d'intermediarite
+    afficher_centralite_i();
 }
 
 
@@ -358,20 +370,23 @@ void Graphe::calculer_tous_Cd()
 /// CENTRALITE DE PROXIMITE
 
 ///calcul de la centralit� de proximit� pour 1 sommet dont l'indice est pass� en parametre
-float Graphe::calculer_Cp(int indice)
+float Graphe::calculer_Cp(int indice) const
 {
     float Cp;
     int somme_distances = 0;
+    int num_CC;
+    quelle_CC(indice, num_CC); //recuperation de la composante connexe a laquelle appartient ce sommet
     //r�cuperer la somme des longueurs des plus courts chemins de s aux autres sommets du graphe
-    for(size_t i = 0; i < m_ordre; ++i)
+    for(size_t i = 0; i < CC[num_CC].size(); ++i) //seulement pour cette composante connexe
     {
         //si ce n'est pas s
-        if(sommets[i] != sommets[indice])
-            if(Appartenance_meme_CC(indice,i)==true)
-                somme_distances += Dijkstra(indice,i); // on ajoute leur distance � la somme
+        if(sommets[CC[num_CC][i]] != sommets[indice])
+            somme_distances += Dijkstra(indice,CC[num_CC][i]); // on ajoute leur distance � la somme en faisant dijkstra sur la CC
     }
-
-    Cp = float(NORMALISE)/somme_distances;
+    if(somme_distances != 0)
+        Cp = float(NORMALISE)/somme_distances;
+    else
+        Cp = 0;
     return Cp;
 }
 
@@ -384,12 +399,14 @@ void Graphe::calculer_tous_Cp()
         centralite_proximite[i] = calculer_Cp(i);
     }
 }
+
 ///algorithme de Dijkstra
+///DIJKSTRA SANS MODIF
 int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
     std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�
-    std::vector<int> distance_S0((int)sommets.size(), 999); //le tableau des distances � S0 (=debut)
+    std::vector<float> distance_S0((float)sommets.size(), 999); //le tableau des distances � S0 (=debut)
     std::vector<int> preds((int)sommets.size(), INCONNU); //vecteur de predecesseur de chaque sommet
     Sommet* s = sommets[debut]; //varaible tampon
     int distance, d_min, id_d_min; //variables
@@ -454,7 +471,6 @@ int Graphe::Dijkstra(int debut, int fin) const
 }
 
 
-
 /// CENTRALITE DE VECTEUR PROPRE
 
 /// Calcul de Cvp
@@ -516,74 +532,159 @@ void Graphe::calculer_Cvp()
 
 /// CENTRALITE D'INTERMEDIARITE
 //= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
+///calcule la centralite d'intermediarite pour un sommet
+float Graphe::calcul_Ci(int s) const
+{
+    float somme_Ci = 0;
+    int num_CC;
+    quelle_CC(s, num_CC);//récupere à quelle composante connexe appartient le sommet
+    //ne lance dijkstra que pour les sommets appartenant à cette CC
+    for(size_t i = 0; i < CC[num_CC].size(); ++i)
+    {
+        for(size_t j = 0; j < CC[num_CC].size(); ++j)
+            if(CC[num_CC][i] != CC[num_CC][j])
+                somme_Ci += Dijkstra_ameliore(CC[num_CC][j], CC[num_CC][i], s);
+    }
+    return somme_Ci;
+
+}
+
+void Graphe::calcul_tous_Ci()
+{
+    centralite_intermediarite = new float[m_ordre];
+    for(int i = 0; i < m_ordre; ++i)
+    {
+        centralite_intermediarite[i] = calcul_Ci(i);
+    }
+}
 
 ///algorithme de Dijkstra adapté
-int Graphe::Dijkstra_adapte(int s0, int sf)
+float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
 {
-    std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
-    std::vector<bool>decouvert(m_ordre,false);
-    int dtot=0;///distance parcourue
-    int sa;
-    int ss=s0;
-    int sommet_marque=0;
-    std::vector<int>distance(m_ordre,-1);///distance absolue du sommet en cours par rapport a un sommet numero i
-
-    while(sommet_marque != int(m_ordre-1)) ///tant que il reste des sommetes marqués
+    std::vector<int>branche(0);
+    std::vector<int>branche0(0);
+    std::vector<bool>marque(m_ordre,false);
+    int n_marque=0;///les sommets marqués sont ceux qui ont fait parti d'un chemin
+    float nb_chemin=0;
+    float Ci=0;
+    bool stop=false;
+    while(stop==false) ///condition d'arret{
     {
 
-        decouvert[ss]=true;
-        sommet_marque++;
+        std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
+        std::vector<bool>decouvert(m_ordre,false);
+        std::vector<int>distance(m_ordre,32767);///distance absolue du sommet en cours par rapport a un sommet numero i
 
-        for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
+        int dtot=0;///distance parcourue
+        int sa;
+        int ss=s0;
+        int sommet_decouverts=0;
+
+        do
         {
-            sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
+            decouvert[ss]=true;
 
-            if(decouvert[sa]==false) ///si le sommet n'est pas découvert
+            sommet_decouverts++;
+
+            for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
             {
-                if((get_arrete(ss,sa).get_poids()+dtot)<distance[sa]||distance[sa]==-1)
-                    ///si la case du tableau de distance est vide ou que la nouvelle distance entre s0 et sa en cours
-                    ///est inférieure a la distance d'avant alors on la remplace dans la liste
+                sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
+
+                if(decouvert[sa]==false) ///si le sommet n'est pas découvert
                 {
-                    distance[sa]=get_arrete(ss,sa).get_poids()+dtot;
-                    pred[sa]=ss;
-
+                    if((get_arrete(ss,sa).get_poids()+dtot)<distance[sa])
+                    {
+                        distance[sa]=get_arrete(ss,sa).get_poids()+dtot;
+                        pred[sa]=ss;
+                    }
                 }
-
             }
-        }
-        int min=32767;///valeur maximale d'un int non signé
-
-        for(size_t i=0; i<distance.size(); i++)
-        {
-            if(distance[i]<min&&distance[i]!=-1&&decouvert[i]==false)
+            int minm=32767;
+            int minn=32767;
+            int sm=0,snm=0;
+            for(size_t i=0; i<distance.size(); i++)
             {
-                min=distance[i];
-                ss=i;
+                if(distance[i]<minm&&decouvert[i]==false&&marque[i]==true)///ici on determine la distance minimale de tous les sommets marqués
+                {
+                    minm=distance[i];
+                    sm=i;
+                }
+                if(distance[i]<minn&&decouvert[i]==false&&marque[i]==false)///ici on determine la distance minimale de tous les sommets non marqués
+                {
+                    minn=distance[i];
+                    snm=i;
+                }
             }
+
+            if(minn<=minm)///si on en est au 2eme chemin le plus cours ou plus alors on se deplace dans un sommet pas encore marque si sa distance ne depasse pas celui marque
+            {
+                ss=snm;
+            }
+            else
+            {
+                ss=sm;
+            }
+            dtot=distance[ss];///on actualise la distance totale
+
         }
-        dtot=distance[ss];///on actualise la distance totale
+        while(sommet_decouverts!=m_ordre);  ///tant que il reste des sommetes decouverts
+
+        std::cout<<std::endl;
+        branche=retourner_chemin(s0,sf,pred);///stocke le chemin dans la branche
+        if(nb_chemin==0)
+        {
+            branche0=branche;
+        }
+        if(nb_chemin>0&&branche0==branche)
+        {
+            stop=true;   ///on s'arrete quand la branche est la meem que celle du debut
+        }
+        for(size_t i=0; i<branche.size(); i++)
+        {
+            if(stop==false)
+//std::cout<<sommets[branche[i]]->get_nom();
+                if(sommets[branche[i]]->get_indice()==straverse&&stop==false) ///si le sommet est dans un chemin
+                {
+
+                    Ci++;
+                }
+            marque[branche[i]]=true;
+        }
+
+        n_marque=0;
+
+        for(size_t i=0; i<m_ordre; i++) ///on met a jour le nb de sommet marque
+        {
+            if(marque[i]==true)
+                n_marque++;
+        }
+        if(stop==false)///a chaque fin de cette boucle un nouveau chemin est trouve
+            nb_chemin++;
     }
+    return Ci/nb_chemin;
+}
+
+std::vector<int> Graphe::retourner_chemin(int s0,int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
+{
     int n;
-    int somme=0;
+    std::vector<int>branche(0);
+
     n=pred[sf];
     if(n!=-1)
     {
-        std::cout<<sommets[sf]->get_nom();
-
-        while(n!=-1)///on remonte tous les predessesseurs jusqu'a trouver le sommet initial
+        //std::cout<<sommets[sf]->get_nom();
+        branche.push_back(sf);
+        while(n!=-1)///on remonte tous les predessesseurs jusqu'a trouver le sommer initial
         {
-            std::cout<<"<--"<<sommets[n]->get_nom();
+            branche.push_back(n);
             n=pred[n];
         }
-
     }
-    return dtot;
+    return branche;
 }
 
 
 /// CALCULER TOUS INDICES
-
-
 void Graphe::calculer_tous_indices()
 {
     calculer_tous_Cd();
@@ -603,7 +704,8 @@ void Graphe::vulnerabilite()
     //2) REGARDER LA CONNEXITE
     //scinder recherche et affichage
     //recherche_afficher_CC();
-    afficher_CC(rechercher_CC());
+    rechercher_CC();
+    afficher_CC();
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     afficher();
     afficher_graphe_internet();
@@ -614,6 +716,11 @@ void Graphe::vulnerabilite()
     float* prec_Cvp = new float [m_ordre];
     float* prec_Cp = new float [m_ordre];
     chargement_centralites(prec_Cd, prec_Cvp, prec_Cp);
+    std::cout << "Voici les indices précédents : " << std::endl;
+    afficher_anciens_indices(prec_Cd, prec_Cvp, prec_Cp);
+
+    std::cout << "Voici les nouveaux indices : " << std::endl;
+    afficher_tous_indices();
     //interpreter les resultats
     //a faire
 }
@@ -690,21 +797,20 @@ std::vector<int> Graphe::BFS(int num_s0)const           // source : Mme PALASI
 
 /// COMPOSANTES CONNEXES
 //renvoie un vecteur avec les differentes composantes connexes du graphe
-std::vector<std::vector<int>> Graphe::rechercher_CC()
+void Graphe::rechercher_CC()
 {
     size_t num=0;
     bool test;
     int ncc=0;
-    std::vector<std::vector<int>> toutes_CC; //le tableau des composantes connexes (chaque case contient un lot de sommets)
-    std::vector<int> CC; //une seule composante connexe
+    std::vector<int> une_cc; //une seule composante connexe
     ///pour noter les numéros de CC
     std::vector<int> cc(sommets.size(),-1);
-    std::map<std::vector<int>, int> CC_ncc;
+    CC.clear(); //on clear le vecteur de CC avant tout calcul
     do
     {
         cc[num]=num;
-        CC.clear();
-        CC.push_back(num);
+        une_cc.clear();
+        une_cc.push_back(num);
         ncc++;
 
         ///lancement d'un BFS sur le sommet num
@@ -715,7 +821,7 @@ std::vector<std::vector<int>> Graphe::rechercher_CC()
             if ((i!=num)&&(arbre_BFS[i]!=-1))
             {
                 cc[i]=num;
-                CC.push_back(i);
+                une_cc.push_back(i);
             }
         }
         ///recherche d'un sommet non explorÈ
@@ -730,52 +836,33 @@ std::vector<std::vector<int>> Graphe::rechercher_CC()
                 break;
             }
         }
-        toutes_CC.push_back(CC);
+        CC.push_back(une_cc);
     }
     while(test==true);
-    return toutes_CC;
 }
 
 //affiche les differentes composantes connexes reçues en parametre
-void Graphe::afficher_CC(std::vector<std::vector<int>> toutes_CC) const
+void Graphe::afficher_CC() const
 {
-    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    for(size_t i = 0; i < CC.size(); ++i)
     {
         std::cout << "Composante connexe " << i << ": ";
-        for(size_t j = 0; j < toutes_CC[i].size(); ++j)
-            std::cout << sommets[toutes_CC[i][j]]->get_nom() << " ";
+        for(size_t j = 0; j < CC[i].size(); ++j)
+            std::cout << sommets[CC[i][j]]->get_nom() << " ";
         std::cout << std::endl;
     }
 }
 
-///A FAIRE
-//verifie si les deux sommets reçus en parametre appartiennent a la meme composante connexe
-bool Graphe::Appartenance_meme_CC(int s1, int s2)
+//renvoie le numero de la composante connexe a laquelle appartient le sommet passé en parametre
+void Graphe::quelle_CC(int s, int &num_CC) const
 {
-    bool appartient = false;
-    std::vector<std::vector<int>> toutes_CC = rechercher_CC();
-    for(size_t i = 0; i < toutes_CC.size(); ++i)
+    for(size_t i = 0; i < CC.size(); ++i) //pour chacune des composantes connexes du graphe
     {
-        auto it = std::find(toutes_CC[i].begin(), toutes_CC[i].end(), s1);
-        if(it !=toutes_CC[i].end()) // on regarde si s1 appartient a i, sinon, on passe a un autre
-        {
-            auto it2 = std::find(toutes_CC[i].begin(), toutes_CC[i].end(), s2);
-            if(it2 != toutes_CC[i].end()) // on regarde si s2 appartient aussi  a i
-        {
-            appartient = true;
-            return appartient;
-        }
-        else
-        {
-            appartient = false;
-            return appartient;
-        }
-
+        for(size_t j = 0; j < CC[i].size(); ++j) //pour chacun des indices de sommets de cette CC
+            if(s == CC[i][j])//si note sommet appartient a cette CC
+                num_CC = i; //alors num_CC prend la valeur de la CC correspondante
     }
-
 }
-}
-
 
 ///SAUVEGARDE CENTRALITE
 
@@ -837,12 +924,12 @@ void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier)
         fichier >> vecteur[i];
 }
 
-
-
-///SCINDER RECHERCHER ET AFFICHER CC
-
-
-
-
-
-
+void Graphe::afficher_anciens_indices(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp)   const
+{
+    std::cout << "Nom du sommet     Degre     Proximite     Vecteur propre     Intermedialite" << std::endl;
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        std::cout << "   " << sommets[i]->get_nom() << "     " << prec_Cd[i] << "      " << prec_Cp[i] << "      " << prec_Cvp << "      " << std::endl;
+    }
+    std::cout << std::endl << std::endl;
+}
