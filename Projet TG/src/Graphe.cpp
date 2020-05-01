@@ -614,109 +614,6 @@ float Graphe::Ci_chemins(int s0, int sf,int straverse) const
     return Ci/nb_chemin;
 }
 //algorithme de Dijkstra adapté
-/*float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
-{
-    std::vector<int>branche(0);
-    std::vector<int>branche0(0);
-    std::vector<bool>marque(m_ordre,false);
-    int n_marque=0;///les sommets marqués sont ceux qui ont fait parti d'un chemin
-    float nb_chemin=0;
-    float Ci=0;
-    bool stop=false;
-    while(stop==false) ///condition d'arret{
-    {
-
-        std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
-        std::vector<bool>decouvert(m_ordre,false);
-        std::vector<int>distance(m_ordre,32767);///distance absolue du sommet en cours par rapport a un sommet numero i
-
-        int dtot=0;///distance parcourue
-        int sa;
-        int ss=s0;
-        int sommet_decouverts=0;
-
-        do
-        {
-            decouvert[ss]=true;
-
-            sommet_decouverts++;
-
-            for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
-            {
-                sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
-
-                if(decouvert[sa]==false) ///si le sommet n'est pas découvert
-                {
-                    Arrete a;
-                    get_arrete(ss, sa, a);
-                    if((a.get_poids()+dtot)<distance[sa])
-                    {
-                        get_arrete(ss,sa,a);
-                        distance[sa]=a.get_poids()+dtot;
-                        pred[sa]=ss;
-                    }
-                }
-            }
-            int minm=32767;
-            int minn=32767;
-            int sm=0,snm=0;
-            for(size_t i=0; i<distance.size(); i++)
-            {
-                if(distance[i]<minm&&decouvert[i]==false&&marque[i]==true)///ici on determine la distance minimale de tous les sommets marqués
-                {
-                    minm=distance[i];
-                    sm=i;
-                }
-                if(distance[i]<minn&&decouvert[i]==false&&marque[i]==false)///ici on determine la distance minimale de tous les sommets non marqués
-                {
-                    minn=distance[i];
-                    snm=i;
-                }
-            }
-
-            if(minn<=minm)///si on en est au 2eme chemin le plus cours ou plus alors on se deplace dans un sommet pas encore marque si sa distance ne depasse pas celui marque
-            {
-                ss=snm;
-            }
-            else
-            {
-                ss=sm;
-            }
-            dtot=distance[ss];///on actualise la distance totale
-
-        }
-        while(sommet_decouverts != int(m_ordre));  ///tant que il reste des sommetes decouverts
-
-        branche=retourner_chemin(sf,pred);///stocke le chemin dans la branche
-        if(nb_chemin==0)
-        {
-            branche0=branche;
-        }
-        if(nb_chemin>0&&branche0==branche)
-        {
-            stop=true;   ///on s'arrete quand la branche est la meem que celle du debut
-        }
-        for(size_t i=0; i<branche.size(); i++)
-        {
-            if(stop==false)
-                if(sommets[branche[i]]->get_indice()==straverse&&stop==false) ///si le sommet est dans un chemin
-                    if((sommets[branche[i]]->get_indice() != s0)&&(sommets[branche[i]]->get_indice() != sf))///si le sommet n'est ni le debut ni la fin
-                        Ci++;
-            marque[branche[i]]=true;
-        }
-
-        n_marque=0;
-
-        for(size_t i=0; i<m_ordre; i++) ///on met a jour le nb de sommet marque
-        {
-            if(marque[i]==true)
-                n_marque++;
-        }
-        if(stop==false)///a chaque fin de cette boucle un nouveau chemin est trouve
-            nb_chemin++;
-    }
-    return Ci/nb_chemin;
-}*/
 
 std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
 {
@@ -992,16 +889,16 @@ void Graphe::sauvegarde_centralites()
     else
     {
         //CENTRALITE DE DEGRE
-        sauv << std::endl << "centralite_degre" << "non normalise      normalise" <<std::endl;
+        sauv << std::endl << "centralite_degre" << "     non_normalise      normalise" <<std::endl;
         ecrire_centralite(centralite_degre, Cd_norm, sauv);
         //CENTRALITE DE VECTEUR PROPRE
-        sauv << std::endl << "centralite_vecteurp" << "non normalise      normalise" << std::endl;
+        sauv << std::endl << "centralite_vecteurp" << "    non_normalise      normalise" << std::endl;
         ecrire_centralite(centralite_vecteurp, Cvp_norm, sauv);
         //CENTRALITE DE PROXIMITE
-        sauv << std::endl << "centralite_proximite" << "non normalise      normalise" <<std::endl;
+        sauv << std::endl << "centralite_proximite" << "    non_normalise      normalise" <<std::endl;
         ecrire_centralite(centralite_proximite, Cp_norm, sauv);
         //CENTRALITE D'INTERMEDIARITE
-        sauv << std::endl << "centralite_intermediarite" << "non normalise      normalise" <<std::endl;
+        sauv << std::endl << "centralite_intermediarite" << "    non_normalise      normalise" <<std::endl;
         ecrire_centralite(centralite_intermediarite, Ci_norm, sauv);
         sauv.close();
     }
@@ -1011,7 +908,7 @@ void Graphe::ecrire_centralite(float* vecteur, float* vecteur_norm, std::ofstrea
 {
     for(size_t i = 0; i < m_ordre; ++i)
     {
-        fichier << "Sommet" << sommets[i]->get_nom() << "     ";
+        fichier << "     Sommet" << sommets[i]->get_nom() << "                ";
         fichier << vecteur[i] << "          "<< vecteur_norm[i] << std::endl;
     }
 
@@ -1047,6 +944,8 @@ void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &p
 void Graphe::recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::ifstream &fichier) const
 {
     std::string sommet;
+    std::string norm;
+    fichier >> norm >> norm;
     for(size_t i = 0; i < m_ordre; ++i)
     {
         fichier >> sommet;
