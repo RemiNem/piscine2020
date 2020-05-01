@@ -8,7 +8,7 @@
 	<iostream>
 	<string>
 
-1588330132 source:c:\users\rose\documents\github\piscine2020\projet tg\src\sommet.cpp
+1588254263 source:c:\users\rose\documents\github\piscine2020\projet tg\src\sommet.cpp
 	"..\include\Sommet.h"
 	<iostream>
 
@@ -31,7 +31,7 @@
 	"include\Graphe.h"
 	"include/menu.h"
 
-1588342334 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+1588271643 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
 	<string>
 	<vector>
 	"Sommet.h"
@@ -44,14 +44,14 @@
 
 1588254263 c:\users\rose\documents\github\piscine2020\projet tg\include\menu.h
 
-1588334104 source:c:\users\rose\documents\github\piscine2020\projet tg\src\menu.cpp
+1588254593 source:c:\users\rose\documents\github\piscine2020\projet tg\src\menu.cpp
 	<iostream>
 	"../include/Graphe.h"
 	"../include/fonctions.h"
 
 1588170467 c:\users\rose\documents\github\piscine2020\projet tg\include\erreur.h
 
-1588342419 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
+1588271257 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
 	"../include/Graphe.h"
 	"../include/svgfile.h"
 	"../include/fonctions.h"
@@ -61,21 +61,20 @@
 	<map>
 	<bits/stdc++.h>
 
-1588330132 c:\users\rose\documents\github\piscine2020\projet tg\include\fonctions.h
+1588254263 c:\users\rose\documents\github\piscine2020\projet tg\include\fonctions.h
 
-1588336888 source:c:\users\rose\documents\github\piscine2020\projet tg\src\fonctions.cpp
+1588254263 source:c:\users\rose\documents\github\piscine2020\projet tg\src\fonctions.cpp
 	<iostream>
 	<string.h>
 	<vector>
 	<dirent.h>
-	<windows.h>
 
-1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\main.cpp
+1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\main.cpp
 	<iostream>
 	"include\Graphe.h"
 	"include/menu.h"
 
-1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
+1588272894 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
 	<string>
 	<vector>
 	"Sommet.h"
@@ -90,28 +89,27 @@
 	<vector>
 	<string>
 
-1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
+1588272894 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
 
 1588247769 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\menu.h
 
-1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
+1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
 	"../include/Arrete.h"
 
-1588333852 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\fonctions.cpp
+1588247863 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\fonctions.cpp
 	<iostream>
 	<string.h>
 	<vector>
 	<dirent.h>
-	<windows.h>
 
-1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
+1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
 	<iostream>
 	"../include/Graphe.h"
 	"../include/fonctions.h"
 
-1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\fonctions.h
+1588247769 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\fonctions.h
 
-1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
+1588247863 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
 	"..\include\Sommet.h"
 	<iostream>
 
@@ -125,7 +123,48 @@
 	<fstream>
 	<set>
 
-1588333649 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
+1588182656 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
+	"../include/Graphe.h"
+	"../include/svgfile.h"
+	"../include/fonctions.h"
+	<dirent.h>
+	<string.h>
+	<bits/stdc++.h>
+
+1588288210 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\main.cpp
+	<iostream>
+	"include\Graphe.h"
+	"include/menu.h"
+
+1588333275 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
+	<string>
+	<vector>
+	"Sommet.h"
+	<iostream>
+	<fstream>
+	"Arrete.h"
+	<math.h>
+	<bits/stdc++.h>
+	<map>
+
+1588287424 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\sommet.h
+	<vector>
+	<string>
+
+1588287424 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
+
+1588287424 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\menu.h
+
+1588287424 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
+	"../include/Arrete.h"
+
+1588287424 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\fonctions.cpp
+	<iostream>
+	<string.h>
+	<vector>
+	<dirent.h>
+
+1588332592 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
 	"../include/Graphe.h"
 	"../include/svgfile.h"
 	"../include/fonctions.h"
@@ -134,4 +173,25 @@
 	<vector>
 	<map>
 	<bits/stdc++.h>
+
+1588090749 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1588287424 c:\users\trani\onedrive\documents\github\piscine2020\projet tg\include\fonctions.h
+
+1588333220 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
+	<iostream>
+	"../include/Graphe.h"
+	"../include/fonctions.h"
+
+1588287424 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
+	"..\include\Sommet.h"
+	<iostream>
+
+1588287424 source:c:\users\trani\onedrive\documents\github\piscine2020\projet tg\src\svgfile.cpp
+	"..\include\svgfile.h"
+	<iostream>
+	<sstream>
 

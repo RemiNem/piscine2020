@@ -7,6 +7,4 @@ void erreur(std::string error);
 std::vector<std::string> recuperer_fichiers(std::string nomdossier);
 ///gere le blindage des entrees console
 void entree_blindee(int mini, int maxi, int &valeur);
-///affichage selon des coordonnees
-void gotoligcol( int lig, int col );
 #endif // FONCTIONS_H_INCLUDED

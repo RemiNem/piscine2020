@@ -2,7 +2,6 @@
 #include <string.h>
 #include <vector>
 #include <dirent.h>
-#include <windows.h>
 
 ///affiche les erreurs
 void erreur(std::string error)
@@ -47,23 +46,10 @@ void entree_blindee(int mini, int maxi,int &valeur)
         std::cin.clear();
         fflush(stdin);
         std::cin >> valeur;
-        std::cout << "votre valeur : " << valeur << std::endl;
         if(valeur < mini || valeur > maxi)
             erreur("Le numero que vous avez entre n'est pas valide");
 
     }while(valeur < mini || valeur > maxi);
-}
-
-
-///affichage selon des coords
-void gotoligcol( int lig, int col )
-{
-    // ressources
-    COORD mycoord;
-    mycoord.X = col;
-    mycoord.Y = lig;
-    SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ), mycoord );
-
 }
 
 
