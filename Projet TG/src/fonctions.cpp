@@ -47,7 +47,6 @@ void entree_blindee(int mini, int maxi,int &valeur)
         std::cin.clear();
         fflush(stdin);
         std::cin >> valeur;
-        std::cout << "votre valeur : " << valeur << std::endl;
         if(valeur < mini || valeur > maxi)
             erreur("Le numero que vous avez entre n'est pas valide");
 

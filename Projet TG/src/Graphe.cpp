@@ -32,7 +32,8 @@ Graphe::~Graphe()
 //default
 Graphe::Graphe()
 {
-
+    //initialiser le vecteur de couleurs
+    charger_couleurs();
 }
 
 /// ------------------------CHARGEMENT GRAPHE--------------------------
@@ -198,15 +199,17 @@ void Graphe::afficher_arretes() const
     }
 }
 
+
 ///affichage graphe en html
 //multiplier les coordonn�es par 100 pour l'echelle
-void Graphe::afficher_graphe_internet() const
+void Graphe::afficher_graphe_internet()
 {
     Svgfile svgout;
+    attribuer_couleur(); //on attribue la couleur du sommet a chaque sommet
     //SOMMETS
     for(size_t i = 0; i < m_ordre; ++i)
     {
-        svgout.addDisk(sommets[i]->get_x()*100, sommets[i]->get_y()*100, 5, "black"); //placer le sommet
+        svgout.addDisk(sommets[i]->get_x()*100, sommets[i]->get_y()*100, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
         svgout.addText(sommets[i]->get_x()*100, sommets[i]->get_y()*100 - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
     }
     //ARRETES + POIDS
@@ -530,7 +533,7 @@ void Graphe::Cvp_normalise()
 {
     Cvp_norm = new float[m_ordre];
     for(size_t i = 0; i < m_ordre; ++i)
-        Cvp_norm[i] = centralite_vecteurp[i]*int(NORMALISE);
+        Cvp_norm[i] = centralite_vecteurp[i];
 }
 
 /// CENTRALITE D'INTERMEDIARITE
@@ -772,6 +775,7 @@ void Graphe::supprimer_arrete()
               << sommets[tampon.get_indice_s2()]->get_nom()
               << " a ete supprime avec succes" << std::endl << std::endl;
     arretes_supprimees.push_back(tampon);
+    afficher_graphe_internet();
 }
 
 /// CONNEXITE
@@ -967,7 +971,72 @@ void Graphe::recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::if
 }
 
 
+///COLORATION
 
+void Graphe::charger_couleurs()
+{
+    std::ifstream fichier{"coloration.txt"};
+    std::string couleur;
+    if(!fichier)
+        erreur("Impossible d'ouvrir le fichier de coloration");
+    else
+    {
+        do
+        {
+            fichier >> couleur;
+            coloration.push_back(couleur);
+        }while(fichier);
+        fichier.close();
+    }
+}
+
+void Graphe::attribuer_couleur()
+{
+    bool changement = true;
+    float** Cd = new float*[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Cd[i] = new float[2];
+    float tampon_c;
+    //copier le vecteur de centralite de degre + le sommet attribué
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        Cd[i][0] = centralite_degre[i];
+        Cd[i][1] = i;
+    }
+    //tri du plus petit Cd au plus grand
+    while(changement)
+    {
+        changement = false;
+        for(size_t i = 0; i < m_ordre - 1; ++i)
+        {
+            if(Cd[i][0] > Cd[i+1][0])
+            {
+                tampon_c = Cd[i][0];
+                Cd[i][0] = Cd[i+1][0];
+                Cd[i+1][0] = tampon_c;
+
+                tampon_c = Cd[i][1];
+                Cd[i][1] = Cd[i+1][1];
+                Cd[i+1][1] = tampon_c;
+
+                changement = true;
+            }
+        }
+    }
+    int couleur = 0;
+    int prec_Cd = int(Cd[0][0]);
+    //Affectation des couleurs aux sommets
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        if(Cd[i][0] == prec_Cd) //si on a la meme couleur qu'avant
+            couleur = couleur; //on conserve la meme couleur
+        else
+            ++couleur; //elle change
+        sommets[Cd[i][1]]->set_couleur(couleur); // on affecte la couleur au sommet
+        prec_Cd = int(Cd[i][0]); //on conserve l'ancienne centralité du sommet pour comparer
+    }
+
+}
 
 
 

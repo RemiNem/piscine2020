@@ -16,6 +16,7 @@ class Graphe
         bool m_orientation; //orientation graphe
         size_t m_ordre; //nombre de sommets
         std::vector<Sommet*> sommets; //tous les sommets
+        std::vector<std::string> coloration; //vecteur de couleurs
         std::vector<Arrete> arretes; //toutes les arretes
         std::vector<Arrete> arretes_supprimees;
         size_t m_taille; //nombre d'arretes
@@ -46,7 +47,7 @@ class Graphe
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
-        void afficher_graphe_internet() const; //html
+        void afficher_graphe_internet(); //html
         void afficher_tous_indices(int y, int x) const; //affiche tous les indices de centralite
         void afficher_centralite(float* vecteur, int dx, int y) const;
         void afficher_tous_indices_normalises(int dy, int dx) const;
@@ -77,9 +78,7 @@ class Graphe
         void Cvp_normalise();
 
         //CENTRALITE D'INTERMEDIARITE
-        //float Dijkstra_ameliore(int s0, int sf,int straverse) const;
         void Dijkstra_ameliore(int s, int s0, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
-        //std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
         float Ci_chemins(int s0, int sf,int straverse) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;
@@ -113,6 +112,9 @@ class Graphe
         void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci, float* &prec_Cd_norm, float* &prec_Cvp_norm, float* &prec_Cp_norm, float* &prec_Ci_norm) const;
         void recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::ifstream &fichier) const;
 
+        //COLORATION
+        void charger_couleurs();
+        void attribuer_couleur();
 
 };
 

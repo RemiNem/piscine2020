@@ -23,17 +23,17 @@ void menu()
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
                 G.charger_graphe(graphe_charge);
-                //afficher le graphe charge
-                system("cls");
-                G.afficher();
-                G.afficher_graphe_internet(); //en html
                 //calculer ses CC
                 G.rechercher_CC();
-                G.afficher_CC();
                 //calculer les indices de centralite du graphe
                 G.calculer_tous_indices();
                 G.calculer_tous_indices_normalises();
                 G.sauvegarde_centralites(); // + sauvegarde des donnees
+                //afficher le graphe charge
+                system("cls");
+                G.afficher();
+                G.afficher_CC();
+                G.afficher_graphe_internet(); //en html
                 break;
             case 2: // CHANGER LE SYSTEME DE PONDERATION DU GRAPHE
                 if(graphe_charge)
