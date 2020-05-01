@@ -1,44 +1,28 @@
 
 centralite_degre     non_normalise      normalise
-     SommetA                2          0.25
-     SommetB                3          0.375
-     SommetC                3          0.375
-     SommetD                4          0.5
-     SommetE                3          0.375
-     SommetF                2          0.25
-     SommetG                3          0.375
-     SommetH                3          0.375
-     SommetI                3          0.375
+     SommetA                1          0.25
+     SommetB                1          0.25
+     SommetC                4          1
+     SommetD                1          0.25
+     SommetE                1          0.25
 
 centralite_vecteurp    non_normalise      normalise
-     SommetA                0.000211655          0.00169324
-     SommetB                0.00031902          0.00255216
-     SommetC                0.00031902          0.00255216
-     SommetD                0.00046146          0.00369168
-     SommetE                0.00031902          0.00255216
-     SommetF                0.000211655          0.00169324
-     SommetG                0.00031902          0.00255216
-     SommetH                0.000331513          0.0026521
-     SommetI                0.000331513          0.0026521
+     SommetA                0.248087          0.992346
+     SommetB                0.248087          0.992346
+     SommetC                0.640954          2.56382
+     SommetD                0.248087          0.992346
+     SommetE                0.248087          0.992346
 
 centralite_proximite    non_normalise      normalise
-     SommetA                0.0555556          0.444444
-     SommetB                0.0714286          0.571429
-     SommetC                0.0714286          0.571429
-     SommetD                0.0833333          0.666667
-     SommetE                0.0714286          0.571429
-     SommetF                0.0555556          0.444444
-     SommetG                0.0714286          0.571429
-     SommetH                0.0769231          0.615385
-     SommetI                0.0769231          0.615385
+     SommetA                0.027027          0.108108
+     SommetB                0.025          0.1
+     SommetC                0.0454545          0.181818
+     SommetD                0.0294118          0.117647
+     SommetE                0.0232558          0.0930233
 
 centralite_intermediarite    non_normalise      normalise
-     SommetA                0.833333          0.0297619
-     SommetB                4.25          0.151786
-     SommetC                4.25          0.151786
-     SommetD                7.16667          0.255952
-     SommetE                4.25          0.151786
-     SommetF                0.833333          0.0297619
-     SommetG                4.25          0.151786
-     SommetH                6.04167          0.215774
-     SommetI                6.04167          0.215774
+     SommetA                0          0
+     SommetB                0          0
+     SommetC                6          1
+     SommetD                0          0
+     SommetE                0          0

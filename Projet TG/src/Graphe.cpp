@@ -18,7 +18,7 @@
 #define NORMALISE           (m_ordre - 1)
 #define AUCUNE_PONDERATION (int(fichiers.size()) + 1)
 #define DX                  26
-#define DY                  6
+#define DY                  8
 
 #define VAR_LAMBDA 4
 
@@ -614,26 +614,6 @@ float Graphe::Ci_chemins(int s0, int sf,int straverse) const
 
     return Ci/nb_chemin;
 }
-/*
-std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
-{
-    int n;
-    std::vector<int>branche(0);
-
-    n=pred[sf];
-    if(n!=-1)
-    {
-        //std::cout<<sommets[sf]->get_nom();
-        branche.push_back(sf);
-        while(n!=-1)///on remonte tous les predessesseurs jusqu'a trouver le sommer initial
-        {
-            branche.push_back(n);
-            n=pred[n];
-        }
-    }
-    return branche;
-}*/
-
 
 /// CALCULER TOUS INDICES
 void Graphe::calculer_tous_indices()
@@ -663,7 +643,7 @@ void Graphe::vulnerabilite()
     do
     {
         supprimer_arrete();
-        std::cout << "Souhaitez-vous supprimer une autre arrete ?" << std::endl;
+        std::cout << "Souhaitez-vous supprimer une autre arrete ? (oui ou non)" << std::endl;
         std::cin.clear();
         fflush(stdin);
         std::cin >> choix;
@@ -677,10 +657,13 @@ void Graphe::vulnerabilite()
             stop=true;
         }
     }while(!stop);
-
+    system("pause");
+    system("cls");
     //2) REGARDER LA CONNEXITE
     rechercher_CC();
     afficher_CC();
+    system("pause");
+    system("cls");
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     afficher_graphe_internet();
     calculer_tous_indices();
@@ -699,41 +682,52 @@ void Graphe::comparaison_centralites() const
     float* prec_Cvp_norm = new float [m_ordre];
     float* prec_Cp_norm = new float [m_ordre];
     float* prec_Ci_norm = new float[m_ordre];
+
     chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci, prec_Cd_norm, prec_Cvp_norm, prec_Cp_norm, prec_Ci_norm); //on recupere les anciennes donnees de centralite
 
-    gotoligcol(DY, DX);
-    std::cout << "prec Cd";
-    gotoligcol(DY, DX + 17);
-    std::cout << "prec Cp";
-    gotoligcol(DY, DX + 31);
-    std::cout << "prec Cvp";
-    gotoligcol(DY, DX + 44);
-    std::cout << "prec Ci";
-    afficher_centralite(prec_Cd, DX, DY);
-    afficher_centralite(prec_Cp, DX + 15, DY);
-    afficher_centralite(prec_Cvp, DX + 30, DY);
-    afficher_centralite(prec_Ci, DX + 45, DY);
+    float* diff_Cd = difference_centralite(prec_Cd, centralite_degre);
+    float* diff_Cvp = difference_centralite(prec_Cvp, centralite_vecteurp);
+    float* diff_Cp = difference_centralite(prec_Cp, centralite_proximite);
+    float* diff_Ci = difference_centralite(prec_Ci, centralite_intermediarite);
+
+    gotoligcol(DY, DX); std::cout << "diff Cd";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
+    gotoligcol(DY, DX + 44); std::cout << "diff Ci";
+    afficher_centralite(diff_Cp, DX, DY);
+    afficher_centralite(diff_Cd, DX + 15, DY);
+    afficher_centralite(diff_Cvp, DX + 30, DY);
+    afficher_centralite(diff_Ci, DX + 45, DY);
 
     afficher_tous_indices(DY + m_ordre + 2, DX);
 
     system("pause");
     system("cls");
 
-    gotoligcol(DY, DX);
-    std::cout << "prec Cd";
-    gotoligcol(DY, DX + 17);
-    std::cout << "prec Cp";
-    gotoligcol(DY, DX + 31);
-    std::cout << "prec Cvp";
-    gotoligcol(DY, DX + 44);
-    std::cout << "prec CI";
-    afficher_centralite(prec_Cd_norm, DX, DY);
-    afficher_centralite(prec_Cp_norm, DX + 15, DY);
-    afficher_centralite(prec_Cvp_norm, DX + 30, DY);
-    afficher_centralite(prec_Ci_norm, DX + 45, DY);
+    diff_Cd = difference_centralite(prec_Cd_norm, centralite_degre);
+    diff_Cvp = difference_centralite(prec_Cvp_norm, centralite_vecteurp);
+    diff_Cp = difference_centralite(prec_Cp_norm, centralite_proximite);
+    diff_Ci = difference_centralite(prec_Ci_norm, centralite_intermediarite);
 
-    afficher_tous_indices_normalises(DY + m_ordre + 2, DX);
+    gotoligcol(DY, DX); std::cout << "diff Cd";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
+    gotoligcol(DY, DX + 44); std::cout << "diff CI";
+    afficher_centralite(diff_Cp, DX, DY);
+    afficher_centralite(diff_Cd, DX + 15, DY);
+    afficher_centralite(diff_Cvp, DX + 30, DY);
+    afficher_centralite(diff_Ci, DX + 45, DY);
 
+    afficher_tous_indices_normalises(DY + m_ordre + 4, DX);
+
+}
+
+float* Graphe::difference_centralite(float* pred, float* nv) const
+{
+    float* diff = new float[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        diff[i] = nv[i] - pred[i];
+    return diff;
 }
 
 void Graphe::supprimer_arrete()
@@ -759,8 +753,6 @@ void Graphe::supprimer_arrete()
     std::cout << std::endl << "l'arrete " << sommets[tampon.get_indice_s1()]->get_nom() << "-"
               << sommets[tampon.get_indice_s2()]->get_nom()
               << " a ete supprime avec succes" << std::endl << std::endl;
-    system("pause");
-    system("cls");
 }
 
 /// CONNEXITE

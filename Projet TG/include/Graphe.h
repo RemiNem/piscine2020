@@ -92,6 +92,8 @@ class Graphe
         void vulnerabilite();
         void supprimer_arrete();
         void comparaison_centralites() const;
+        float*difference_centralite(float* pred, float* nv) const;
+
 
         //CONEXITE
         std::vector<int> BFS(int num_s0)const;
