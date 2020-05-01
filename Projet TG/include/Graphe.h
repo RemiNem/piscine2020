@@ -41,8 +41,9 @@ class Graphe
         void afficher() const; //affichage du graphe sur console
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
         void afficher_graphe_internet() const; //html
-        void afficher_tous_indices() const; //affiche tous les indices de centralite
+        void afficher_tous_indices(int y, int x) const; //affiche tous les indices de centralite
         void afficher_centralite(float* vecteur) const; //affiche une centralite passee en paramtre
+        void afficher_centralite(float* vecteur, int dx, int y) const;
 
 
         /// ------------GETTERS-------------------
@@ -80,6 +81,7 @@ class Graphe
         //VULNERABILITE
         void vulnerabilite();
         void supprimer_arrete();
+        void comparaison_centralites() const;
 
         //CONEXITE
         std::vector<int> BFS(int num_s0)const;
@@ -93,8 +95,8 @@ class Graphe
         void ecrire_centralite(float* vecteur, std::ofstream &fichier);
 
         //CHARGEMENT
-        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci);
-        void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
+        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci) const;
+        void recuperer_centralite(float* &vecteur, std::ifstream &fichier) const;
 
 
 };

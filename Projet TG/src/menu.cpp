@@ -17,12 +17,14 @@ void menu()
                   << "4) Supprimer une arrete du graphe " << std::endl
                   << "5) Quitter " << std::endl;
         entree_blindee(1, 5, choix);
+        system("cls");
         switch(choix)
         {
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
                 G.charger_graphe(graphe_charge);
                 //afficher le graphe charge
+                system("cls");
                 G.afficher();
                 G.afficher_graphe_internet(); //en html
                 //calculer ses CC
@@ -47,20 +49,14 @@ void menu()
                 if(graphe_charge)
                 {
                     //affichage du graphe
-                    G.afficher();
                     G.afficher_graphe_internet();
                     //Affichage des degres de centralite
-                    G.afficher_tous_indices();
+                    G.afficher_tous_indices(8, 26);
                 }
                 else
                     erreur("le graphe n'est pas encore charge");
                 break;
             case 4: // SUPPRIMER UNE ARRETE DU GRAPHE
-                // = creer un sspg "vulnerabilite" qui appellera d'autres programme pour :
-                // 1) supprimer une arrete
-                // 2) tester la connexite
-                // 3) recalculer les nouveaux indices de centralit� et les comparer avec les anciens (dans la sauvegarde)
-                // 4) sauvegarder les nouveaux indices de centralite ?
                 if(graphe_charge)
                 {
                     G.vulnerabilite();
@@ -76,6 +72,8 @@ void menu()
             default: // mettre un catch pour les erreurs
                 break;
         }
+        system("pause");
+        system("cls");
 
     }while(!quitter);
 }

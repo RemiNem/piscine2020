@@ -17,6 +17,8 @@
 #define INCONNU             -1
 #define NORMALISE           (m_ordre - 1)
 #define AUCUNE_PONDERATION (int(fichiers.size()) + 1)
+#define DX                  26
+#define DY                  6
 
 #define VAR_LAMBDA 4
 
@@ -234,28 +236,34 @@ void Graphe::afficher_graphe_internet() const
         svgout.addText(x + 5, y - 5, arretes[i].get_poids(), "black");
     }
 }
-//affiche une centralite
-void Graphe::afficher_centralite(float* vecteur) const
+
+void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
 {
+    int descendre = 1;
     //pour tous les sommets du graphe
     for(size_t i = 0; i < m_ordre; ++i)
     {
         //on affiche le nom
-        std::cout << sommets[i]->get_nom() << " : " << vecteur[i] << std::endl;;
+        gotoligcol(dy + descendre, 10); std::cout << "Sommet " << sommets[i]->get_nom() << ": ";
+        gotoligcol(dy + descendre, dx); std::cout << vecteur[i];
+        ++descendre;
     }
-    std::cout << std::endl;
 }
+
+
+
 //afficher tous les indices de centralite
-void Graphe::afficher_tous_indices() const
+void Graphe::afficher_tous_indices(int dy, int dx) const
 {
-    std::cout << std::endl << "La centralite de proximite des sommets : " << std::endl;
-    afficher_centralite(centralite_proximite);
-    std::cout << std::endl << "Le degre de centralite des sommets : " << std::endl;
-    afficher_centralite(centralite_degre);
-    std::cout << std::endl << "La centralite de vecteur propre des sommets : " << std::endl;
-    afficher_centralite(centralite_vecteurp);
-    std::cout << std::endl << "La centralite d'intermediarite des sommets : " << std::endl;
-    afficher_centralite(centralite_intermediarite);
+    gotoligcol(dy, dx + 4); printf("Cp");
+    afficher_centralite(centralite_proximite, dx, dy);
+    gotoligcol(dy, dx + 17); printf("Cd");
+    afficher_centralite(centralite_degre, 15 + dx, dy);
+    gotoligcol(dy, dx + 34); printf("Cvp");
+    afficher_centralite(centralite_vecteurp, 30 + dx, dy);
+    gotoligcol(dy, dx + 47); printf("Ci");
+    afficher_centralite(centralite_intermediarite, 45 + dx, dy);
+    std::cout << std::endl;
 }
 
 
@@ -658,41 +666,41 @@ void Graphe::vulnerabilite()
     //1) SUPPRIMER UNE ARRETE
     supprimer_arrete();
     //2) REGARDER LA CONNEXITE
-    //scinder recherche et affichage
-    //recherche_afficher_CC();
     rechercher_CC();
     afficher_CC();
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
-    afficher();
     afficher_graphe_internet();
     calculer_tous_indices();
     //4) COMPARER CES CALCULS AVEC LES ANCIENS (dans la sauvegarde)
     //on recupere dans la sauvegarde les anciens indices de centralite
+    comparaison_centralites();
+}
+
+void Graphe::comparaison_centralites() const
+{
     float* prec_Cd = new float [m_ordre];
     float* prec_Cvp = new float [m_ordre];
     float* prec_Cp = new float [m_ordre];
     float* prec_Ci = new float[m_ordre];
-    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci);
-    std::cout << "la centralite de degre precedente puis actuelle" << std::endl;
-    afficher_centralite(prec_Cd);
-    afficher_centralite(centralite_degre);
-    std::cout << "la centralite de vecteur propre precedente puis actuelle" << std::endl;
-    afficher_centralite(prec_Cvp);
-    afficher_centralite(centralite_vecteurp);
-    std::cout << "la centralite de proximite precedente puis actuelle" << std::endl;
-    afficher_centralite(prec_Cp);
-    afficher_centralite(centralite_proximite);
-    std::cout << "la centralite d intermediarite precedente puis actuelle" << std::endl;
-    afficher_centralite(prec_Ci);
-    afficher_centralite(centralite_intermediarite);
-    //5) INTERPRETER LES RESULTATS
-}
+    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci); //on recupere les anciennes donnees de centralite
 
+    gotoligcol(DY, DX); std::cout << "prec Cd";
+    gotoligcol(DY, DX + 17); std::cout << "prec Cp";
+    gotoligcol(DY, DX + 31); std::cout << "prec Cvp";
+    gotoligcol(DY, DX + 44); std::cout << "prec Ci";
+    afficher_centralite(prec_Cd, DX, DY);
+    afficher_centralite(prec_Cp, DX + 15, DY);
+    afficher_centralite(prec_Cvp, DX + 30, DY);
+    afficher_centralite(prec_Ci, DX + 45, DY);
+
+    afficher_tous_indices(DY + m_ordre + 2, DX);
+}
 
 void Graphe::supprimer_arrete()
 {
     int indice;
     Arrete tampon;
+    system("cls");
     afficher_arretes();
     std::cout << std::endl <<"Indiquez le numero de l'arrete que vous souhaitez vous supprimer  " << std::endl;
     entree_blindee(0, m_taille, indice);
@@ -708,8 +716,11 @@ void Graphe::supprimer_arrete()
     arretes.pop_back();
     m_taille--;
 
-    std::cout << std::endl << "Les nouvelles arretes : " << std::endl;
-    afficher_arretes();
+    std::cout << std::endl << "l'arrete " << sommets[tampon.get_indice_s1()]->get_nom() << "-"
+                           << sommets[tampon.get_indice_s2()]->get_nom()
+                           << " a ete supprime avec succes" << std::endl << std::endl;
+    system("pause");
+    system("cls");
 }
 
 /// CONNEXITE
@@ -807,6 +818,7 @@ void Graphe::rechercher_CC()
 //affiche les differentes composantes connexes reçues en parametre
 void Graphe::afficher_CC() const
 {
+    std::cout << std::endl;
     for(size_t i = 0; i < CC.size(); ++i)
     {
         std::cout << "Composante connexe " << i << ": ";
@@ -863,7 +875,7 @@ void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
 
 
 ///CHARGEMENT CENTRALITE
-void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci)
+void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci) const
 {
     std::string centralite;
     std::ifstream charg{"centralites.txt"};
@@ -871,19 +883,23 @@ void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &p
         erreur("Impossible d'ouvrir le fichier de sauvegarde des centralites");
     else
     {
-        charg >> centralite;
-        if(centralite == "centralite_degre") //DEGRE
-            recuperer_centralite(prec_Cd, charg);
-        else if(centralite == "centralite_vecteurp") //VECTEUR PROPRE
-            recuperer_centralite(prec_Cvp, charg);
-        else if(centralite == "centralite_proximite") //PROXIMITE
-            recuperer_centralite(prec_Cp, charg);
-        else if(centralite == "centralite_intermediarite") //INTERMEDIARITE
-            recuperer_centralite(prec_Ci, charg);
+        do
+        {
+            charg >> centralite;
+            if(centralite == "centralite_degre") //DEGRE
+                recuperer_centralite(prec_Cd, charg);
+            else if(centralite == "centralite_vecteurp") //VECTEUR PROPRE
+                recuperer_centralite(prec_Cvp, charg);
+            else if(centralite == "centralite_proximite") //PROXIMITE
+                recuperer_centralite(prec_Cp, charg);
+            else if(centralite == "centralite_intermediarite") //INTERMEDIARITE
+                recuperer_centralite(prec_Ci, charg);
+        }while(charg);
+        charg.close();
     }
 }
 
-void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier)
+void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier) const
 {
     for(size_t i = 0; i < m_ordre; ++i)
         fichier >> vecteur[i];

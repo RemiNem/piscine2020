@@ -53,8 +53,8 @@ void Sommet::supprimer_succ(int indice)
     Sommet *tampon = sommet_adjacent[nbr_succ-1]; //on intervertit le sommet a supprimer avec le dernier
     sommet_adjacent[nbr_succ-1]=sommet_adjacent[i];
     sommet_adjacent[i]=tampon;
-    std::cout << std::endl << "depuis le sommet : " << get_nom() << " d'indice : " << get_indice() << std::endl;
-    std::cout << "on supprime le successeur : " << sommet_adjacent[nbr_succ-1]->get_nom() << " d'indice : " << sommet_adjacent[nbr_succ-1]->get_indice() << std::endl;
+    //std::cout << std::endl << "depuis le sommet : " << get_nom() << " d'indice : " << get_indice() << std::endl;
+    //std::cout << "on supprime le successeur : " << sommet_adjacent[nbr_succ-1]->get_nom() << " d'indice : " << sommet_adjacent[nbr_succ-1]->get_indice() << std::endl;
 
     sommet_adjacent.pop_back();
 }
