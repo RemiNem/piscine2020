@@ -704,8 +704,25 @@ void Graphe::calculer_tous_indices_normalises()
 
 void Graphe::vulnerabilite()
 {
-    //1) SUPPRIMER UNE ARRETE
-    supprimer_arrete();
+    //1) SUPPRIMER UNE ARRETE OU PLUSIEURS
+    bool stop = false;
+    std::string choix;
+    do
+    {
+        supprimer_arrete();
+        std::cout << "Souhaitez-vous supprimer une autre arrete ?" << std::endl;
+        std::cin >> choix;
+        if(choix == "oui")
+            stop = false;
+        else if (choix == "non")
+            stop = true;
+        else
+        {
+            std::cout << "vous n avez pas repondu par oui ou par non, on considere cela comme un non" << std::endl;
+            stop=true;
+        }
+    }while(!stop);
+
     //2) REGARDER LA CONNEXITE
     rechercher_CC();
     afficher_CC();
