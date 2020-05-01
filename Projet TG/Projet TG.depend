@@ -70,12 +70,12 @@
 	<dirent.h>
 	<windows.h>
 
-1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\main.cpp
+1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\main.cpp
 	<iostream>
 	"include\Graphe.h"
 	"include/menu.h"
 
-1588272894 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
+1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\graphe.h
 	<string>
 	<vector>
 	"Sommet.h"
@@ -90,27 +90,28 @@
 	<vector>
 	<string>
 
-1588272894 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
+1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\arrete.h
 
 1588247769 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\menu.h
 
-1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
+1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\arrete.cpp
 	"../include/Arrete.h"
 
-1588247863 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\fonctions.cpp
+1588333852 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\fonctions.cpp
 	<iostream>
 	<string.h>
 	<vector>
 	<dirent.h>
+	<windows.h>
 
-1588272894 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
+1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\menu.cpp
 	<iostream>
 	"../include/Graphe.h"
 	"../include/fonctions.h"
 
-1588247769 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\fonctions.h
+1588332850 c:\users\playe\onedrive\documents\github\piscine2020\projet tg\include\fonctions.h
 
-1588247863 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
+1588332850 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\sommet.cpp
 	"..\include\Sommet.h"
 	<iostream>
 
@@ -124,11 +125,13 @@
 	<fstream>
 	<set>
 
-1588182656 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
+1588333649 source:c:\users\playe\onedrive\documents\github\piscine2020\projet tg\src\graphe.cpp
 	"../include/Graphe.h"
 	"../include/svgfile.h"
 	"../include/fonctions.h"
 	<dirent.h>
 	<string.h>
+	<vector>
+	<map>
 	<bits/stdc++.h>
 
