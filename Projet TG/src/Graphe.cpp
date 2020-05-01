@@ -672,7 +672,7 @@ void Graphe::vulnerabilite()
     comparaison_centralites();
 }
 
-void Graphe::comparaison_centralites() const
+void Graphe::comparaison_centralites()
 {
     float* prec_Cd = new float [m_ordre];
     float* prec_Cvp = new float [m_ordre];
@@ -690,8 +690,10 @@ void Graphe::comparaison_centralites() const
     float* diff_Cp = difference_centralite(prec_Cp, centralite_proximite);
     float* diff_Ci = difference_centralite(prec_Ci, centralite_intermediarite);
 
-    gotoligcol(DY, DX); std::cout << "diff Cd";
-    gotoligcol(DY, DX + 17); std::cout << "diff Cp";
+    afficher_arretes_suppr_pour_centralite();
+
+    gotoligcol(DY, DX); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cd";
     gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
     gotoligcol(DY, DX + 44); std::cout << "diff Ci";
     afficher_centralite(diff_Cp, DX, DY);
@@ -709,8 +711,10 @@ void Graphe::comparaison_centralites() const
     diff_Cp = difference_centralite(prec_Cp_norm, centralite_proximite);
     diff_Ci = difference_centralite(prec_Ci_norm, centralite_intermediarite);
 
-    gotoligcol(DY, DX); std::cout << "diff Cd";
-    gotoligcol(DY, DX + 17); std::cout << "diff Cp";
+    afficher_arretes_suppr_pour_centralite();
+
+    gotoligcol(DY, DX); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cd";
     gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
     gotoligcol(DY, DX + 44); std::cout << "diff CI";
     afficher_centralite(diff_Cp, DX, DY);
@@ -719,6 +723,20 @@ void Graphe::comparaison_centralites() const
     afficher_centralite(diff_Ci, DX + 45, DY);
 
     afficher_tous_indices_normalises(DY + m_ordre + 4, DX);
+
+    arretes_supprimees.clear();
+
+}
+
+void Graphe::afficher_arretes_suppr_pour_centralite() const
+{
+    std::cout << std::endl << "Modification des centralites du graphe suite a la suppression";
+    if(arretes_supprimees.size() > 1)
+        std::cout << " des arretes : ";
+    else
+         std::cout << " de l'arrete :";
+    for (size_t i = 0; i < arretes_supprimees.size(); ++i)
+        std::cout << sommets[arretes_supprimees[i].get_indice_s1()]->get_nom() << "-" << sommets[arretes_supprimees[i].get_indice_s2()]->get_nom() << "  ";
 
 }
 
@@ -753,6 +771,7 @@ void Graphe::supprimer_arrete()
     std::cout << std::endl << "l'arrete " << sommets[tampon.get_indice_s1()]->get_nom() << "-"
               << sommets[tampon.get_indice_s2()]->get_nom()
               << " a ete supprime avec succes" << std::endl << std::endl;
+    arretes_supprimees.push_back(tampon);
 }
 
 /// CONNEXITE

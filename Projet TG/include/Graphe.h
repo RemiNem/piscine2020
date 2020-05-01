@@ -17,6 +17,7 @@ class Graphe
         size_t m_ordre; //nombre de sommets
         std::vector<Sommet*> sommets; //tous les sommets
         std::vector<Arrete> arretes; //toutes les arretes
+        std::vector<Arrete> arretes_supprimees;
         size_t m_taille; //nombre d'arretes
         std::string nomfichiergraphe; // nom du dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
         std::vector<std::vector<int>> CC;//le tableau des composantes connexes (chaque case contient un lot de sommets)
@@ -91,8 +92,10 @@ class Graphe
         //VULNERABILITE
         void vulnerabilite();
         void supprimer_arrete();
-        void comparaison_centralites() const;
+        void comparaison_centralites();
         float*difference_centralite(float* pred, float* nv) const;
+        void afficher_arretes_suppr_pour_centralite() const;
+
 
 
         //CONEXITE
