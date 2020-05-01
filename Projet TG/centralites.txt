@@ -1,40 +1,44 @@
+
 centralite_degre
-0.25
-0.375
-0.375
-0.5
-0.375
-0.25
-0.375
-0.25
-0.25
+SommetA     2
+SommetB     3
+SommetC     3
+SommetD     4
+SommetE     3
+SommetF     2
+SommetG     3
+SommetH     2
+SommetI     2
+
 centralite_vecteurp
-0.000325051
-0.000460509
-0.000460509
-0.000646506
-0.000460509
-0.000325051
-0.000460509
-0.000325051
-0.000325051
+SommetA     0.000325051
+SommetB     0.000460509
+SommetC     0.000460509
+SommetD     0.000646506
+SommetE     0.000460509
+SommetF     0.000325051
+SommetG     0.000460509
+SommetH     0.000325051
+SommetI     0.000325051
+
 centralite_proximite
-0.444444
-0.533333
-0.533333
-0.666667
-0.533333
-0.444444
-0.533333
-0.444444
-0.444444
+SommetA     0
+SommetB     0
+SommetC     0
+SommetD     0
+SommetE     0
+SommetF     0
+SommetG     0
+SommetH     0
+SommetI     0
+
 centralite_intermediarite
-2
-5.33333
-4.66667
-9.16667
-5.33333
-1.5
-4.66667
-1.5
-1.83333
+SommetA     2
+SommetB     5.33333
+SommetC     4.66667
+SommetD     9.16667
+SommetE     5.33333
+SommetF     1.5
+SommetG     4.66667
+SommetH     1.5
+SommetI     1.83333

@@ -255,6 +255,7 @@ void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
 //afficher tous les indices de centralite
 void Graphe::afficher_tous_indices(int dy, int dx) const
 {
+    gotoligcol(6, 30); std::cout << "INDICES DE CENTRALITE NON NORMALISES";
     gotoligcol(dy, dx + 4); printf("Cp");
     afficher_centralite(centralite_proximite, dx, dy);
     gotoligcol(dy, dx + 17); printf("Cd");
@@ -265,6 +266,21 @@ void Graphe::afficher_tous_indices(int dy, int dx) const
     afficher_centralite(centralite_intermediarite, 45 + dx, dy);
     std::cout << std::endl;
 }
+
+void Graphe::afficher_tous_indices_normalises(int dy, int dx) const
+{
+    gotoligcol(6, 30); std::cout << "INDICES DE CENTRALITE NORMALISES";
+    gotoligcol(dy, dx + 4); printf("Cp");
+    afficher_centralite(Cp_norm, dx, dy);
+    gotoligcol(dy, dx + 17); printf("Cd");
+    afficher_centralite(Cd_norm, 15 + dx, dy);
+    gotoligcol(dy, dx + 34); printf("Cvp");
+    afficher_centralite(Cvp_norm, 30 + dx, dy);
+    gotoligcol(dy, dx + 47); printf("Ci");
+    afficher_centralite(Ci_norm, 45 + dx, dy);
+    std::cout << std::endl;
+}
+
 
 
 /// ----------GETTERS----------
@@ -302,7 +318,7 @@ void Graphe::set_m_taille(size_t taille)
 
 ///CENTRALITE DE DEGRE
 
-///calcul de la centralit� de degr� pour 1 sommet dont l'indice est pass� en parametre
+//calcul de la centralit� de degr� pour 1 sommet dont l'indice est pass� en parametre
 float Graphe::calculer_Cd(int indice) const
 {
     //1) r�cuperer le nombre d'arretes entrantes et sortantes du sommet = le degr�
@@ -316,11 +332,11 @@ float Graphe::calculer_Cd(int indice) const
     }
 
     //2) Calcul de la centralit� normalis� de degr� du sommet
-    float Cd = degre/NORMALISE;
+    float Cd = degre;
     return Cd;
 }
 
-///Calcul de la  centralit� de tous les sommets (plac�es dans un tableau)
+//Calcul de la  centralit� de tous les sommets (plac�es dans un tableau)
 void Graphe::calculer_tous_Cd()
 {
     //allocation du tab de centralite de degre
@@ -331,11 +347,17 @@ void Graphe::calculer_tous_Cd()
         centralite_degre[i] = calculer_Cd(i);
     }
 }
-
+//calcule la Cd normalisé de tous les sommets
+void Graphe::Cd_normalise()
+{
+    Cd_norm = new float [m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Cd_norm[i] = centralite_degre[i]/int(NORMALISE);
+}
 
 /// CENTRALITE DE PROXIMITE
 
-///calcul de la centralit� de proximit� pour 1 sommet dont l'indice est pass� en parametre
+//calcul de la centralit� de proximit� pour 1 sommet dont l'indice est pass� en parametre
 float Graphe::calculer_Cp(int indice) const
 {
     float Cp;
@@ -350,13 +372,13 @@ float Graphe::calculer_Cp(int indice) const
             somme_distances += Dijkstra(indice,CC[num_CC][i]); // on ajoute leur distance � la somme en faisant dijkstra sur la CC
     }
     if(somme_distances != 0)
-        Cp = float(NORMALISE)/somme_distances;
+        Cp = 1/somme_distances;
     else
         Cp = 0;
     return Cp;
 }
 
-///calcul de la centralit� de proximite pour tous les sommets
+//calcul de la centralit� de proximite pour tous les sommets
 void Graphe::calculer_tous_Cp()
 {
     centralite_proximite = new float[m_ordre]; //Allocation
@@ -366,8 +388,16 @@ void Graphe::calculer_tous_Cp()
     }
 }
 
-///algorithme de Dijkstra
-///DIJKSTRA SANS MODIF
+//Calcul de la Cp normalisé de tous les sommets
+void Graphe::Cp_normalise()
+{
+    Cp_norm = new float[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Cp_norm[i] =  centralite_proximite[i]*int(NORMALISE);
+}
+
+//algorithme de Dijkstra
+//DIJKSTRA SANS MODIF
 int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
@@ -438,7 +468,7 @@ int Graphe::Dijkstra(int debut, int fin) const
 
 /// CENTRALITE DE VECTEUR PROPRE
 
-/// Calcul de Cvp
+// Calcul de Cvp
 void Graphe::calculer_Cvp()
 {
     // initialisation : on passe l'indice des sommets � 1
@@ -450,12 +480,9 @@ void Graphe::calculer_Cvp()
 
     // tableau centralit� "intermediaire" pour calcul
     float centralite[m_ordre] = {0};
-
     float lambda_p = 0;
     float lambda =100;
     float lambda_diff = 100;
-
-
     float somme_ci =0;
 
     do
@@ -469,8 +496,6 @@ void Graphe::calculer_Cvp()
                 centralite[i] = centralite[i] + centralite_vecteurp[sommets[i]->sommet_adjacent[j]->get_indice()];
             }
         }
-
-
         lambda_p = lambda;
 
         for(size_t i =0; i < m_ordre; i++)    // permet d'avoir la somme des Ci^2
@@ -484,16 +509,17 @@ void Graphe::calculer_Cvp()
         {
             centralite_vecteurp[i]= centralite[i]/lambda;
         }
-        /* std::cout << "lambda vaut : " << lambda << std::endl;
-         std::cout << "lambda prec : " << lambda_p << std::endl;*/
-
         lambda_diff = abs(lambda_p-lambda);
-
-
     }
     while(lambda_diff > VAR_LAMBDA);
 }
-
+//Calcul de Cvp normalisé pour tous les sommets
+void Graphe::Cvp_normalise()
+{
+    Cvp_norm = new float[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Cvp_norm[i] = centralite_vecteurp[i]/int(NORMALISE);
+}
 
 /// CENTRALITE D'INTERMEDIARITE
 //= la fréquence avec laquelle un sommet se trouve sur les plus courts chemins reliant deux autre sommets quelconques du graphe
@@ -521,6 +547,14 @@ void Graphe::calcul_tous_Ci()
     {
         centralite_intermediarite[i] = calcul_Ci(i);
     }
+}
+
+//calcule la Ci normalisé de tous les sommets
+void Graphe::Ci_normalise()
+{
+    Ci_norm = new float[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Ci_norm[i] = (2*centralite_intermediarite[i])/(m_ordre*m_ordre - 3*m_ordre + 2);
 }
 
 //algorithme de Dijkstra adapté
@@ -657,6 +691,13 @@ void Graphe::calculer_tous_indices()
     calcul_tous_Ci();
 }
 
+void Graphe::calculer_tous_indices_normalises()
+{
+    Cd_normalise();
+    Cp_normalise();
+    Cvp_normalise();
+    Ci_normalise();
+}
 
 
 //VULNERABILITE
@@ -849,16 +890,16 @@ void Graphe::sauvegarde_centralites()
     else
     {
         //CENTRALITE DE DEGRE
-        sauv << "centralite_degre" << std::endl;
+        sauv << std::endl << "centralite_degre" << std::endl;
         ecrire_centralite(centralite_degre, sauv);
         //CENTRALITE DE VECTEUR PROPRE
-        sauv << "centralite_vecteurp" << std::endl;
+        sauv << std::endl << "centralite_vecteurp" << std::endl;
         ecrire_centralite(centralite_vecteurp, sauv);
         //CENTRALITE DE PROXIMITE
-        sauv << "centralite_proximite" << std::endl;
+        sauv << std::endl << "centralite_proximite" << std::endl;
         ecrire_centralite(centralite_proximite, sauv);
         //CENTRALITE D'INTERMEDIARITE
-        sauv << "centralite_intermediarite" << std::endl;
+        sauv << std::endl << "centralite_intermediarite" << std::endl;
         ecrire_centralite(centralite_intermediarite, sauv);
         sauv.close();
     }
@@ -867,7 +908,11 @@ void Graphe::sauvegarde_centralites()
 void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
 {
     for(size_t i = 0; i < m_ordre; ++i)
+    {
+        fichier << "Sommet" << sommets[i]->get_nom() << "     ";
         fichier << vecteur[i] << std::endl;
+    }
+
 }
 
 
@@ -901,8 +946,13 @@ void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &p
 
 void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier) const
 {
+    std::string sommet;
     for(size_t i = 0; i < m_ordre; ++i)
+    {
+        fichier >> sommet;
         fichier >> vecteur[i];
+    }
+
 }
 
 

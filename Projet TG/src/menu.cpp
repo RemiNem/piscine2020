@@ -32,6 +32,7 @@ void menu()
                 G.afficher_CC();
                 //calculer les indices de centralite du graphe
                 G.calculer_tous_indices();
+                G.calculer_tous_indices_normalises();
                 G.sauvegarde_centralites(); // + sauvegarde des donnees
                 break;
             case 2: // CHANGER LE SYSTEME DE PONDERATION DU GRAPHE
@@ -39,6 +40,7 @@ void menu()
                 {
                     G.changer_ponderation();
                     G.calculer_tous_indices(); // recalculer les indices de centralite qui ont change
+                    G.calculer_tous_indices_normalises();
                     G.sauvegarde_centralites(); //on les sauvegarde
                     G.afficher_graphe_internet(); //actualiser l'affichage du graphe sur html
                 }
@@ -52,6 +54,8 @@ void menu()
                     G.afficher_graphe_internet();
                     //Affichage des degres de centralite
                     G.afficher_tous_indices(8, 26);
+                    system("pause");
+                    G.afficher_tous_indices_normalises(8, 26);
                 }
                 else
                     erreur("le graphe n'est pas encore charge");

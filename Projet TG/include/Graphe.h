@@ -20,11 +20,16 @@ class Graphe
         size_t m_taille; //nombre d'arretes
         std::string nomfichiergraphe; // nom du dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
         std::vector<std::vector<int>> CC;//le tableau des composantes connexes (chaque case contient un lot de sommets)
-        /// INDICES DE CENTRALITE
+        /// INDICES DE CENTRALITE (NON NORMALISES)
         float *centralite_degre; //le degr� de centralit� de chaque sommet dans un vecteur
         float *centralite_vecteurp; // degr� de centralit� Vp de chaque sommet
         float *centralite_proximite; //le degre de proximit� de chaque sommet dans un vecteur
         float *centralite_intermediarite; //bon vous avez compris le concept
+        ///INDICES DE CENTRALITE NORMALISES
+        float *Cd_norm;
+        float *Cvp_norm;
+        float *Cp_norm;
+        float* Ci_norm;
     public:
         ///DESTRUCTION
         Graphe();
@@ -42,8 +47,8 @@ class Graphe
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
         void afficher_graphe_internet() const; //html
         void afficher_tous_indices(int y, int x) const; //affiche tous les indices de centralite
-        void afficher_centralite(float* vecteur) const; //affiche une centralite passee en paramtre
         void afficher_centralite(float* vecteur, int dx, int y) const;
+        void afficher_tous_indices_normalises(int dy, int dx) const;
 
 
         /// ------------GETTERS-------------------
@@ -58,25 +63,28 @@ class Graphe
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
+        void Cd_normalise();
 
         //CENTRALITE DE PROXIMITE
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
-        //int Dijkstra_2(int debut, int fin, int num_CC) const;
-
+        void Cp_normalise();
 
         //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
+        void Cvp_normalise();
 
         //CENTRALITE D'INTERMEDIARITE
         float Dijkstra_ameliore(int s0, int sf,int straverse) const;
         std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;
+        void Ci_normalise();
 
         //CALCULER TOUS
         void calculer_tous_indices();
+        void calculer_tous_indices_normalises();
 
         //VULNERABILITE
         void vulnerabilite();
