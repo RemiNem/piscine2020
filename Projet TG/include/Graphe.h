@@ -77,8 +77,8 @@ class Graphe
 
         //CENTRALITE D'INTERMEDIARITE
         //float Dijkstra_ameliore(int s0, int sf,int straverse) const;
-        void Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
-        std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
+        void Dijkstra_ameliore(int s, int s0, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
+        //std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
         float Ci_chemins(int s0, int sf,int straverse) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;

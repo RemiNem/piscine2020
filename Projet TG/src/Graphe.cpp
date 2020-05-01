@@ -569,7 +569,7 @@ void Graphe::Ci_normalise()
         Ci_norm[i] = (2*centralite_intermediarite[i])/(m_ordre*m_ordre - 3*m_ordre + 2);
 }
 
-void Graphe::Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const
+void Graphe::Dijkstra_ameliore(int s, int s0, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const
 {
     parcouru[s] = true;
     chemin[noeud_parcourus]=s;
@@ -582,7 +582,8 @@ void Graphe::Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&pa
         for( i=0; i<noeud_parcourus; i++)
         {
             if(sommets[chemin[i]]->get_indice()==straverse)
-                Ci++;
+                if((straverse != sf)&&(straverse != s0))
+                    Ci++;
         }
 
     }
@@ -596,7 +597,7 @@ void Graphe::Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&pa
                 Arrete a;
                 get_arrete(s,sa,a);
                 int poids=poidstot+a.get_poids();
-                Dijkstra_ameliore(sa, sf,straverse, parcouru, chemin, noeud_parcourus,poids,poidsmax,Ci,nb_chemin);
+                Dijkstra_ameliore(sa, s0, sf,straverse, parcouru, chemin, noeud_parcourus,poids,poidsmax,Ci,nb_chemin);
             }
         }
     }
@@ -609,12 +610,11 @@ float Graphe::Ci_chemins(int s0, int sf,int straverse) const
     int *chemin = new int[m_ordre];
     float Ci=0;
     float nb_chemin=0;
-    Dijkstra_ameliore(s0,sf,straverse,parcouru,chemin,0,0,Dijkstra(s0,sf),Ci,nb_chemin);
+    Dijkstra_ameliore(s0,s0,sf,straverse,parcouru,chemin,0,0,Dijkstra(s0,sf),Ci,nb_chemin);
 
     return Ci/nb_chemin;
 }
-//algorithme de Dijkstra adapté
-
+/*
 std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
 {
     int n;
@@ -632,7 +632,7 @@ std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///
         }
     }
     return branche;
-}
+}*/
 
 
 /// CALCULER TOUS INDICES
