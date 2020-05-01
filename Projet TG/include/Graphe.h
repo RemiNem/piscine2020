@@ -76,8 +76,10 @@ class Graphe
         void Cvp_normalise();
 
         //CENTRALITE D'INTERMEDIARITE
-        float Dijkstra_ameliore(int s0, int sf,int straverse) const;
+        //float Dijkstra_ameliore(int s0, int sf,int straverse) const;
+        void Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
         std::vector<int> retourner_chemin(int sf,std::vector<int> pred) const;
+        float Ci_chemins(int s0, int sf,int straverse) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;
         void Ci_normalise();
@@ -100,11 +102,11 @@ class Graphe
 
         //SAUVEGARDE
         void sauvegarde_centralites();
-        void ecrire_centralite(float* vecteur, std::ofstream &fichier);
+        void ecrire_centralite(float* vecteur, float* vecteur_norm, std::ofstream &fichier);
 
         //CHARGEMENT
-        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci) const;
-        void recuperer_centralite(float* &vecteur, std::ifstream &fichier) const;
+        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci, float* &prec_Cd_norm, float* &prec_Cvp_norm, float* &prec_Cp_norm, float* &prec_Ci_norm) const;
+        void recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::ifstream &fichier) const;
 
 
 };

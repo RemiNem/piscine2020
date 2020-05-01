@@ -55,6 +55,7 @@ void menu()
                     //Affichage des degres de centralite
                     G.afficher_tous_indices(8, 26);
                     system("pause");
+                    system("cls");
                     G.afficher_tous_indices_normalises(8, 26);
                 }
                 else

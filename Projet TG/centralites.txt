@@ -1,44 +1,44 @@
 
-centralite_degre
-SommetA     2
-SommetB     3
-SommetC     3
-SommetD     4
-SommetE     3
-SommetF     2
-SommetG     3
-SommetH     2
-SommetI     2
+centralite_degrenon normalise      normalise
+SommetA     2          0.25
+SommetB     3          0.375
+SommetC     3          0.375
+SommetD     4          0.5
+SommetE     3          0.375
+SommetF     2          0.25
+SommetG     3          0.375
+SommetH     2          0.25
+SommetI     2          0.25
 
-centralite_vecteurp
-SommetA     0.000325051
-SommetB     0.000460509
-SommetC     0.000460509
-SommetD     0.000646506
-SommetE     0.000460509
-SommetF     0.000325051
-SommetG     0.000460509
-SommetH     0.000325051
-SommetI     0.000325051
+centralite_vecteurpnon normalise      normalise
+SommetA     0.000325051          0.00260041
+SommetB     0.000460509          0.00368407
+SommetC     0.000460509          0.00368407
+SommetD     0.000646506          0.00517204
+SommetE     0.000460509          0.00368407
+SommetF     0.000325051          0.00260041
+SommetG     0.000460509          0.00368407
+SommetH     0.000325051          0.00260041
+SommetI     0.000325051          0.00260041
 
-centralite_proximite
-SommetA     0
-SommetB     0
-SommetC     0
-SommetD     0
-SommetE     0
-SommetF     0
-SommetG     0
-SommetH     0
-SommetI     0
+centralite_proximitenon normalise      normalise
+SommetA     0.0555556          0.444444
+SommetB     0.0666667          0.533333
+SommetC     0.0666667          0.533333
+SommetD     0.0833333          0.666667
+SommetE     0.0666667          0.533333
+SommetF     0.0555556          0.444444
+SommetG     0.0666667          0.533333
+SommetH     0.0555556          0.444444
+SommetI     0.0555556          0.444444
 
-centralite_intermediarite
-SommetA     2
-SommetB     5.33333
-SommetC     4.66667
-SommetD     9.16667
-SommetE     5.33333
-SommetF     1.5
-SommetG     4.66667
-SommetH     1.5
-SommetI     1.83333
+centralite_intermediaritenon normalise      normalise
+SommetA     2          0.0714286
+SommetB     5.33333          0.190476
+SommetC     4.66667          0.166667
+SommetD     9.16667          0.327381
+SommetE     5.33333          0.190476
+SommetF     1.5          0.0535714
+SommetG     4.66667          0.166667
+SommetH     1.5          0.0535714
+SommetI     1.83333          0.0654762
