@@ -711,6 +711,8 @@ void Graphe::vulnerabilite()
     {
         supprimer_arrete();
         std::cout << "Souhaitez-vous supprimer une autre arrete ?" << std::endl;
+        std::cin.clear();
+        fflush(stdin);
         std::cin >> choix;
         if(choix == "oui")
             stop = false;

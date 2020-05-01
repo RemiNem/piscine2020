@@ -1,44 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="800">
 
-<circle cx="300" cy="100" r="5" fill="black" />
-<text x="300" y="95" fill="black" >A</text>
+<circle cx="200" cy="100" r="5" fill="black" />
+<text x="200" y="95" fill="black" >A</text>
+<circle cx="100" cy="200" r="5" fill="black" />
+<text x="100" y="195" fill="black" >B</text>
 <circle cx="200" cy="200" r="5" fill="black" />
-<text x="200" y="195" fill="black" >B</text>
-<circle cx="400" cy="200" r="5" fill="black" />
-<text x="400" y="195" fill="black" >C</text>
-<circle cx="300" cy="300" r="5" fill="black" />
-<text x="300" y="295" fill="black" >D</text>
-<circle cx="200" cy="400" r="5" fill="black" />
-<text x="200" y="395" fill="black" >E</text>
-<circle cx="300" cy="400" r="5" fill="black" />
-<text x="300" y="395" fill="black" >F</text>
-<circle cx="400" cy="400" r="5" fill="black" />
-<text x="400" y="395" fill="black" >G</text>
-<circle cx="100" cy="500" r="5" fill="black" />
-<text x="100" y="495" fill="black" >H</text>
-<circle cx="500" cy="500" r="5" fill="black" />
-<text x="500" y="495" fill="black" >I</text>
-<line x1="200" y1="400" x2="100" y2="500" stroke="black" />
-<text x="155" y="445" fill="black" >1</text>
-<line x1="300" y1="100" x2="400" y2="200" stroke="black" />
-<text x="355" y="145" fill="black" >1</text>
-<line x1="200" y1="200" x2="300" y2="300" stroke="black" />
-<text x="255" y="245" fill="black" >1</text>
-<line x1="400" y1="200" x2="300" y2="300" stroke="black" />
-<text x="355" y="245" fill="black" >1</text>
-<line x1="300" y1="300" x2="200" y2="400" stroke="black" />
-<text x="255" y="345" fill="black" >1</text>
-<line x1="400" y1="400" x2="500" y2="500" stroke="black" />
-<text x="455" y="445" fill="black" >1</text>
-<line x1="200" y1="200" x2="100" y2="500" stroke="black" />
-<text x="155" y="345" fill="black" >1</text>
-<line x1="400" y1="200" x2="500" y2="500" stroke="black" />
-<text x="455" y="345" fill="black" >1</text>
-<line x1="200" y1="400" x2="300" y2="400" stroke="black" />
-<text x="255" y="395" fill="black" >1</text>
-<line x1="300" y1="400" x2="400" y2="400" stroke="black" />
-<text x="355" y="395" fill="black" >1</text>
+<text x="200" y="195" fill="black" >C</text>
+<circle cx="300" cy="200" r="5" fill="black" />
+<text x="300" y="195" fill="black" >D</text>
+<circle cx="200" cy="300" r="5" fill="black" />
+<text x="200" y="295" fill="black" >E</text>
+<line x1="200" y1="200" x2="200" y2="300" stroke="black" />
+<text x="205" y="245" fill="black" >7</text>
+<line x1="100" y1="200" x2="200" y2="200" stroke="black" />
+<text x="155" y="195" fill="black" >6</text>
+<line x1="200" y1="200" x2="300" y2="200" stroke="black" />
+<text x="255" y="195" fill="black" >4</text>
 
 
 </svg>
