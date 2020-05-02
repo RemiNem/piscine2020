@@ -19,6 +19,7 @@
 #define AUCUNE_PONDERATION (int(fichiers.size()) + 1)
 #define DX                  26
 #define DY                  8
+#define ECHELLE             70
 
 #define VAR_LAMBDA 4
 
@@ -209,29 +210,29 @@ void Graphe::afficher_graphe_internet()
     //SOMMETS
     for(size_t i = 0; i < m_ordre; ++i)
     {
-        svgout.addDisk(sommets[i]->get_x()*100, sommets[i]->get_y()*100, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
-        svgout.addText(sommets[i]->get_x()*100, sommets[i]->get_y()*100 - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
+        svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
+        svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
     }
     //ARRETES + POIDS
     for(size_t i = 0; i < m_taille; ++i)
     {
         //Arrete
-        svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*100, sommets[arretes[i].get_indice_s1()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, "black");
+        svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s1()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, "black");
 
         //Ajouter une fleche si le graphe est orient� (sommet 2 = pointe de la fl�che)
         if(m_orientation == true)
         {
 
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 - 10, "black");
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 + 10, "black");
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE - 10, "black");
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE + 10, "black");
 
         }
         //Ajouter le poids
         //on r�cupere les coordonn�es du point � mi chemin entre les deux sommets
-        int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*100;
-        int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*100;
-        int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*100;
-        int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*100;
+        int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*ECHELLE;
+        int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*ECHELLE;
+        int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE;
+        int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE;
 
         int x = (max(x1, x2) - min(x1,x2))/2 + min(x1,x2);
         int y = (max(y1,y2) - min(y1,y2))/2 + min(y1,y2);
@@ -650,9 +651,9 @@ void Graphe::vulnerabilite()
         std::cin.clear();
         fflush(stdin);
         std::cin >> choix;
-        if(choix == "oui")
+        if(choix == "oui" || choix == "OUI")
             stop = false;
-        else if (choix == "non")
+        else if (choix == "non" || choix == "NON")
             stop = true;
         else
         {
@@ -975,19 +976,12 @@ void Graphe::recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::if
 
 void Graphe::charger_couleurs()
 {
-    std::ifstream fichier{"coloration.txt"};
-    std::string couleur;
-    if(!fichier)
-        erreur("Impossible d'ouvrir le fichier de coloration");
-    else
-    {
-        do
-        {
-            fichier >> couleur;
-            coloration.push_back(couleur);
-        }while(fichier);
-        fichier.close();
-    }
+    coloration.push_back("blue");
+    coloration.push_back("green");
+    coloration.push_back("red");
+    coloration.push_back("purple");
+    coloration.push_back("black");
+    coloration.push_back("pink");
 }
 
 void Graphe::attribuer_couleur()
