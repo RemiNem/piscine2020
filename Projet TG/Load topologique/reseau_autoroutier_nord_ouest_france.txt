@@ -1,19 +1,19 @@
 0
 14
 0   Rennes     5 4
-1   SaintMalo  4 3
+1   Saint-Malo  4 3
 2   Vannes     3 5
 3   Lorient    2 5
 4   Brest      1 3
 5   Nantes     5 6
 6   Anger      6 5
-7   LeMans     7 4
+7   Le_Mans     7 4
 8   Paris      11 3
 9   Caen       6 2
 10  Cherbourg  5 1
 11  Tours      8 6
 12  Orleans    10 5
-13  LeHavre    7 1
+13  Le_Havre    7 1
 20
 0 4 1
 1 0 1

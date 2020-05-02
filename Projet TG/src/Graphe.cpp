@@ -193,7 +193,7 @@ void Graphe::afficher_arretes() const
 {
     for(size_t i=0; i < m_taille; i++)
     {
-        std::cout<< "Arrete "<< arretes[i].get_indice() <<" : "<< sommets[arretes[i].get_indice_s1()]->get_nom() << "-"
+        std::cout<< "Arrete "<< arretes[i].get_indice() <<" : "<< sommets[arretes[i].get_indice_s1()]->get_nom() << " --- "
                  << sommets[arretes[i].get_indice_s2()]->get_nom() << "   Poids: "
                  << arretes[i].get_poids()
                  <<std::endl;

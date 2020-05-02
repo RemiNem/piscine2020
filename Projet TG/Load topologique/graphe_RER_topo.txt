@@ -1,23 +1,23 @@
 0
 18
-0 A 8 17
-1 B 5 15
-2 C 3 13
-3 D 3 10
-4 E 4 9
-5 F 6 9
-6 G 6 5
-7 H 8 11
-8 I 6 13
-9 J 8 13
-10 K 13 5
-11 L 13 9
-12 M 14 11
-13 N 14 16
-14 O 15 15
-15 P 16 8
-16 Q 17 5
-17 R 21 10
+0 Porte_Clichy 5 0
+1 Pereire 2 1
+2 Avenue_Foch 0 3
+3 Avenue_Henri_Martin 0 6
+4 Avenue_Pdt_Kennedy 1 8
+5 Tour_Eiffel 3 8
+6 Pont_Garigliano 3 12
+7 Invalides 5 6
+8 CdG_Etoile 3 3
+9 Saint-Lazare 5 3
+10 Denfert 10 12
+11 Notre-Dame 10 8
+12 Chatelet 11 6
+13 Gare_du_Nord 11 1
+14 Magenta 12 2
+15 Gare_de_Lyon 13 9
+16 Bibliotheque_F_Mitterrand 14 12
+17 Nation 18 8
 19
 0 0 1
 1 1 2

@@ -1,0 +1,80 @@
+
+centralite_degre     non_normalise      normalise
+     SommetPorte_Clichy                1          0.0588235
+     SommetPereire                2          0.117647
+     SommetAvenue_Foch                2          0.117647
+     SommetAvenue_Henri_Martin                2          0.117647
+     SommetAvenue_Pdt_Kennedy                2          0.117647
+     SommetTour_Eiffel                3          0.176471
+     SommetPont_Garigliano                1          0.0588235
+     SommetInvalides                2          0.117647
+     SommetCdG_Etoile                1          0.0588235
+     SommetSaint-Lazare                3          0.176471
+     SommetDenfert                1          0.0588235
+     SommetNotre-Dame                4          0.235294
+     SommetChatelet                6          0.352941
+     SommetGare_du_Nord                2          0.117647
+     SommetMagenta                1          0.0588235
+     SommetGare_de_Lyon                3          0.176471
+     SommetBibliotheque_F_Mitterrand                1          0.0588235
+     SommetNation                1          0.0588235
+
+centralite_vecteurp    non_normalise      normalise
+     SommetPorte_Clichy                3.74605e-006          3.74605e-006
+     SommetPereire                7.39071e-006          7.39071e-006
+     SommetAvenue_Foch                1.06812e-005          1.06812e-005
+     SommetAvenue_Henri_Martin                1.49777e-005          1.49777e-005
+     SommetAvenue_Pdt_Kennedy                2.49608e-005          2.49608e-005
+     SommetTour_Eiffel                4.56118e-005          4.56118e-005
+     SommetPont_Garigliano                1.74049e-005          1.74049e-005
+     SommetInvalides                9.73177e-005          9.73177e-005
+     SommetCdG_Etoile                6.77738e-005          6.77738e-005
+     SommetSaint-Lazare                0.000202295          0.000202295
+     SommetDenfert                8.22444e-005          8.22444e-005
+     SommetNotre-Dame                0.000253315          0.000253315
+     SommetChatelet                0.000499007          0.000499007
+     SommetGare_du_Nord                0.00036482          0.00036482
+     SommetMagenta                6.77738e-005          6.77738e-005
+     SommetGare_de_Lyon                0.000386392          0.000386392
+     SommetBibliotheque_F_Mitterrand                8.22444e-005          8.22444e-005
+     SommetNation                0.000120743          0.000120743
+
+centralite_proximite    non_normalise      normalise
+     SommetPorte_Clichy                0.00869565          0.147826
+     SommetPereire                0.010101          0.171717
+     SommetAvenue_Foch                0.0117647          0.2
+     SommetAvenue_Henri_Martin                0.0136986          0.232877
+     SommetAvenue_Pdt_Kennedy                0.015873          0.269841
+     SommetTour_Eiffel                0.0181818          0.309091
+     SommetPont_Garigliano                0.0140845          0.239437
+     SommetInvalides                0.0196078          0.333333
+     SommetCdG_Etoile                0.0123457          0.209877
+     SommetSaint-Lazare                0.0153846          0.261538
+     SommetDenfert                0.0153846          0.261538
+     SommetNotre-Dame                0.0204082          0.346939
+     SommetChatelet                0.0188679          0.320755
+     SommetGare_du_Nord                0.0144928          0.246377
+     SommetMagenta                0.0123457          0.209877
+     SommetGare_de_Lyon                0.0149254          0.253731
+     SommetBibliotheque_F_Mitterrand                0.0153846          0.261538
+     SommetNation                0.0120482          0.204819
+
+centralite_intermediarite    non_normalise      normalise
+     SommetPorte_Clichy                0          0
+     SommetPereire                16          0.117647
+     SommetAvenue_Foch                30          0.220588
+     SommetAvenue_Henri_Martin                42          0.308824
+     SommetAvenue_Pdt_Kennedy                52          0.382353
+     SommetTour_Eiffel                71          0.522059
+     SommetPont_Garigliano                0          0
+     SommetInvalides                70          0.514706
+     SommetCdG_Etoile                0          0
+     SommetSaint-Lazare                31          0.227941
+     SommetDenfert                0          0
+     SommetNotre-Dame                87          0.639706
+     SommetChatelet                77          0.566176
+     SommetGare_du_Nord                0          0
+     SommetMagenta                0          0
+     SommetGare_de_Lyon                16          0.117647
+     SommetBibliotheque_F_Mitterrand                0          0
+     SommetNation                0          0
