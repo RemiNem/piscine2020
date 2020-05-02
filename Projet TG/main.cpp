@@ -6,7 +6,6 @@ int main()
 {
     menu();
 //rose la mongole
-
     return 0;
 }
 
