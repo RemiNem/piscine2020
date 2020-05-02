@@ -16,15 +16,22 @@ class Graphe
         bool m_orientation; //orientation graphe
         size_t m_ordre; //nombre de sommets
         std::vector<Sommet*> sommets; //tous les sommets
+        std::vector<std::string> coloration; //vecteur de couleurs
         std::vector<Arrete> arretes; //toutes les arretes
+        std::vector<Arrete> arretes_supprimees;
         size_t m_taille; //nombre d'arretes
         std::string nomfichiergraphe; // nom du dossier dans lequel se trouvent les ponderations autorisees a charger sur ce graphe
         std::vector<std::vector<int>> CC;//le tableau des composantes connexes (chaque case contient un lot de sommets)
-        /// INDICES DE CENTRALITE
+        /// INDICES DE CENTRALITE (NON NORMALISES)
         float *centralite_degre; //le degr� de centralit� de chaque sommet dans un vecteur
         float *centralite_vecteurp; // degr� de centralit� Vp de chaque sommet
         float *centralite_proximite; //le degre de proximit� de chaque sommet dans un vecteur
         float *centralite_intermediarite; //bon vous avez compris le concept
+        ///INDICES DE CENTRALITE NORMALISES
+        float *Cd_norm;
+        float *Cvp_norm;
+        float *Cp_norm;
+        float* Ci_norm;
     public:
         ///DESTRUCTION
         Graphe();
@@ -40,9 +47,10 @@ class Graphe
         /// ---------AFFICHAGE--------
         void afficher() const; //affichage du graphe sur console
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
-        void afficher_graphe_internet() const; //html
-        void afficher_tous_indices() const; //affiche tous les indices de centralite
-        void afficher_centralite(float* vecteur) const; //affiche une centralite passee en paramtre
+        void afficher_graphe_internet(); //html
+        void afficher_tous_indices(int y, int x) const; //affiche tous les indices de centralite
+        void afficher_centralite(float* vecteur, int dx, int y) const;
+        void afficher_tous_indices_normalises(int dy, int dx) const;
 
 
         /// ------------GETTERS-------------------
@@ -57,29 +65,37 @@ class Graphe
         //CENTRALITE DE DEGRE
         float calculer_Cd(int indice) const;
         void calculer_tous_Cd();
+        void Cd_normalise();
 
         //CENTRALITE DE PROXIMITE
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
         int Dijkstra(int debut, int fin) const;
-        //int Dijkstra_2(int debut, int fin, int num_CC) const;
-
+        void Cp_normalise();
 
         //CENTRALITE DE VECTEUR PROPRE
         void calculer_Cvp();
+        void Cvp_normalise();
 
         //CENTRALITE D'INTERMEDIARITE
-        void Dijkstra_ameliore(int s, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
+        void Dijkstra_ameliore(int s, int s0, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const;
         float Ci_chemins(int s0, int sf,int straverse) const;
         void calcul_tous_Ci();
         float calcul_Ci(int s) const;
+        void Ci_normalise();
 
         //CALCULER TOUS
         void calculer_tous_indices();
+        void calculer_tous_indices_normalises();
 
         //VULNERABILITE
         void vulnerabilite();
         void supprimer_arrete();
+        void comparaison_centralites();
+        float*difference_centralite(float* pred, float* nv) const;
+        void afficher_arretes_suppr_pour_centralite() const;
+
+
 
         //CONEXITE
         std::vector<int> BFS(int num_s0)const;
@@ -90,12 +106,15 @@ class Graphe
 
         //SAUVEGARDE
         void sauvegarde_centralites();
-        void ecrire_centralite(float* vecteur, std::ofstream &fichier);
+        void ecrire_centralite(float* vecteur, float* vecteur_norm, std::ofstream &fichier);
 
         //CHARGEMENT
-        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci);
-        void recuperer_centralite(float* &vecteur, std::ifstream &fichier);
+        void chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci, float* &prec_Cd_norm, float* &prec_Cvp_norm, float* &prec_Cp_norm, float* &prec_Ci_norm) const;
+        void recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::ifstream &fichier) const;
 
+        //COLORATION
+        void charger_couleurs();
+        void attribuer_couleur();
 
 };
 

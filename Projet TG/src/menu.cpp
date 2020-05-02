@@ -17,26 +17,30 @@ void menu()
                   << "4) Supprimer une arrete du graphe " << std::endl
                   << "5) Quitter " << std::endl;
         entree_blindee(1, 5, choix);
+        system("cls");
         switch(choix)
         {
             case 1: //CHARGER UN GRAPHE
                 //charger le graphe avec les blindages
                 G.charger_graphe(graphe_charge);
-                //afficher le graphe charge
-                G.afficher();
-                G.afficher_graphe_internet(); //en html
                 //calculer ses CC
-                //G.rechercher_CC();
-               // G.afficher_CC();
+                G.rechercher_CC();
                 //calculer les indices de centralite du graphe
-                //G.calculer_tous_indices();
-                //G.sauvegarde_centralites(); // + sauvegarde des donnees
+                G.calculer_tous_indices();
+                G.calculer_tous_indices_normalises();
+                G.sauvegarde_centralites(); // + sauvegarde des donnees
+                //afficher le graphe charge
+                system("cls");
+                G.afficher();
+                G.afficher_CC();
+                G.afficher_graphe_internet(); //en html
                 break;
             case 2: // CHANGER LE SYSTEME DE PONDERATION DU GRAPHE
                 if(graphe_charge)
                 {
                     G.changer_ponderation();
                     G.calculer_tous_indices(); // recalculer les indices de centralite qui ont change
+                    G.calculer_tous_indices_normalises();
                     G.sauvegarde_centralites(); //on les sauvegarde
                     G.afficher_graphe_internet(); //actualiser l'affichage du graphe sur html
                 }
@@ -47,20 +51,17 @@ void menu()
                 if(graphe_charge)
                 {
                     //affichage du graphe
-                    G.afficher();
                     G.afficher_graphe_internet();
                     //Affichage des degres de centralite
-                    G.afficher_tous_indices();
+                    G.afficher_tous_indices(8, 26);
+                    system("pause");
+                    system("cls");
+                    G.afficher_tous_indices_normalises(8, 26);
                 }
                 else
                     erreur("le graphe n'est pas encore charge");
                 break;
             case 4: // SUPPRIMER UNE ARRETE DU GRAPHE
-                // = creer un sspg "vulnerabilite" qui appellera d'autres programme pour :
-                // 1) supprimer une arrete
-                // 2) tester la connexite
-                // 3) recalculer les nouveaux indices de centralit� et les comparer avec les anciens (dans la sauvegarde)
-                // 4) sauvegarder les nouveaux indices de centralite ?
                 if(graphe_charge)
                 {
                     G.vulnerabilite();
@@ -70,17 +71,14 @@ void menu()
                     erreur("le graphe n'est pas encore charge");
                 break;
             case 5: // QUITTER
-std::cout<<G.Ci_chemins(0,5,4);
-               // quitter = true;
+                quitter = true;
                 break;
-
-
-
-
 
             default: // mettre un catch pour les erreurs
                 break;
         }
+        system("pause");
+        system("cls");
 
     }while(!quitter);
 }
