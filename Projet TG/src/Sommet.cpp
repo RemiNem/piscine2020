@@ -33,12 +33,26 @@ int Sommet::get_y() const
 {
     return ys;
 }
+int Sommet::get_degre() const
+{
+    return sommet_adjacent.size();
+}
 
+int Sommet::get_couleur()
+{
+    return m_couleur;
+}
 ///setters
 
 void Sommet::ajouter_adjacent(Sommet* s)
 {
     sommet_adjacent.push_back(s);
+}
+
+
+void Sommet::set_couleur(int couleur)
+{
+    m_couleur = couleur;
 }
 
 ///suppr sucesseur

@@ -18,7 +18,8 @@
 #define NORMALISE           (m_ordre - 1)
 #define AUCUNE_PONDERATION (int(fichiers.size()) + 1)
 #define DX                  26
-#define DY                  6
+#define DY                  8
+#define ECHELLE             70
 
 #define VAR_LAMBDA 4
 
@@ -32,7 +33,8 @@ Graphe::~Graphe()
 //default
 Graphe::Graphe()
 {
-
+    //initialiser le vecteur de couleurs
+    charger_couleurs();
 }
 
 /// ------------------------CHARGEMENT GRAPHE--------------------------
@@ -198,37 +200,39 @@ void Graphe::afficher_arretes() const
     }
 }
 
+
 ///affichage graphe en html
 //multiplier les coordonn�es par 100 pour l'echelle
-void Graphe::afficher_graphe_internet() const
+void Graphe::afficher_graphe_internet()
 {
     Svgfile svgout;
+    attribuer_couleur(); //on attribue la couleur du sommet a chaque sommet
     //SOMMETS
     for(size_t i = 0; i < m_ordre; ++i)
     {
-        svgout.addDisk(sommets[i]->get_x()*100, sommets[i]->get_y()*100, 5, "black"); //placer le sommet
-        svgout.addText(sommets[i]->get_x()*100, sommets[i]->get_y()*100 - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
+        svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
+        svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
     }
     //ARRETES + POIDS
     for(size_t i = 0; i < m_taille; ++i)
     {
         //Arrete
-        svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*100, sommets[arretes[i].get_indice_s1()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, "black");
+        svgout.addLine(sommets[arretes[i].get_indice_s1()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s1()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, "black");
 
         //Ajouter une fleche si le graphe est orient� (sommet 2 = pointe de la fl�che)
         if(m_orientation == true)
         {
 
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 - 10, "black");
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*100, sommets[arretes[i].get_indice_s2()]->get_y()*100, sommets[arretes[i].get_indice_s2()]->get_x()*100 - 10, sommets[arretes[i].get_indice_s2()]->get_y()*100 + 10, "black");
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE - 10, "black");
+            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE + 10, "black");
 
         }
         //Ajouter le poids
         //on r�cupere les coordonn�es du point � mi chemin entre les deux sommets
-        int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*100;
-        int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*100;
-        int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*100;
-        int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*100;
+        int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*ECHELLE;
+        int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*ECHELLE;
+        int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE;
+        int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE;
 
         int x = (max(x1, x2) - min(x1,x2))/2 + min(x1,x2);
         int y = (max(y1,y2) - min(y1,y2))/2 + min(y1,y2);
@@ -244,8 +248,10 @@ void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
     for(size_t i = 0; i < m_ordre; ++i)
     {
         //on affiche le nom
-        gotoligcol(dy + descendre, 10); std::cout << "Sommet " << sommets[i]->get_nom() << ": ";
-        gotoligcol(dy + descendre, dx); std::cout << vecteur[i];
+        gotoligcol(dy + descendre, 10);
+        std::cout << "Sommet " << sommets[i]->get_nom() << ": ";
+        gotoligcol(dy + descendre, dx);
+        std::cout << vecteur[i];
         ++descendre;
     }
 }
@@ -255,28 +261,38 @@ void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
 //afficher tous les indices de centralite
 void Graphe::afficher_tous_indices(int dy, int dx) const
 {
-    gotoligcol(6, 30); std::cout << "INDICES DE CENTRALITE NON NORMALISES";
-    gotoligcol(dy, dx + 4); printf("Cp");
+    gotoligcol(5, 30);
+    std::cout << "INDICES DE CENTRALITE NON NORMALISES";
+    gotoligcol(dy, dx + 4);
+    printf("Cp");
     afficher_centralite(centralite_proximite, dx, dy);
-    gotoligcol(dy, dx + 17); printf("Cd");
+    gotoligcol(dy, dx + 17);
+    printf("Cd");
     afficher_centralite(centralite_degre, 15 + dx, dy);
-    gotoligcol(dy, dx + 34); printf("Cvp");
+    gotoligcol(dy, dx + 34);
+    printf("Cvp");
     afficher_centralite(centralite_vecteurp, 30 + dx, dy);
-    gotoligcol(dy, dx + 47); printf("Ci");
+    gotoligcol(dy, dx + 47);
+    printf("Ci");
     afficher_centralite(centralite_intermediarite, 45 + dx, dy);
     std::cout << std::endl;
 }
 
 void Graphe::afficher_tous_indices_normalises(int dy, int dx) const
 {
-    gotoligcol(6, 30); std::cout << "INDICES DE CENTRALITE NORMALISES";
-    gotoligcol(dy, dx + 4); printf("Cp");
+    gotoligcol(5, 30);
+    std::cout << "INDICES DE CENTRALITE NORMALISES";
+    gotoligcol(dy, dx + 4);
+    printf("Cp");
     afficher_centralite(Cp_norm, dx, dy);
-    gotoligcol(dy, dx + 17); printf("Cd");
+    gotoligcol(dy, dx + 17);
+    printf("Cd");
     afficher_centralite(Cd_norm, 15 + dx, dy);
-    gotoligcol(dy, dx + 34); printf("Cvp");
+    gotoligcol(dy, dx + 34);
+    printf("Cvp");
     afficher_centralite(Cvp_norm, 30 + dx, dy);
-    gotoligcol(dy, dx + 47); printf("Ci");
+    gotoligcol(dy, dx + 47);
+    printf("Ci");
     afficher_centralite(Ci_norm, 45 + dx, dy);
     std::cout << std::endl;
 }
@@ -372,7 +388,7 @@ float Graphe::calculer_Cp(int indice) const
             somme_distances += Dijkstra(indice,CC[num_CC][i]); // on ajoute leur distance � la somme en faisant dijkstra sur la CC
     }
     if(somme_distances != 0)
-        Cp = 1/somme_distances;
+        Cp = float(1)/somme_distances;
     else
         Cp = 0;
     return Cp;
@@ -518,7 +534,7 @@ void Graphe::Cvp_normalise()
 {
     Cvp_norm = new float[m_ordre];
     for(size_t i = 0; i < m_ordre; ++i)
-        Cvp_norm[i] = centralite_vecteurp[i]/int(NORMALISE);
+        Cvp_norm[i] = centralite_vecteurp[i];
 }
 
 /// CENTRALITE D'INTERMEDIARITE
@@ -534,7 +550,7 @@ float Graphe::calcul_Ci(int s) const
     {
         for(size_t j = 0; j < CC[num_CC].size(); ++j)
             if(CC[num_CC][j] < CC[num_CC][i])
-                somme_Ci += Dijkstra_ameliore(CC[num_CC][j], CC[num_CC][i], s);
+                somme_Ci += Ci_chemins(CC[num_CC][j], CC[num_CC][i], s);
     }
     return somme_Ci;
 
@@ -557,130 +573,51 @@ void Graphe::Ci_normalise()
         Ci_norm[i] = (2*centralite_intermediarite[i])/(m_ordre*m_ordre - 3*m_ordre + 2);
 }
 
-//algorithme de Dijkstra adapté
-float Graphe::Dijkstra_ameliore(int s0, int sf,int straverse) const
+void Graphe::Dijkstra_ameliore(int s, int s0, int sf,int straverse, std::vector<bool>&parcouru, int chemin[], int noeud_parcourus,int poidstot,int poidsmax,float &Ci,float &nb_chemin)const
 {
-    std::vector<int>branche(0);
-    std::vector<int>branche0(0);
-    std::vector<bool>marque(m_ordre,false);
-    int n_marque=0;///les sommets marqués sont ceux qui ont fait parti d'un chemin
-    float nb_chemin=0;
-    float Ci=0;
-    bool stop=false;
-    while(stop==false) ///condition d'arret{
+    parcouru[s] = true;
+    chemin[noeud_parcourus]=s;
+    noeud_parcourus++;
+
+    if(s==sf) ///si soommet atteint
     {
-
-        std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
-        std::vector<bool>decouvert(m_ordre,false);
-        std::vector<int>distance(m_ordre,32767);///distance absolue du sommet en cours par rapport a un sommet numero i
-
-        int dtot=0;///distance parcourue
-        int sa;
-        int ss=s0;
-        int sommet_decouverts=0;
-
-        do
+        int i;
+        nb_chemin++;///on aug le nb de chemins le plus cours
+        for( i=0; i<noeud_parcourus; i++)
         {
-            decouvert[ss]=true;
-
-            sommet_decouverts++;
-
-            for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
-            {
-                sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
-
-                if(decouvert[sa]==false) ///si le sommet n'est pas découvert
-                {
-                    Arrete a;
-                    get_arrete(ss, sa, a);
-                    if((a.get_poids()+dtot)<distance[sa])
-                    {
-                        get_arrete(ss,sa,a);
-                        distance[sa]=a.get_poids()+dtot;
-                        pred[sa]=ss;
-                    }
-                }
-            }
-            int minm=32767;
-            int minn=32767;
-            int sm=0,snm=0;
-            for(size_t i=0; i<distance.size(); i++)
-            {
-                if(distance[i]<minm&&decouvert[i]==false&&marque[i]==true)///ici on determine la distance minimale de tous les sommets marqués
-                {
-                    minm=distance[i];
-                    sm=i;
-                }
-                if(distance[i]<minn&&decouvert[i]==false&&marque[i]==false)///ici on determine la distance minimale de tous les sommets non marqués
-                {
-                    minn=distance[i];
-                    snm=i;
-                }
-            }
-
-            if(minn<=minm)///si on en est au 2eme chemin le plus cours ou plus alors on se deplace dans un sommet pas encore marque si sa distance ne depasse pas celui marque
-            {
-                ss=snm;
-            }
-            else
-            {
-                ss=sm;
-            }
-            dtot=distance[ss];///on actualise la distance totale
-
-        }
-        while(sommet_decouverts != int(m_ordre));  ///tant que il reste des sommetes decouverts
-
-        branche=retourner_chemin(sf,pred);///stocke le chemin dans la branche
-        if(nb_chemin==0)
-        {
-            branche0=branche;
-        }
-        if(nb_chemin>0&&branche0==branche)
-        {
-            stop=true;   ///on s'arrete quand la branche est la meem que celle du debut
-        }
-        for(size_t i=0; i<branche.size(); i++)
-        {
-            if(stop==false)
-                if(sommets[branche[i]]->get_indice()==straverse&&stop==false) ///si le sommet est dans un chemin
-                    if((sommets[branche[i]]->get_indice() != s0)&&(sommets[branche[i]]->get_indice() != sf))///si le sommet n'est ni le debut ni la fin
-                        Ci++;
-            marque[branche[i]]=true;
+            if(sommets[chemin[i]]->get_indice()==straverse)
+                if((straverse != sf)&&(straverse != s0))
+                    Ci++;
         }
 
-        n_marque=0;
-
-        for(size_t i=0; i<m_ordre; i++) ///on met a jour le nb de sommet marque
-        {
-            if(marque[i]==true)
-                n_marque++;
-        }
-        if(stop==false)///a chaque fin de cette boucle un nouveau chemin est trouve
-            nb_chemin++;
     }
+    else if(poidstot<=poidsmax) ///si le chemin en cours a un poids inferieur a celui de dijstra on continue
+    {
+        for (size_t i = 0; i <sommets[s]->sommet_adjacent.size(); ++i)
+        {
+            int sa=sommets[s]->sommet_adjacent[i]->get_indice();
+            if (parcouru[sa]==false)
+            {
+                Arrete a;
+                get_arrete(s,sa,a);
+                int poids=poidstot+a.get_poids();
+                Dijkstra_ameliore(sa, s0, sf,straverse, parcouru, chemin, noeud_parcourus,poids,poidsmax,Ci,nb_chemin);
+            }
+        }
+    }
+    noeud_parcourus--;
+    parcouru[s]=false;
+}
+float Graphe::Ci_chemins(int s0, int sf,int straverse) const
+{
+    std::vector<bool> parcouru (m_ordre,false);
+    int *chemin = new int[m_ordre];
+    float Ci=0;
+    float nb_chemin=0;
+    Dijkstra_ameliore(s0,s0,sf,straverse,parcouru,chemin,0,0,Dijkstra(s0,sf),Ci,nb_chemin);
+
     return Ci/nb_chemin;
 }
-
-std::vector<int> Graphe::retourner_chemin(int sf,std::vector<int> pred) const///affiche l'arborescence a partir de la liste des predecesseurs
-{
-    int n;
-    std::vector<int>branche(0);
-
-    n=pred[sf];
-    if(n!=-1)
-    {
-        //std::cout<<sommets[sf]->get_nom();
-        branche.push_back(sf);
-        while(n!=-1)///on remonte tous les predessesseurs jusqu'a trouver le sommer initial
-        {
-            branche.push_back(n);
-            n=pred[n];
-        }
-    }
-    return branche;
-}
-
 
 /// CALCULER TOUS INDICES
 void Graphe::calculer_tous_indices()
@@ -710,13 +647,13 @@ void Graphe::vulnerabilite()
     do
     {
         supprimer_arrete();
-        std::cout << "Souhaitez-vous supprimer une autre arrete ?" << std::endl;
+        std::cout << "Souhaitez-vous supprimer une autre arrete ? (oui ou non)" << std::endl;
         std::cin.clear();
         fflush(stdin);
         std::cin >> choix;
-        if(choix == "oui")
+        if(choix == "oui" || choix == "OUI")
             stop = false;
-        else if (choix == "non")
+        else if (choix == "non" || choix == "NON")
             stop = true;
         else
         {
@@ -724,10 +661,13 @@ void Graphe::vulnerabilite()
             stop=true;
         }
     }while(!stop);
-
+    system("pause");
+    system("cls");
     //2) REGARDER LA CONNEXITE
     rechercher_CC();
     afficher_CC();
+    system("pause");
+    system("cls");
     //3) RECALCULER LES NOUVEAUX INDICES DE CENTRALITE
     afficher_graphe_internet();
     calculer_tous_indices();
@@ -736,24 +676,80 @@ void Graphe::vulnerabilite()
     comparaison_centralites();
 }
 
-void Graphe::comparaison_centralites() const
+void Graphe::comparaison_centralites()
 {
     float* prec_Cd = new float [m_ordre];
     float* prec_Cvp = new float [m_ordre];
     float* prec_Cp = new float [m_ordre];
     float* prec_Ci = new float[m_ordre];
-    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci); //on recupere les anciennes donnees de centralite
+    float* prec_Cd_norm = new float [m_ordre];
+    float* prec_Cvp_norm = new float [m_ordre];
+    float* prec_Cp_norm = new float [m_ordre];
+    float* prec_Ci_norm = new float[m_ordre];
 
-    gotoligcol(DY, DX); std::cout << "prec Cd";
-    gotoligcol(DY, DX + 17); std::cout << "prec Cp";
-    gotoligcol(DY, DX + 31); std::cout << "prec Cvp";
-    gotoligcol(DY, DX + 44); std::cout << "prec Ci";
-    afficher_centralite(prec_Cd, DX, DY);
-    afficher_centralite(prec_Cp, DX + 15, DY);
-    afficher_centralite(prec_Cvp, DX + 30, DY);
-    afficher_centralite(prec_Ci, DX + 45, DY);
+    chargement_centralites(prec_Cd, prec_Cvp, prec_Cp, prec_Ci, prec_Cd_norm, prec_Cvp_norm, prec_Cp_norm, prec_Ci_norm); //on recupere les anciennes donnees de centralite
+
+    float* diff_Cd = difference_centralite(prec_Cd, centralite_degre);
+    float* diff_Cvp = difference_centralite(prec_Cvp, centralite_vecteurp);
+    float* diff_Cp = difference_centralite(prec_Cp, centralite_proximite);
+    float* diff_Ci = difference_centralite(prec_Ci, centralite_intermediarite);
+
+    afficher_arretes_suppr_pour_centralite();
+
+    gotoligcol(DY, DX); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cd";
+    gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
+    gotoligcol(DY, DX + 44); std::cout << "diff Ci";
+    afficher_centralite(diff_Cp, DX, DY);
+    afficher_centralite(diff_Cd, DX + 15, DY);
+    afficher_centralite(diff_Cvp, DX + 30, DY);
+    afficher_centralite(diff_Ci, DX + 45, DY);
 
     afficher_tous_indices(DY + m_ordre + 2, DX);
+
+    system("pause");
+    system("cls");
+
+    diff_Cd = difference_centralite(prec_Cd_norm, centralite_degre);
+    diff_Cvp = difference_centralite(prec_Cvp_norm, centralite_vecteurp);
+    diff_Cp = difference_centralite(prec_Cp_norm, centralite_proximite);
+    diff_Ci = difference_centralite(prec_Ci_norm, centralite_intermediarite);
+
+    afficher_arretes_suppr_pour_centralite();
+
+    gotoligcol(DY, DX); std::cout << "diff Cp";
+    gotoligcol(DY, DX + 17); std::cout << "diff Cd";
+    gotoligcol(DY, DX + 31); std::cout << "diff Cvp";
+    gotoligcol(DY, DX + 44); std::cout << "diff CI";
+    afficher_centralite(diff_Cp, DX, DY);
+    afficher_centralite(diff_Cd, DX + 15, DY);
+    afficher_centralite(diff_Cvp, DX + 30, DY);
+    afficher_centralite(diff_Ci, DX + 45, DY);
+
+    afficher_tous_indices_normalises(DY + m_ordre + 4, DX);
+
+    arretes_supprimees.clear();
+
+}
+
+void Graphe::afficher_arretes_suppr_pour_centralite() const
+{
+    std::cout << std::endl << "Modification des centralites du graphe suite a la suppression";
+    if(arretes_supprimees.size() > 1)
+        std::cout << " des arretes : ";
+    else
+         std::cout << " de l'arrete :";
+    for (size_t i = 0; i < arretes_supprimees.size(); ++i)
+        std::cout << sommets[arretes_supprimees[i].get_indice_s1()]->get_nom() << "-" << sommets[arretes_supprimees[i].get_indice_s2()]->get_nom() << "  ";
+
+}
+
+float* Graphe::difference_centralite(float* pred, float* nv) const
+{
+    float* diff = new float[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        diff[i] = nv[i] - pred[i];
+    return diff;
 }
 
 void Graphe::supprimer_arrete()
@@ -777,10 +773,10 @@ void Graphe::supprimer_arrete()
     m_taille--;
 
     std::cout << std::endl << "l'arrete " << sommets[tampon.get_indice_s1()]->get_nom() << "-"
-                           << sommets[tampon.get_indice_s2()]->get_nom()
-                           << " a ete supprime avec succes" << std::endl << std::endl;
-    system("pause");
-    system("cls");
+              << sommets[tampon.get_indice_s2()]->get_nom()
+              << " a ete supprime avec succes" << std::endl << std::endl;
+    arretes_supprimees.push_back(tampon);
+    afficher_graphe_internet();
 }
 
 /// CONNEXITE
@@ -909,37 +905,34 @@ void Graphe::sauvegarde_centralites()
     else
     {
         //CENTRALITE DE DEGRE
-        sauv << std::endl << "centralite_degre" << std::endl;
-        ecrire_centralite(centralite_degre, sauv);
+        sauv << std::endl << "centralite_degre" << "     non_normalise      normalise" <<std::endl;
+        ecrire_centralite(centralite_degre, Cd_norm, sauv);
         //CENTRALITE DE VECTEUR PROPRE
-        sauv << std::endl << "centralite_vecteurp" << std::endl;
-        ecrire_centralite(centralite_vecteurp, sauv);
+        sauv << std::endl << "centralite_vecteurp" << "    non_normalise      normalise" << std::endl;
+        ecrire_centralite(centralite_vecteurp, Cvp_norm, sauv);
         //CENTRALITE DE PROXIMITE
-        sauv << std::endl << "centralite_proximite" << std::endl;
-        ecrire_centralite(centralite_proximite, sauv);
+        sauv << std::endl << "centralite_proximite" << "    non_normalise      normalise" <<std::endl;
+        ecrire_centralite(centralite_proximite, Cp_norm, sauv);
         //CENTRALITE D'INTERMEDIARITE
-        sauv << std::endl << "centralite_intermediarite" << std::endl;
-        ecrire_centralite(centralite_intermediarite, sauv);
+        sauv << std::endl << "centralite_intermediarite" << "    non_normalise      normalise" <<std::endl;
+        ecrire_centralite(centralite_intermediarite, Ci_norm, sauv);
         sauv.close();
     }
 }
 
-void Graphe::ecrire_centralite(float* vecteur, std::ofstream &fichier)
+void Graphe::ecrire_centralite(float* vecteur, float* vecteur_norm, std::ofstream &fichier)
 {
     for(size_t i = 0; i < m_ordre; ++i)
     {
-        fichier << "Sommet" << sommets[i]->get_nom() << "     ";
-        fichier << vecteur[i] << std::endl;
+        fichier << "     Sommet" << sommets[i]->get_nom() << "                ";
+        fichier << vecteur[i] << "          "<< vecteur_norm[i] << std::endl;
     }
 
 }
 
 
-
-
-
 ///CHARGEMENT CENTRALITE
-void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci) const
+void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &prec_Cp, float* &prec_Ci, float* &prec_Cd_norm, float* &prec_Cvp_norm, float* &prec_Cp_norm, float* &prec_Ci_norm) const
 {
     std::string centralite;
     std::ifstream charg{"centralites.txt"};
@@ -951,31 +944,93 @@ void Graphe::chargement_centralites(float* &prec_Cd, float* &prec_Cvp, float* &p
         {
             charg >> centralite;
             if(centralite == "centralite_degre") //DEGRE
-                recuperer_centralite(prec_Cd, charg);
+                recuperer_centralite(prec_Cd, prec_Cd_norm, charg);
             else if(centralite == "centralite_vecteurp") //VECTEUR PROPRE
-                recuperer_centralite(prec_Cvp, charg);
+                recuperer_centralite(prec_Cvp, prec_Cvp_norm, charg);
             else if(centralite == "centralite_proximite") //PROXIMITE
-                recuperer_centralite(prec_Cp, charg);
+                recuperer_centralite(prec_Cp, prec_Cp_norm, charg);
             else if(centralite == "centralite_intermediarite") //INTERMEDIARITE
-                recuperer_centralite(prec_Ci, charg);
-        }while(charg);
+                recuperer_centralite(prec_Ci, prec_Ci_norm, charg);
+        }
+        while(charg);
         charg.close();
     }
 }
 
-void Graphe::recuperer_centralite(float* &vecteur, std::ifstream &fichier) const
+void Graphe::recuperer_centralite(float* &vecteur, float* &vecteur_norm, std::ifstream &fichier) const
 {
     std::string sommet;
+    std::string norm;
+    fichier >> norm >> norm;
     for(size_t i = 0; i < m_ordre; ++i)
     {
         fichier >> sommet;
         fichier >> vecteur[i];
+        fichier >> vecteur_norm[i];
     }
 
 }
 
 
+///COLORATION
 
+void Graphe::charger_couleurs()
+{
+    coloration.push_back("blue");
+    coloration.push_back("green");
+    coloration.push_back("red");
+    coloration.push_back("purple");
+    coloration.push_back("black");
+    coloration.push_back("pink");
+}
+
+void Graphe::attribuer_couleur()
+{
+    bool changement = true;
+    float** Cd = new float*[m_ordre];
+    for(size_t i = 0; i < m_ordre; ++i)
+        Cd[i] = new float[2];
+    float tampon_c;
+    //copier le vecteur de centralite de degre + le sommet attribué
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        Cd[i][0] = centralite_degre[i];
+        Cd[i][1] = i;
+    }
+    //tri du plus petit Cd au plus grand
+    while(changement)
+    {
+        changement = false;
+        for(size_t i = 0; i < m_ordre - 1; ++i)
+        {
+            if(Cd[i][0] > Cd[i+1][0])
+            {
+                tampon_c = Cd[i][0];
+                Cd[i][0] = Cd[i+1][0];
+                Cd[i+1][0] = tampon_c;
+
+                tampon_c = Cd[i][1];
+                Cd[i][1] = Cd[i+1][1];
+                Cd[i+1][1] = tampon_c;
+
+                changement = true;
+            }
+        }
+    }
+    int couleur = 0;
+    int prec_Cd = int(Cd[0][0]);
+    //Affectation des couleurs aux sommets
+    for(size_t i = 0; i < m_ordre; ++i)
+    {
+        if(Cd[i][0] == prec_Cd) //si on a la meme couleur qu'avant
+            couleur = couleur; //on conserve la meme couleur
+        else
+            ++couleur; //elle change
+        sommets[Cd[i][1]]->set_couleur(couleur); // on affecte la couleur au sommet
+        prec_Cd = int(Cd[i][0]); //on conserve l'ancienne centralité du sommet pour comparer
+    }
+
+}
 
 
 
