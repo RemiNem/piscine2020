@@ -1,22 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="800">
 
-<circle cx="200" cy="100" r="5" fill="black" />
-<text x="200" y="95" fill="black" >A</text>
-<circle cx="100" cy="200" r="5" fill="black" />
-<text x="100" y="195" fill="black" >B</text>
-<circle cx="200" cy="200" r="5" fill="black" />
-<text x="200" y="195" fill="black" >C</text>
-<circle cx="300" cy="200" r="5" fill="black" />
-<text x="300" y="195" fill="black" >D</text>
-<circle cx="200" cy="300" r="5" fill="black" />
-<text x="200" y="295" fill="black" >E</text>
-<line x1="200" y1="200" x2="200" y2="300" stroke="black" />
-<text x="205" y="245" fill="black" >7</text>
-<line x1="100" y1="200" x2="200" y2="200" stroke="black" />
-<text x="155" y="195" fill="black" >6</text>
-<line x1="200" y1="200" x2="300" y2="200" stroke="black" />
-<text x="255" y="195" fill="black" >4</text>
+<circle cx="800" cy="1700" r="5" fill="black" />
+<text x="800" y="1695" fill="black" >A</text>
+<circle cx="500" cy="1500" r="5" fill="black" />
+<text x="500" y="1495" fill="black" >B</text>
+<circle cx="300" cy="1300" r="5" fill="black" />
+<text x="300" y="1295" fill="black" >C</text>
+<circle cx="300" cy="1000" r="5" fill="black" />
+<text x="300" y="995" fill="black" >D</text>
+<circle cx="400" cy="900" r="5" fill="black" />
+<text x="400" y="895" fill="black" >E</text>
+<circle cx="600" cy="900" r="5" fill="black" />
+<text x="600" y="895" fill="black" >F</text>
+<circle cx="600" cy="500" r="5" fill="black" />
+<text x="600" y="495" fill="black" >G</text>
+<circle cx="800" cy="1100" r="5" fill="black" />
+<text x="800" y="1095" fill="black" >H</text>
+<circle cx="600" cy="1300" r="5" fill="black" />
+<text x="600" y="1295" fill="black" >I</text>
+<circle cx="800" cy="1300" r="5" fill="black" />
+<text x="800" y="1295" fill="black" >J</text>
+<circle cx="1300" cy="500" r="5" fill="black" />
+<text x="1300" y="495" fill="black" >K</text>
+<circle cx="1300" cy="900" r="5" fill="black" />
+<text x="1300" y="895" fill="black" >L</text>
+<circle cx="1400" cy="1100" r="5" fill="black" />
+<text x="1400" y="1095" fill="black" >M</text>
+<circle cx="1400" cy="1600" r="5" fill="black" />
+<text x="1400" y="1595" fill="black" >N</text>
+<circle cx="1500" cy="1500" r="5" fill="black" />
+<text x="1500" y="1495" fill="black" >O</text>
+<circle cx="1600" cy="800" r="5" fill="black" />
+<text x="1600" y="795" fill="black" >P</text>
+<circle cx="1700" cy="500" r="5" fill="black" />
+<text x="1700" y="495" fill="black" >Q</text>
+<circle cx="2100" cy="1000" r="5" fill="black" />
+<text x="2100" y="995" fill="black" >R</text>
+<line x1="800" y1="1700" x2="500" y2="1500" stroke="black" />
+<text x="655" y="1595" fill="black" >1</text>
+<line x1="500" y1="1500" x2="300" y2="1300" stroke="black" />
+<text x="405" y="1395" fill="black" >1</text>
+<line x1="300" y1="1300" x2="300" y2="1000" stroke="black" />
+<text x="305" y="1145" fill="black" >1</text>
+<line x1="300" y1="1000" x2="400" y2="900" stroke="black" />
+<text x="355" y="945" fill="black" >1</text>
+<line x1="400" y1="900" x2="600" y2="900" stroke="black" />
+<text x="505" y="895" fill="black" >1</text>
+<line x1="600" y1="900" x2="600" y2="500" stroke="black" />
+<text x="605" y="695" fill="black" >1</text>
+<line x1="800" y1="1300" x2="1500" y2="1500" stroke="black" />
+<text x="1155" y="1395" fill="black" >1</text>
+<line x1="800" y1="1100" x2="1300" y2="900" stroke="black" />
+<text x="1055" y="995" fill="black" >1</text>
+<line x1="1300" y1="900" x2="1700" y2="500" stroke="black" />
+<text x="1505" y="695" fill="black" >1</text>
+<line x1="600" y1="1300" x2="800" y2="1300" stroke="black" />
+<text x="705" y="1295" fill="black" >1</text>
+<line x1="800" y1="1300" x2="1400" y2="1100" stroke="black" />
+<text x="1105" y="1195" fill="black" >1</text>
+<line x1="1400" y1="1100" x2="1600" y2="800" stroke="black" />
+<text x="1505" y="945" fill="black" >1</text>
+<line x1="1600" y1="800" x2="2100" y2="1000" stroke="black" />
+<text x="1855" y="895" fill="black" >1</text>
+<line x1="1400" y1="1600" x2="1400" y2="1100" stroke="black" />
+<text x="1405" y="1345" fill="black" >1</text>
+<line x1="1400" y1="1600" x2="1400" y2="1100" stroke="black" />
+<text x="1405" y="1345" fill="black" >1</text>
+<line x1="1400" y1="1100" x2="1600" y2="800" stroke="black" />
+<text x="1505" y="945" fill="black" >1</text>
+<line x1="1400" y1="1100" x2="1300" y2="900" stroke="black" />
+<text x="1355" y="995" fill="black" >1</text>
+<line x1="1300" y1="900" x2="1300" y2="500" stroke="black" />
+<text x="1305" y="695" fill="black" >1</text>
 
 
 </svg>
