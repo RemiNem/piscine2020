@@ -213,6 +213,8 @@ void Graphe::afficher_graphe_internet()
         svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
         //svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, "black");
         svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), coloration[sommets[i]->get_couleur()]); //Afficher son nom
+        //svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
+
     }
     //ARRETES + POIDS
     for(size_t i = 0; i < m_taille; ++i)
@@ -268,7 +270,7 @@ void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
     for(size_t i = 0; i < m_ordre; ++i)
     {
         //on affiche le nom
-        gotoligcol(dy + descendre, 10);
+        gotoligcol(dy + descendre, 5);
         std::cout << "Sommet " << sommets[i]->get_nom() << ": ";
         gotoligcol(dy + descendre, dx);
         std::cout << vecteur[i];
@@ -434,7 +436,7 @@ void Graphe::Cp_normalise()
 
 //algorithme de Dijkstra
 //DIJKSTRA SANS MODIF
-int Graphe::Dijkstra(int debut, int fin) const
+/*int Graphe::Dijkstra(int debut, int fin) const
 {
     //1) INITIALISATION
     std::vector<int> marquage((int)sommets.size(), NON_MARQUE); //aucun sommet n'est marqu�
@@ -499,8 +501,66 @@ int Graphe::Dijkstra(int debut, int fin) const
 
     //on retourn la distance de debut � fin
     return distance_S0[fin];
+}*/
+
+int Graphe::Dijkstra(int s0,int sf) const
+{
+
+    std::vector<int>pred(m_ordre,-1);///liste des predecesseurs
+    int dtot=0;///distance parcourue
+    int sa;
+    int ss=s0;
+    int sommet_marque=0;
+    std::vector<int>distance(m_ordre,-1);///distance absolue du sommet en cours par rapport a un sommet numero i
+    std::vector<bool>decouvert(m_ordre, false);
+
+    while(sommet_marque!= int(m_ordre-1)) ///tant que il reste des sommetes marqués
+    {
+
+        //sommets[ss]->decouvert=true;
+        decouvert[ss] = true;
+        sommet_marque++;
+
+        for(size_t i=0; i<sommets[ss]->sommet_adjacent.size(); i++) ///on parcourt les sommets adjacents des sommets en cours
+        {
+            sa=sommets[ss]->sommet_adjacent[i]->get_indice();///on note le numero de sommet
+
+            if(decouvert[sa]==false) ///si le sommet n'est pas découvert
+            {
+                Arrete a;
+                get_arrete(ss, sa, a);
+                if((a.get_poids() + dtot) < distance[sa]||distance[sa] == -1)
+                    ///si la case du tableau de distance est vide ou que la nouvelle distance entre s0 et sa en cours
+                    ///est inférieure a la distance d'avant alors on la remplace dans la liste
+                {
+                    distance[sa]= a.get_poids() + dtot;
+                    pred[sa]=ss;
+                }
+
+            }
+        }
+        ss=minimum(distance, decouvert);///on récupere le numero de sommet qui a la plus petite distance par rapport a s0
+        dtot=distance[ss];///on actualise la distance totale
+    }
+
+        //afficher_arbo(s0,sf,pred);///on affiche le parcours du plus petit chemin
+        return distance[sf];
 }
 
+int Graphe::minimum(std::vector<int>tab, std::vector<bool> decouvert) const
+{
+    int min=32767;///valeur maximale d'un int non signé
+    int rang;
+    for(size_t i=0; i<tab.size(); i++)
+    {
+        if(tab[i]<min&&tab[i]!=-1&&decouvert[i]==false)
+        {
+            min=tab[i];
+            rang=i;
+        }
+    }
+    return rang;
+}
 
 /// CENTRALITE DE VECTEUR PROPRE
 
@@ -643,9 +703,11 @@ float Graphe::Ci_chemins(int s0, int sf,int straverse) const
 void Graphe::calculer_tous_indices()
 {
     calculer_tous_Cd();
-    calculer_tous_Cp();
     calculer_Cvp();
+    calculer_tous_Cp();
+    std::cout << "coucou" << std::endl;
     calcul_tous_Ci();
+    std::cout << "coucou" << std::endl;
 }
 
 void Graphe::calculer_tous_indices_normalises()

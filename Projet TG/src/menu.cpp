@@ -25,6 +25,7 @@ void menu()
                 G.charger_graphe(graphe_charge);
                 //calculer ses CC
                 G.rechercher_CC();
+                //G.afficher_graphe_internet();
                 //calculer les indices de centralite du graphe
                 G.calculer_tous_indices();
                 G.calculer_tous_indices_normalises();

@@ -72,7 +72,9 @@ class Graphe
         //CENTRALITE DE PROXIMITE
         float calculer_Cp(int indice) const;
         void calculer_tous_Cp();
-        int Dijkstra(int debut, int fin) const;
+        //int Dijkstra(int debut, int fin) const;
+        int Dijkstra(int s0, int sf) const;
+        int minimum(std::vector<int>tab, std::vector<bool> decouvert) const;
         void Cp_normalise();
 
         //CENTRALITE DE VECTEUR PROPRE
