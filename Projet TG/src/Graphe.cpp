@@ -211,7 +211,8 @@ void Graphe::afficher_graphe_internet()
     for(size_t i = 0; i < m_ordre; ++i)
     {
         svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, coloration[sommets[i]->get_couleur()]); //placer le sommet
-        svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), "black"); //Afficher son nom
+        //svgout.addDisk(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE, 5, "black");
+        svgout.addText(sommets[i]->get_x()*ECHELLE, sommets[i]->get_y()*ECHELLE - 5, sommets[i]->get_nom(), coloration[sommets[i]->get_couleur()]); //Afficher son nom
     }
     //ARRETES + POIDS
     for(size_t i = 0; i < m_taille; ++i)
@@ -221,24 +222,43 @@ void Graphe::afficher_graphe_internet()
 
         //Ajouter une fleche si le graphe est orient� (sommet 2 = pointe de la fl�che)
         if(m_orientation == true)
-        {
-
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE - 10, "black");
-            svgout.addLine(sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE, sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE - 10, sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE + 10, "black");
-
-        }
+            ajouter_fleche(svgout, arretes[i]);
         //Ajouter le poids
         //on r�cupere les coordonn�es du point � mi chemin entre les deux sommets
         int x1 = sommets[arretes[i].get_indice_s1()]->get_x()*ECHELLE;
         int y1 = sommets[arretes[i].get_indice_s1()]->get_y()*ECHELLE;
         int x2 = sommets[arretes[i].get_indice_s2()]->get_x()*ECHELLE;
         int y2 = sommets[arretes[i].get_indice_s2()]->get_y()*ECHELLE;
-
-        int x = (max(x1, x2) - min(x1,x2))/2 + min(x1,x2);
-        int y = (max(y1,y2) - min(y1,y2))/2 + min(y1,y2);
-
-        svgout.addText(x + 5, y - 5, arretes[i].get_poids(), "black");
+        int x = (x1 + x2)/2;
+        int y = (y1 + y2)/2;
+        svgout.addText(x, y, arretes[i].get_poids(), "black");
     }
+}
+
+void Graphe::ajouter_fleche(Svgfile &svgout, Arrete arrete) const
+{
+    //coordonnées du sommet où la flèche pointe
+    int xs2 = sommets[arrete.get_indice_s2()]->get_x()*ECHELLE;
+    int ys2 = sommets[arrete.get_indice_s2()]->get_y()*ECHELLE;
+    //coordonnées du sommet d'où la fleche part
+    int xs1 = sommets[arrete.get_indice_s1()]->get_x()*ECHELLE;
+    int ys1 = sommets[arrete.get_indice_s1()]->get_y()*ECHELLE;
+    //norme de la distance s1 s2
+    int norme_arrete = sqrt(pow(xs2 - xs1, 2) + pow(ys2 - ys1, 2));
+    //point d'où part la fleche (reculée de 5 par rapport au sommet = son rayon)
+    int departfleche_x = xs2 - 5*(xs2 - xs1)/norme_arrete;
+    int departfleche_y = ys2 - 5*(ys2 - ys1)/norme_arrete;
+    //coeff pour que la norme du vecteur n vaille 8
+    int a = sqrt(64/(pow((ys1-ys2)/(xs1-xs2), 2) + 1));
+    //point où le vecteur normal à la droite s1s2 part
+    int dx = 30*(xs2 - xs1)/norme_arrete;
+    int dy = 30*(ys2 - ys1)/norme_arrete;
+    //vecteur normal à la droite de vecteur directeur s1s2
+    int xn = a*(ys1 - ys2)/(xs1 - xs2);
+    int yn = -a;
+    //affichage fleche
+    svgout.addLine(departfleche_x, departfleche_y, xs2 - dx - xn, ys2 - dy - yn, "black");
+    svgout.addLine(departfleche_x, departfleche_y, xs2 - dx + xn, ys2 - dy + yn, "black");
 }
 
 void Graphe::afficher_centralite(float* vecteur, int dx, int dy) const
@@ -980,8 +1000,11 @@ void Graphe::charger_couleurs()
     coloration.push_back("green");
     coloration.push_back("red");
     coloration.push_back("purple");
-    coloration.push_back("black");
     coloration.push_back("pink");
+    coloration.push_back("orange");
+    coloration.push_back("brown");
+    coloration.push_back("grey");
+    coloration.push_back("yellow");
 }
 
 void Graphe::attribuer_couleur()

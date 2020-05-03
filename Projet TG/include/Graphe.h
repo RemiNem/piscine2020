@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "Arrete.h"
+#include "svgfile.h"
 #include <math.h>
 #include <bits/stdc++.h>
 #include <map>
@@ -48,6 +49,7 @@ class Graphe
         void afficher() const; //affichage du graphe sur console
         void afficher_arretes() const; //affiche seulement les arretes du graphe avec leur poids
         void afficher_graphe_internet(); //html
+        void ajouter_fleche(Svgfile &svgout, Arrete arrete) const;
         void afficher_tous_indices(int y, int x) const; //affiche tous les indices de centralite
         void afficher_centralite(float* vecteur, int dx, int y) const;
         void afficher_tous_indices_normalises(int dy, int dx) const;
