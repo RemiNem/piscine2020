@@ -28,6 +28,8 @@ class Svgfile
 
         void addGrid(double span=100.0, bool numbering=true, std::string color="lightgrey");
 
+        void addTriangle(int x1, int y1, int x2, int y2,int x3, int y3, std::string colorFill);
+
         static std::string makeRGB(int r, int g, int b);
 
         /// Type non copiable

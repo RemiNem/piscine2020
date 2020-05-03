@@ -16,12 +16,12 @@
 	<vector>
 	<string>
 
-1588254264 source:c:\users\rose\documents\github\piscine2020\projet tg\src\svgfile.cpp
+1588433842 source:c:\users\rose\documents\github\piscine2020\projet tg\src\svgfile.cpp
 	"..\include\svgfile.h"
 	<iostream>
 	<sstream>
 
-1588254264 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
+1588433842 c:\users\rose\documents\github\piscine2020\projet tg\include\svgfile.h
 	<string>
 	<fstream>
 	<set>
@@ -31,27 +31,28 @@
 	"include\Graphe.h"
 	"include/menu.h"
 
-1588347682 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
+1588433905 c:\users\rose\documents\github\piscine2020\projet tg\include\graphe.h
 	<string>
 	<vector>
 	"Sommet.h"
 	<iostream>
 	<fstream>
 	"Arrete.h"
+	"svgfile.h"
 	<math.h>
 	<bits/stdc++.h>
 	<map>
 
 1588254264 c:\users\rose\documents\github\piscine2020\projet tg\include\menu.h
 
-1588348098 source:c:\users\rose\documents\github\piscine2020\projet tg\src\menu.cpp
+1588511674 source:c:\users\rose\documents\github\piscine2020\projet tg\src\menu.cpp
 	<iostream>
 	"../include/Graphe.h"
 	"../include/fonctions.h"
 
 1588170467 c:\users\rose\documents\github\piscine2020\projet tg\include\erreur.h
 
-1588418938 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
+1588511674 source:c:\users\rose\documents\github\piscine2020\projet tg\src\graphe.cpp
 	"../include/Graphe.h"
 	"../include/svgfile.h"
 	"../include/fonctions.h"

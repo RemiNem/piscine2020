@@ -164,6 +164,16 @@ void Svgfile::addGrid(double span, bool numbering, std::string color)
     }
 }
 
+void Svgfile::addTriangle(int x1, int y1, int x2, int y2,int x3, int y3, std::string colorFill)
+{
+    m_ostrm << "<polygon points=\" "
+            << x1 << "," << y1 << " "
+            << x2 << "," << y2 << " "
+            << x3 << "," << y3
+            << "\" style=\"fill:" << colorFill
+            << "\" />\n";
+}
+
 std::string Svgfile::makeRGB(int r, int g, int b)
 {
     std::ostringstream oss;
